@@ -11,7 +11,7 @@ import router from './plugins/router'
 
 const vuetify = createVuetify({
   theme: {
-    defaultTheme: 'dark'
+    defaultTheme: 'light'
   }
 })
 

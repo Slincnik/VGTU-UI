@@ -12,9 +12,9 @@ const keycloakLogin = async () => {
 }
 
 onMounted(() => {
-  keycloakInstance.init({
-    onLoad: 'login-required',
-    checkLoginIframe: false
-  })
+  // keycloakInstance.init({
+  //   onLoad: 'login-required',
+  //   checkLoginIframe: false
+  // })
 })
 </script>
