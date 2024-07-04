@@ -10,5 +10,16 @@ variables:
   DEV_HOME: /home/${DEV_USER}
   DEV_HOST: 185.175.45.94
 
+default:
+  image: node:20
+  before_script:
+    - corepack enable pnpm
+
+cache:
+  paths:
+    - node_modules/
+    - dist
+    - deploy
+
 include:
   - local: .gitlab/ci/*.gitlab-ci.yml
