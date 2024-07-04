@@ -1,0 +1,8 @@
+variables:
+  VERSION: 1.0.${CI_PIPELINE_ID}
+  DEV_USER: slincnik
+  DEV_HOME: /home/${DEV_USER}
+  DEV_HOST: 185.175.45.94
+
+include:
+  - local: .gitlab/ci/*.gitlab-ci.yml

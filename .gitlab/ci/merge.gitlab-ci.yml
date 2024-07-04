@@ -1,0 +1,7 @@
+lint:
+  stage: lint
+  script:
+    - pnpm install --prod --frozen-lockfile
+    - pnpm lint
+  only:
+    - merge_requests
