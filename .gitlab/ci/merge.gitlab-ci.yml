@@ -1,0 +1,7 @@
+lint-merge-job:
+  stage: lint
+  script:
+    - pnpm install --prod --frozen-lockfile
+    - pnpm lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
