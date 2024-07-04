@@ -1,4 +1,4 @@
-lint:
+lint-mr:
   stage: lint
   script:
     - pnpm install --prod --frozen-lockfile
