@@ -1,7 +1,7 @@
 <template>
   <v-app-bar :elevation="0" extended extension-height="100">
     <v-avatar size="64" :image="logo"></v-avatar>
-    <v-app-bar-title class="font-weight-bold"> ВГТУ </v-app-bar-title>
+    <v-app-bar-title class="font-weight-bold ml-1 mt-2"> ВГТУ </v-app-bar-title>
     <template #extension>
       <div class="ml-2 opacity-60">
         Меню
@@ -12,20 +12,21 @@
           icon="mdi-menu"
         ></v-btn>
       </div>
-      <v-toolbar-title class="ml-4 text-h4 font-weight-bold text-no-wrap">
-        <div class="d-flex">
+      <v-toolbar-title class="ml-4 text-h4 font-weight-bold">
+        <div class="d-block d-sm-flex">
           Расписание
           <div class="ml-4 font-weight-regular opacity-60">бМП-211</div>
         </div>
       </v-toolbar-title>
     </template>
-    <v-spacer />
+    <v-spacer v-if="width >= 627" />
     <v-text-field
+      v-if="width >= 627"
       class="mt-4 mr-10"
       bg-color="grey-lighten-4"
       flat
       rounded
-      label="Поиск по порталу"
+      placeholder="Поиск по порталу"
       variant="solo"
       prepend-inner-icon="mdi-magnify"
     ></v-text-field>
@@ -74,7 +75,7 @@
   </v-navigation-drawer>
 
   <v-main>
-    <v-container>
+    <v-container fluid class="h-100">
       <slot />
     </v-container>
   </v-main>
@@ -87,7 +88,7 @@ import logo from '@/assets/img/logo.svg'
 const drawer = ref(true)
 const rail = ref(true)
 
-const { mobile } = useDisplay()
+const { mobile, width } = useDisplay()
 
 const items = ref([
   { id: 1, title: 'Главная', icon: 'mdi-home', link: '/home' },
