@@ -177,7 +177,8 @@ module.exports = {
       }
     ],
     'no-bitwise': ['error', { allow: ['~'] }],
-    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': ['error'],
     'max-len': ['error', { code: 120 }],
     'object-curly-newline': [
       'error',
