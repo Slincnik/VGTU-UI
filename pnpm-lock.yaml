@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@vue/eslint-config-airbnb':
-        specifier: ^8.0.0
-        version: 8.0.0(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.4.5))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -45,6 +42,9 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^5.0.5
         version: 5.0.5(vite@5.3.1(@types/node@20.14.6))(vue@3.4.29(typescript@5.4.5))
+      '@vue/eslint-config-airbnb':
+        specifier: ^8.0.0
+        version: 8.0.0(@typescript-eslint/parser@7.13.1(eslint@8.57.0)(typescript@5.4.5))(eslint-plugin-vue@9.26.0(eslint@8.57.0))(eslint@8.57.0)
       '@vue/eslint-config-prettier':
         specifier: ^9.0.0
         version: 9.0.0(eslint@8.57.0)(prettier@3.3.2)
