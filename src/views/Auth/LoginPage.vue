@@ -1,6 +1,15 @@
 <template>
-  <v-card width="617" class="mx-auto" rounded="xl" elevation="1">
-    <v-img class="mx-auto mb-10 mt-10" width="120" :src="logo"></v-img>
+  <v-card
+    width="617"
+    class="mx-auto"
+    rounded="xl"
+    elevation="1"
+  >
+    <v-img
+      class="mx-auto mb-10 mt-10"
+      width="120"
+      :src="logo"
+    />
     <v-form
       v-model="formValid"
       class="d-flex flex-column align-center justify-center w-100"
@@ -16,7 +25,7 @@
         variant="outlined"
         max-width="360"
         min-width="290"
-      ></v-text-field>
+      />
 
       <v-text-field
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
@@ -29,7 +38,7 @@
         @click:append-inner="visible = !visible"
         max-width="360"
         min-width="290"
-      ></v-text-field>
+      />
 
       <v-btn
         :disabled="!formValid"
@@ -51,16 +60,17 @@
 import { ref } from 'vue'
 import logo from '@/assets/img/logo.svg'
 
-const login = () => {
-  if (!formValid.value) return
-  console.log('login')
-}
 const DTO = ref({
   login: '',
   password: ''
 })
 const formValid = ref(false)
 const visible = ref(false)
+
+const login = () => {
+  if (!formValid.value) return
+  console.log('login')
+}
 
 const rules = {
   required: (value: string) => !!value || 'Обязательное поле'

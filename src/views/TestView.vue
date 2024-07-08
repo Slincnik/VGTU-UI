@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="ts">
-import keycloakInstance from '@/plugins/keycloak'
 import { onMounted } from 'vue'
+import keycloakInstance from '@/plugins/keycloak'
 
 const keycloakLogin = async () => {
   const userProfile = keycloakInstance.createLogoutUrl()

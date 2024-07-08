@@ -5,7 +5,7 @@ import type { KeycloakProfile } from 'keycloak-js'
 export type UserStore = {
   user: KeycloakProfile | null
   accessToken: string | null
-  refreshToken: string | null,
+  refreshToken: string | null
 }
 
 export const useAuthStore = defineStore({

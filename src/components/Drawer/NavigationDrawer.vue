@@ -7,11 +7,11 @@
     border="0"
   >
     <v-icon
-        v-if="!mobile"
-        class="toggle-button rounded-circle"
-        @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
-        :icon="rail ? 'mdi-chevron-right-circle' : 'mdi-chevron-left-circle'"
-      ></v-icon>
+      v-if="!mobile"
+      class="toggle-button rounded-circle"
+      @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
+      :icon="rail ? 'mdi-chevron-right-circle' : 'mdi-chevron-left-circle'"
+    />
 
     <v-list>
       <v-list-item

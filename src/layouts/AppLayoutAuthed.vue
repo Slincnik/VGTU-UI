@@ -1,10 +1,19 @@
 <template>
-  <HeaderLayout v-model:drawer="drawer" v-model:rail="rail" />
+  <header-layout
+    v-model:drawer="drawer"
+    v-model:rail="rail"
+  />
 
-  <NavigationDrawer v-model:drawer="drawer" v-model:rail="rail" />
+  <navigation-drawer
+    v-model:drawer="drawer"
+    v-model:rail="rail"
+  />
 
   <v-main>
-    <v-container fluid class="h-100">
+    <v-container
+      fluid
+      class="h-100"
+    >
       <slot />
     </v-container>
   </v-main>
