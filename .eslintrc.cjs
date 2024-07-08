@@ -1,7 +1,7 @@
 /* eslint-env node */
 require('@rushstack/eslint-patch/modern-module-resolution')
 const path = require('node:path')
-const createAliasSetting = require('@vue/eslint-config-airbnb/createAliasSetting')
+const createAliasSetting = require('@vue/eslint-config-airbnb-with-typescript/createAliasSetting')
 
 module.exports = {
   root: true,
@@ -10,8 +10,7 @@ module.exports = {
   },
   extends: [
     'plugin:vue/vue3-essential',
-    '@vue/eslint-config-airbnb',
-    '@vue/eslint-config-typescript',
+    '@vue/eslint-config-airbnb-with-typescript',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
   parserOptions: {
@@ -23,8 +22,6 @@ module.exports = {
     })
   },
   rules: {
-    'no-shadow': 'off',
-    '@typescript-eslint/no-shadow': 'error',
     'import/no-extraneous-dependencies': 'off',
     'import/no-unresolved': 'off',
     'vue/html-self-closing': [
@@ -177,8 +174,6 @@ module.exports = {
       }
     ],
     'no-bitwise': ['error', { allow: ['~'] }],
-    'no-unused-vars': 'off',
-    '@typescript-eslint/no-unused-vars': ['error'],
     'max-len': ['error', { code: 120 }],
     'object-curly-newline': [
       'error',
