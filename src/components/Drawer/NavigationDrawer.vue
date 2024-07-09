@@ -6,13 +6,6 @@
     v-model="drawer"
     border="0"
   >
-    <v-icon
-      v-if="!mobile"
-      class="toggle-button rounded-circle"
-      @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
-      :icon="rail ? 'mdi-chevron-right-circle' : 'mdi-chevron-left-circle'"
-    />
-
     <v-list>
       <v-list-item
         v-for="item in items"
@@ -53,12 +46,6 @@ const { mobile } = useDisplay()
 </script>
 
 <style scoped>
-.toggle-button {
-  position: absolute !important;
-  right: -13px;
-  top: 60px;
-  z-index: 1;
-}
 .list-active {
   background-color: #39476a !important;
   color: white !important;
