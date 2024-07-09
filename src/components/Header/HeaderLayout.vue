@@ -76,12 +76,10 @@ import { useDisplay } from 'vuetify'
 import logo from '@/assets/img/logo.svg'
 
 const drawer = defineModel<boolean>('drawer', {
-  required: true,
-  default: false
+  required: true
 })
 const rail = defineModel<boolean>('rail', {
-  required: true,
-  default: false
+  required: true
 })
 
 const { mobile, width } = useDisplay()

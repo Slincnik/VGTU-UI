@@ -20,10 +20,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useDisplay } from 'vuetify'
 import HeaderLayout from '@/components/Header/HeaderLayout.vue'
 import NavigationDrawer from '@/components/Drawer/NavigationDrawer.vue'
 
-const drawer = ref(true)
-const rail = ref(true)
+const drawer = ref(false)
+const rail = ref(false)
+
+const { mobile } = useDisplay()
+
+onMounted(() => {
+  if (!mobile.value) {
+    drawer.value = true
+    rail.value = true
+  }
+})
+
+watch(mobile, (newVal, oldVal) => {
+  if (!newVal && oldVal) {
+    if (!drawer.value && !rail.value) {
+      drawer.value = true
+      rail.value = true
+    }
+  } else if (newVal && !oldVal) {
+    if (rail.value) {
+      drawer.value = false
+      rail.value = false
+    }
+    if (!rail.value && drawer.value) {
+      drawer.value = true
+    }
+  }
+})
 </script>

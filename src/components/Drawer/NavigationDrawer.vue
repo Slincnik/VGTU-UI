@@ -2,8 +2,8 @@
   <v-navigation-drawer
     :rail
     :temporary="mobile"
-    :location="mobile ? 'top' : undefined"
     v-model="drawer"
+    :disable-resize-watcher="true"
     border="0"
   >
     <v-list>
@@ -34,8 +34,7 @@ const items = ref([
 ])
 
 const drawer = defineModel('drawer', {
-  required: true,
-  default: false
+  required: true
 })
 const rail = defineModel('rail', {
   required: true,
