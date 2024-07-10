@@ -11,11 +11,13 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-essential',
     '@vue/eslint-config-airbnb-with-typescript',
-    '@vue/eslint-config-prettier/skip-formatting'
+    '@vue/eslint-config-prettier/skip-formatting',
+    'prettier'
   ],
   parserOptions: {
     ecmaVersion: 'latest'
   },
+  plugins: ['prettier'],
   settings: {
     ...createAliasSetting({
       '@': `${path.resolve(__dirname, './src')}`
