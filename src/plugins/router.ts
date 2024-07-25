@@ -17,6 +17,19 @@ const router = createRouter({
       path: '/login',
       name: 'LoginPage',
       component: () => import('@/views/Auth/LoginPage.vue')
+    },
+    {
+      path: '/schedule',
+      name: 'SchedulePage',
+      component: () => import('@/views/TestView.vue'),
+      meta: {
+        layout: AppLayoutsEnum.authed
+      }
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'NotFound',
+      component: () => import('@/components/NotFound/NotFound.vue')
     }
   ]
 })
