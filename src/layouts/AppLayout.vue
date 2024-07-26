@@ -7,12 +7,17 @@ const isRouterReady = ref(false)
 const route = useRoute()
 const router = useRouter()
 
-router.isReady().finally(() => (isRouterReady.value = true))
+router.isReady().finally(() => {
+  isRouterReady.value = true
+})
 </script>
 
 <template>
   <div v-if="!isRouterReady">
-    <v-progress-circular indeterminate :size="36"></v-progress-circular>
+    <v-progress-circular
+      indeterminate
+      :size="36"
+    />
   </div>
   <template v-else>
     <component :is="route.meta.layoutComponent">
