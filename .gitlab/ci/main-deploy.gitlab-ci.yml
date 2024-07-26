@@ -1,8 +1,7 @@
-
 lint-job:
   stage: lint
   script:
-    - pnpm install --prod --frozen-lockfile
+    - pnpm install --frozen-lockfile
     - pnpm lint
   artifacts:
     paths:
