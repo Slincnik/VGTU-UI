@@ -1,8 +1,7 @@
-
 lint-job:
   stage: lint
   script:
-    - pnpm install --prod --frozen-lockfile
+    - pnpm install --frozen-lockfile
     - pnpm lint
   artifacts:
     paths:
@@ -30,23 +29,23 @@ release-job:
     paths:
       - frontend-${VERSION}.tar.gz
 
-deploy-job:
-  stage: deploy
-  image: ubuntu:22.04
-  needs:
-    - release-job
-  before_script:
-    #устанавливаем ssh-agent для удобства аутентификации по ssh
-    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-    - eval $(ssh-agent -s)
-    #сохраняем сгенеренный ранее приватный ключ для раннера
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - mkdir -p ~/.ssh
-    - chmod 600 ~/.ssh
-    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-    - ssh ${DEV_USER}@${DEV_HOST} "export "VERSION=${VERSION}""
-  script:
-    - scp frontend-${VERSION}.tar.gz ${DEV_USER}@${DEV_HOST}:/home/slincnik/Testfront
+# deploy-job:
+#   stage: deploy
+#   image: ubuntu:22.04
+#   needs:
+#     - release-job
+#   before_script:
+#     #устанавливаем ssh-agent для удобства аутентификации по ssh
+#     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - eval $(ssh-agent -s)
+#     #сохраняем сгенеренный ранее приватный ключ для раннера
+#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+#     - mkdir -p ~/.ssh
+#     - chmod 600 ~/.ssh
+#     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+#     - ssh ${DEV_USER}@${DEV_HOST} "export "VERSION=${VERSION}""
+#   script:
+#     - scp frontend-${VERSION}.tar.gz ${DEV_USER}@${DEV_HOST}:/home/slincnik/Testfront
 
 
 workflow:
