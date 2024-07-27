@@ -8,14 +8,9 @@
       class="ml-5"
       base-color="#8FBCBB"
       :ripple="false"
-      :icon="menuSvgBtn"
+      icon="custom:iconMenu"
       @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
-    >
-      <v-avatar
-        size="30"
-        :image="menuSvgBtn"
-      />
-    </v-btn>
+    />
     <v-app-bar-title class="ml-5">
       <div class="d-flex flex-column">
         <span class="font-weight-bold">ВГТУ</span>
@@ -34,19 +29,15 @@
         variant="tonal"
         size="48"
         class="mr-5"
-        icon
+        icon="custom:iconLogout"
         :ripple="false"
-      >
-        <v-avatar :image="logoutIcon" />
-      </v-btn>
+      />
     </template>
   </v-app-bar>
 </template>
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
-import menuSvgBtn from '@/assets/svg/menu-button.svg'
-import logoutIcon from '@/assets/svg/logout.svg'
 
 const drawer = defineModel<boolean>('drawer', {
   required: true

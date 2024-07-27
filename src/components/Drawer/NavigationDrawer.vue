@@ -4,22 +4,32 @@
     :temporary="mobile"
     v-model="drawer"
     :disable-resize-watcher="true"
-    border="0"
+    width="274"
+    rail-width="88"
   >
-    <v-list>
+    <v-list class="mt-5 py-0">
       <v-list-item
         v-for="item in items"
-        :prepend-icon="item.icon"
         :key="item.id"
-        link
-        rounded="lg"
         :active="item.link === $route.path"
         active-class="list-active"
+        rounded="lg"
         @click="$router.push(item.link)"
       >
-        <v-list-item-title class="list-font-text">
-          {{ item.title }}
-        </v-list-item-title>
+        <div class="d-flex align-center">
+          <v-btn
+            icon
+            elevation="0"
+            class="mr-5"
+            color="#ECEFF4"
+          >
+            <v-icon
+              :icon="item.icon"
+              color="#2E3440"
+            />
+          </v-btn>
+          <v-list-item-title class="list-font-text"> {{ item.title }} </v-list-item-title>
+        </div>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -30,13 +40,13 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const items = ref([
-  { id: 1, title: 'Главная', icon: 'mdi-home', link: '/' },
-  { id: 2, title: 'Расписание', icon: 'mdi-calendar-month-outline', link: '/schedule' },
-  { id: 3, title: 'Обучение', icon: 'mdi-school', link: '/education' },
-  { id: 4, title: 'Портфолио', icon: 'mdi-certificate', link: '/portfolio' },
-  { id: 5, title: 'Заявки', icon: 'mdi-export-variant', link: '/requests' },
-  { id: 6, title: 'Опросы', icon: 'mdi-help-box', link: '/surveys' },
-  { id: 7, title: 'Информация', icon: 'mdi-information', link: '/info' }
+  { id: 1, title: 'Главная', icon: 'custom:iconHome', link: '/' },
+  { id: 2, title: 'Расписание', icon: 'custom:iconSchedule', link: '/schedule' },
+  { id: 3, title: 'Обучение', icon: 'custom:iconEducation', link: '/education' },
+  { id: 4, title: 'Портфолио', icon: 'custom:iconPortfolio', link: '/portfolio' },
+  { id: 5, title: 'Заявки', icon: 'custom:iconRequest', link: '/requests' },
+  { id: 6, title: 'Опросы', icon: 'custom:iconSurvey', link: '/surveys' },
+  { id: 7, title: 'Информация', icon: 'custom:iconInfo', link: '/info' }
 ])
 
 const drawer = defineModel<boolean>('drawer', {
@@ -54,7 +64,8 @@ const { mobile } = useDisplay()
 .list-font-text {
   font-family: 'Fira Sans', sans-serif;
   font-weight: 400;
-  font-size: 16;
+  font-style: normal;
+  font-size: 16px;
 }
 .list-active {
   background-color: #39476a !important;

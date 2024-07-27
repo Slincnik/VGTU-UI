@@ -8,10 +8,17 @@ import { createVuetify } from 'vuetify'
 
 import App from './App.vue'
 import router from './plugins/router'
+import { customSVGs } from './plugins/iconSet'
 
 const vuetify = createVuetify({
   theme: {
     defaultTheme: 'light'
+  },
+  icons: {
+    defaultSet: 'mdi',
+    sets: {
+      custom: customSVGs
+    }
   }
 })
 
