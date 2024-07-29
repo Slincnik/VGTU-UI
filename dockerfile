@@ -18,7 +18,7 @@ RUN pnpm run build
 
 # Stage 4
 FROM nginx:1.27.0-alpine
-COPY deploy/default.conf /etc/nginx/conf.d/default.conf
+COPY deploy/front.conf /etc/nginx/conf.d/default.conf
 COPY --from=prod-deps /usr/scr/app/node_modules /var/www-data/dist/frontend
 COPY --from=build /usr/scr/app/dist /var/www-data/dist/frontend
 EXPOSE 80
