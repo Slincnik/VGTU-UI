@@ -9,6 +9,7 @@ variables:
   DEV_USER: slincnik
   DEV_HOME: /home/${DEV_USER}
   DEV_HOST: 185.175.45.94
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
 default:
   image: node:20

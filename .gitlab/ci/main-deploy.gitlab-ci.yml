@@ -21,13 +21,15 @@ release-job:
   stage: release
   needs:
     - build-job
+  image: docker:latest
+  services:
+    - docker:dind
   before_script:
-    - echo "Start release"
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD docker.io
   script:
-    - tar czvf frontend-${VERSION}.tar.gz dist deploy
-  artifacts:
-    paths:
-      - frontend-${VERSION}.tar.gz
+    - docker build -t $DOCKER_HUB_USER/$CONTAINER_RELEASE_IMAGE .
+    - docker push $DOCKER_HUB_USER/$CONTAINER_RELEASE_IMAGE
+
 
 # deploy-job:
 #   stage: deploy
