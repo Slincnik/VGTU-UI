@@ -17,39 +17,6 @@ build-job:
     paths:
       - dist/
 
-release-job:
-  stage: release
-  needs:
-    - build-job
-  image: docker:latest
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD docker.io
-  script:
-    - docker build -t $DOCKER_HUB_USER/$CONTAINER_RELEASE_IMAGE .
-    - docker push $DOCKER_HUB_USER/$CONTAINER_RELEASE_IMAGE
-
-
-# deploy-job:
-#   stage: deploy
-#   image: ubuntu:22.04
-#   needs:
-#     - release-job
-#   before_script:
-#     #устанавливаем ssh-agent для удобства аутентификации по ssh
-#     - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
-#     - eval $(ssh-agent -s)
-#     #сохраняем сгенеренный ранее приватный ключ для раннера
-#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-#     - mkdir -p ~/.ssh
-#     - chmod 600 ~/.ssh
-#     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-#     - ssh ${DEV_USER}@${DEV_HOST} "export "VERSION=${VERSION}""
-#   script:
-#     - scp frontend-${VERSION}.tar.gz ${DEV_USER}@${DEV_HOST}:/home/slincnik/Testfront
-
-
 workflow:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
