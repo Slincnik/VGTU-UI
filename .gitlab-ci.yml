@@ -1,11 +1,12 @@
 stages:
   - lint
   - build
+  - publish
   - release
   - deploy
 
 variables:
-  CONTAINER_RELEASE_IMAGE: $DOCKER_HUB_USER/cchgeu-frontend:$CI_COMMIT_TAG
+  CONTAINER_IMAGE_NAME: $DOCKER_HUB_USER/cchgeu-frontend
 
 default:
   image: node:20

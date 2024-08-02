@@ -5,4 +5,4 @@ sudo docker network create -d bridge cchgeu_network || true
 sudo docker rm -f cchgeu-frontend || true
 sudo docker run --rm -d --name cchgeu-frontend -p 80:80 \
      --network=cchgeu_network \
-     "${CONTAINER_RELEASE_IMAGE}"
+     "${CONTAINER_IMAGE_NAME}:latest"
