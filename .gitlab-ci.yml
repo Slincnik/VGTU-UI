@@ -8,6 +8,9 @@ stages:
 variables:
   CONTAINER_IMAGE_NAME: $DOCKER_HUB_USER/cchgeu-frontend
 
+default:
+  image: node:20-slim
+
 cache:
   paths:
     - node_modules/

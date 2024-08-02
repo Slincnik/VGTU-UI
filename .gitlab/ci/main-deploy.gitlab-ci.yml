@@ -1,6 +1,5 @@
 lint-job:
   stage: lint
-  image: node:20
   before_script:
     - corepack enable pnpm
   script:
@@ -12,7 +11,6 @@ lint-job:
 
 build-job:
   stage: build
-  image: node:20
   needs:
     - lint-job
   before_script:
