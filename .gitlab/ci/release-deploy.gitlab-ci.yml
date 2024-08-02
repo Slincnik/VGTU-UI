@@ -1,7 +1,7 @@
-release-job:
-  stage: release
+build-docker-job:
+  stage: build
   needs:
-    - build-job
+    - lint-job
   image: docker:latest
   services:
     - docker:dind
@@ -10,11 +10,19 @@ release-job:
   script:
     - docker build -t $CONTAINER_RELEASE_IMAGE .
     - docker push $CONTAINER_RELEASE_IMAGE
+
+release-job:
+  stage: release
+  needs:
+    - build-docker-job
+  image: registry.gitlab.com/gitlab-org/release-cli
+  script:
+    - echo "Creating a release for $CI_COMMIT_TAG"
   release:
     tag_name: $CI_COMMIT_TAG
     name: 'Release $CI_COMMIT_TAG'
     description: 'Release created'
-
+    ref: '$CI_COMMIT_TAG'
 
 deploy-job:
   stage: deploy
