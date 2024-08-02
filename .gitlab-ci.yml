@@ -6,7 +6,7 @@ stages:
   - deploy
 
 variables:
-  CONTAINER_IMAGE_NAME: $DOCKER_HUB_USER/cchgeu-frontend
+  CONTAINER_IMAGE_NAME: cchgeu-frontend
 
 default:
   image: node:20
