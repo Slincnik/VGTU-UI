@@ -17,7 +17,7 @@ is-latest:
   script:
     - echo "pushing to $DESTINATION"
     - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKER_AUTH_CODE\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --dockerfile $CI_PROJECT_DIR/Dockerfile $DESTINATION
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile $DESTINATION
 
 docker-push-tag:
   extends: .docker-push
