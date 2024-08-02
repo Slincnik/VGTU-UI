@@ -7,7 +7,7 @@ stages:
 
 variables:
   DOCKER_REGISTRY: docker.io
-  CONTAINER_IMAGE_NAME: $DOCKER_HUB_USER/cchgeu-frontend
+  CONTAINER_IMAGE_NAME: cchgeu-frontend
 
 default:
   image: node:20
