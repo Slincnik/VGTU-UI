@@ -1,0 +1,66 @@
+is-latest:
+  stage: build
+  script:
+    - echo "IS_LATEST=false" > latest.env
+    - LATEST_GIT_TAG=$(git -c versionsort.prereleaseSuffix="-rc" -c versionsort.prereleaseSuffix="-RC" tag -l "v*.*.*" --sort=-v:refname | awk '!/rc/' | head -n 1)
+    - if [ "$CI_COMMIT_TAG" = "$LATEST_GIT_TAG" ]; then echo "IS_LATEST=true" > latest.env; fi
+    - echo "commit tag is $CI_COMMIT_TAG - latest git tag is $LATEST_GIT_TAG"
+  artifacts:
+    reports:
+      dotenv: latest.env
+
+.docker-push:
+  stage: publish
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: ['']
+  script:
+    - echo "pushing to $DESTINATION"
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKER_AUTH_CODE\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/dockerfile $DESTINATION
+
+docker-push-tag:
+  extends: .docker-push
+  needs:
+    - job: is-latest
+      artifacts: true
+  variables:
+    DESTINATION: --destination $CONTAINER_IMAGE_NAME:$CI_COMMIT_TAG
+  before_script:
+    - echo $IS_LATEST
+    - if [ "$IS_LATEST" = "true" ]; then export DESTINATION="$DESTINATION --destination $CONTAINER_IMAGE_NAME:latest"; fi
+
+# release-job:
+#   stage: release
+#   image: registry.gitlab.com/gitlab-org/release-cli:latest
+#   script:
+#     - echo "Creating a release for $CI_COMMIT_TAG"
+#   release:
+#     tag_name: '$CI_COMMIT_TAG'
+#     name: 'Release $CI_COMMIT_TAG'
+#     description: 'Release created'
+
+deploy-job:
+  stage: deploy
+  image: alpine:3.18
+  needs:
+    - docker-push-tag
+  before_script:
+    - apk update && apk add bash
+    - apk update && apk add gettext
+    - apk add openssh-client bash
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+  script:
+    - ssh ${DEV_USER}@${DEV_HOST} "mkdir -p /tmp/${CI_PROJECT_DIR}/frontend/"
+    - scp ./deploy/front.conf ${DEV_USER}@${DEV_HOST}:/tmp/${CI_PROJECT_DIR}/frontend/default.conf
+    - envsubst < ./deploy/deploy.sh| ssh ${DEV_USER}@${DEV_HOST}
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG'

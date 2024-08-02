@@ -1,12 +1,8 @@
 #! /bin/bash
 set -xe
-
-cd /home/slincnik/Testfront/deploy
-
-# Обновляем конфигурацию Nginx для работы с файлами фронта
-sudo cp -rf front.conf /etc/nginx/sites-enabled/
-
-# Перезапускаем фронт
-sudo systemctl daemon-reload
-sudo systemctl enable nginx
-sudo systemctl restart nginx
+sudo docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_PASSWORD docker.io
+sudo docker network create -d bridge cchgeu_network || true
+sudo docker rm -f cchgeu-frontend || true
+sudo docker run --rm -d --name cchgeu-frontend -p 80:80 \
+     --network=cchgeu_network \
+     "${CONTAINER_IMAGE_NAME}:latest"

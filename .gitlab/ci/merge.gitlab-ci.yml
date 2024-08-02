@@ -1,7 +1,9 @@
 lint-merge-job:
   stage: lint
+  before_script:
+    - corepack enable pnpm
   script:
-    - pnpm install --prod --frozen-lockfile
+    - pnpm install --frozen-lockfile
     - pnpm lint
   rules:
-    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: '$CI_MERGE_REQUEST_IID'
