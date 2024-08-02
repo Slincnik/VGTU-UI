@@ -41,7 +41,6 @@ release-job:
     tag_name: $CI_COMMIT_TAG
     name: 'Release $CI_COMMIT_TAG'
     description: 'Release created'
-    ref: '$CI_COMMIT_TAG'
 
 deploy-job:
   stage: deploy
