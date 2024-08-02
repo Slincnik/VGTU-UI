@@ -1,5 +1,7 @@
 is-latest:
   stage: build
+  rules:
+    - if: '$CI_COMMIT_TAG'
   script:
     - echo "IS_LATEST=false" > latest.env
     - LATEST_GIT_TAG=$(git -c versionsort.prereleaseSuffix="-rc" -c versionsort.prereleaseSuffix="-RC" tag -l "v*.*.*" --sort=-v:refname | awk '!/rc/' | head -n 1)
@@ -21,6 +23,8 @@ is-latest:
 
 docker-push-tag:
   extends: .docker-push
+  rules:
+    - if: '$CI_COMMIT_TAG'
   needs:
     - job: is-latest
       artifacts: true
@@ -32,6 +36,8 @@ docker-push-tag:
 
 # release-job:
 #   stage: release
+#   rules:
+#     - if: '$CI_COMMIT_TAG'
 #   image: registry.gitlab.com/gitlab-org/release-cli:latest
 #   script:
 #     - echo "Creating a release for $CI_COMMIT_TAG"
@@ -43,6 +49,8 @@ docker-push-tag:
 deploy-job:
   stage: deploy
   image: alpine:3.18
+  rules:
+    - if: '$CI_COMMIT_TAG'
   needs:
     - docker-push-tag
   before_script:
@@ -60,7 +68,3 @@ deploy-job:
     - ssh ${DEV_USER}@${DEV_HOST} "mkdir -p /tmp/${CI_PROJECT_DIR}/frontend/"
     - scp ./deploy/front.conf ${DEV_USER}@${DEV_HOST}:/tmp/${CI_PROJECT_DIR}/frontend/default.conf
     - envsubst < ./deploy/deploy.sh| ssh ${DEV_USER}@${DEV_HOST}
-
-workflow:
-  rules:
-    - if: '$CI_COMMIT_TAG'
