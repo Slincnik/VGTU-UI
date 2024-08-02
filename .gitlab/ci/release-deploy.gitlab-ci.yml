@@ -34,7 +34,7 @@ docker-push-tag:
 release-job:
   stage: release
   needs:
-    - build-docker-job
+    - docker-push-tag
   image: registry.gitlab.com/gitlab-org/release-cli
   script:
     - echo "Creating a release for $CI_COMMIT_TAG"
