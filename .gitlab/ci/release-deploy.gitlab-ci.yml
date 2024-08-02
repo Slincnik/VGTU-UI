@@ -44,7 +44,7 @@ deploy-job:
   stage: deploy
   image: alpine:3.18
   needs:
-    - release-job
+    - docker-push-tag
   before_script:
     - apk update && apk add bash
     - apk update && apk add gettext
