@@ -1,5 +1,8 @@
 lint-job:
   stage: lint
+  image: node:20
+  before_script:
+    - corepack enable pnpm
   script:
     - pnpm install --frozen-lockfile
     - pnpm lint
@@ -9,8 +12,11 @@ lint-job:
 
 build-job:
   stage: build
+  image: node:20
   needs:
     - lint-job
+  before_script:
+    - corepack enable pnpm
   script:
     - pnpm run build
   artifacts:
