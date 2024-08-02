@@ -30,15 +30,15 @@ docker-push-tag:
     - echo $IS_LATEST
     - if [ "$IS_LATEST" = "true" ]; then export DESTINATION="$DESTINATION --destination $CONTAINER_IMAGE_NAME:latest"; fi
 
-release-job:
-  stage: release
-  image: registry.gitlab.com/gitlab-org/release-cli:latest
-  script:
-    - echo "Creating a release for $CI_COMMIT_TAG"
-  release:
-    tag_name: '$CI_COMMIT_TAG'
-    name: 'Release $CI_COMMIT_TAG'
-    description: 'Release created'
+# release-job:
+#   stage: release
+#   image: registry.gitlab.com/gitlab-org/release-cli:latest
+#   script:
+#     - echo "Creating a release for $CI_COMMIT_TAG"
+#   release:
+#     tag_name: '$CI_COMMIT_TAG'
+#     name: 'Release $CI_COMMIT_TAG'
+#     description: 'Release created'
 
 deploy-job:
   stage: deploy
