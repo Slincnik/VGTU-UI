@@ -13,12 +13,11 @@ is-latest:
   stage: publish
   image:
     name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
+    entrypoint: ['']
   script:
     - echo "pushing to $DESTINATION"
     - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$DOCKER_AUTH_CODE\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context $CI_PROJECT_DIR --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $DESTINATION
-
+    - /kaniko/executor --dockerfile $CI_PROJECT_DIR/Dockerfile --destination $DESTINATION
 
 docker-push-tag:
   extends: .docker-push
