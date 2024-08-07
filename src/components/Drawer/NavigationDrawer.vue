@@ -14,6 +14,7 @@
         :active="item.link === $route.path"
         active-class="list-active"
         rounded="lg"
+        :ripple="false"
         @click="$router.push(item.link)"
       >
         <div class="d-flex align-center">
@@ -22,6 +23,7 @@
             elevation="0"
             class="mr-5"
             color="#ECEFF4"
+            :ripple="false"
           >
             <v-icon
               :icon="item.icon"
