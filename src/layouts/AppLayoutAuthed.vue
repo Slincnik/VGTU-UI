@@ -12,7 +12,7 @@
   <v-main>
     <v-container
       fluid
-      class="h-100"
+      class="h-100 px-0 py-0"
     >
       <slot />
     </v-container>

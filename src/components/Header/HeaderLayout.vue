@@ -20,8 +20,9 @@
     <template #append>
       <v-avatar
         color="info"
-        class="mr-5"
+        class="mr-5 cursor-pointer"
         :size="48"
+        @click.stop="$router.push('/profile')"
       >
         CХ
       </v-avatar>

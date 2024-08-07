@@ -27,6 +27,34 @@ const router = createRouter({
       }
     },
     {
+      path: '/profile',
+      name: 'ProfilePage',
+      component: () => import('@/views/Profile/ProfileView.vue'),
+      meta: {
+        layout: AppLayoutsEnum.authed
+      },
+      children: [
+        {
+          path: 'main',
+          name: 'ProfileMain',
+          component: () => import('@/components/ProfileInfo/ProfileInfo.vue')
+        },
+        {
+          path: 'orders',
+          name: 'ProfileOrders',
+          component: () => import('@/components/ProfileInfo/ProfileInfo.vue')
+        },
+        {
+          path: 'payments',
+          name: 'ProfilePayments',
+          component: () => import('@/components/ProfileInfo/ProfileInfo.vue')
+        }
+      ],
+      redirect: () => {
+        return { name: 'ProfileMain' }
+      }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('@/components/NotFound/NotFound.vue')
