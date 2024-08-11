@@ -9,7 +9,7 @@ module.exports = {
     node: true
   },
   extends: [
-    'plugin:vue/vue3-essential',
+    'plugin:vue/vue3-recommended',
     '@vue/eslint-config-airbnb-with-typescript',
     '@vue/eslint-config-prettier/skip-formatting',
     'prettier'
