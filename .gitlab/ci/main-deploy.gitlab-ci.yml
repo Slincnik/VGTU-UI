@@ -1,5 +1,7 @@
 lint-job:
   stage: lint
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   before_script:
     - corepack enable pnpm
   script:
@@ -11,6 +13,8 @@ lint-job:
 
 build-job:
   stage: build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
     - lint-job
   before_script:
@@ -20,7 +24,3 @@ build-job:
   artifacts:
     paths:
       - dist/
-
-workflow:
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH

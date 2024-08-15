@@ -29,10 +29,10 @@ docker-push-tag:
     - job: is-latest
       artifacts: true
   variables:
-    DESTINATION: --destination $CONTAINER_IMAGE_NAME:$CI_COMMIT_TAG
+    DESTINATION: --destination $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
   before_script:
     - echo $IS_LATEST
-    - if [ "$IS_LATEST" = "true" ]; then export DESTINATION="$DESTINATION --destination $CONTAINER_IMAGE_NAME:latest"; fi
+    - if [ "$IS_LATEST" = "true" ]; then export DESTINATION="$DESTINATION --destination $CI_REGISTRY_IMAGE:latest"; fi
 
 # release-job:
 #   stage: release
