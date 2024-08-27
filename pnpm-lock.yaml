@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@josempgon/vue-keycloak':
+        specifier: ^3.0.0
+        version: 3.0.0(keycloak-js@25.0.1)(vue@3.4.29(typescript@5.4.5))
       axios:
         specifier: ^1.7.2
         version: 1.7.2
@@ -429,6 +432,12 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
+
+  '@josempgon/vue-keycloak@3.0.0':
+    resolution: {integrity: sha512-nYXRayueLoiVtpvfH5h/AklsEiyMn8xZoj2r0i0fM80A0893t0Wg1v+BHebYdWcEpy7pU1Jq22PuhoY9SPmJtA==}
+    peerDependencies:
+      keycloak-js: 18 - 25
+      vue: ^3.4.0
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -2749,6 +2758,11 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
+
+  '@josempgon/vue-keycloak@3.0.0(keycloak-js@25.0.1)(vue@3.4.29(typescript@5.4.5))':
+    dependencies:
+      keycloak-js: 25.0.1
+      vue: 3.4.29(typescript@5.4.5)
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:

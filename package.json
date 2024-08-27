@@ -14,6 +14,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@josempgon/vue-keycloak": "^3.0.0",
     "axios": "^1.7.2",
     "keycloak-js": "^25.0.1",
     "pinia": "^2.1.7",
