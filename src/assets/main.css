@@ -1,20 +1,28 @@
 @font-face {
-  font-family: 'GothamPro Medium';
+  font-family: 'GothamPro';
+  font-style: normal;
+  font-weight: 400;
   src: url('@/assets/fonts/gothampro_medium.ttf');
 }
 
 @font-face {
   font-family: 'GothamPro';
+  font-style: normal;
+  font-weight: 400;
   src: url('@/assets/fonts/gothampro.ttf');
 }
 
 @font-face {
-  font-family: 'GothamPro Bold';
+  font-family: 'GothamPro';
+  font-style: normal;
+  font-weight: 600;
   src: url('@/assets/fonts/gothampro_bold.ttf');
 }
 
 @font-face {
-  font-family: 'GothamPro Light';
+  font-family: 'GothamPro';
+  font-style: normal;
+  font-weight: 200;
   src: url('@/assets/fonts/gothampro_light.ttf');
 }
 
