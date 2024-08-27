@@ -27,6 +27,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/surveys',
+      name: 'SurveysPage',
+      component: () => import('@/views/Surveys/SurveysView.vue'),
+      meta: {
+        layout: AppLayoutsEnum.authed
+      }
+    },
+    {
       path: '/profile',
       name: 'ProfilePage',
       component: () => import('@/views/Profile/ProfileView.vue'),
