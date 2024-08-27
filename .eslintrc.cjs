@@ -132,6 +132,12 @@ module.exports = {
         registeredComponentsOnly: true
       }
     ],
+    'vue/valid-v-slot': [
+      'error',
+      {
+        allowModifiers: true
+      }
+    ],
     'comma-dangle': [
       'error',
       {
