@@ -11,6 +11,9 @@ import iconPortfolio from '@/assets/svg/icon-portfolio.svg'
 import iconRequest from '@/assets/svg/icon-request.svg'
 import iconSchedule from '@/assets/svg/icon-schedule.svg'
 import iconSurvey from '@/assets/svg/icon-survey.svg'
+import iconTrash from '@/assets/svg/icon-trash.svg'
+import iconDownload from '@/assets/svg/icon-download.svg'
+import iconEdit from '@/assets/svg/icon-edit.svg'
 
 const customSvgNameToComponent: Record<string, string> = {
   iconEducation,
@@ -21,7 +24,10 @@ const customSvgNameToComponent: Record<string, string> = {
   iconPortfolio,
   iconRequest,
   iconSchedule,
-  iconSurvey
+  iconSurvey,
+  iconTrash,
+  iconDownload,
+  iconEdit
 }
 
 const customSVGs: IconSet = {
