@@ -8,7 +8,7 @@ import { createVuetify } from 'vuetify'
 
 import { vueKeycloak } from '@josempgon/vue-keycloak'
 import App from './App.vue'
-import { initRouter } from './plugins/router'
+import { router } from './plugins/router'
 
 const vuetify = createVuetify({
   theme: {
@@ -22,7 +22,9 @@ app.use(createPinia())
 
 await vueKeycloak.install(app, {
   initOptions: {
-    flow: 'hybrid'
+    onLoad: 'check-sso',
+    checkLoginIframe: true,
+    silentCheckSsoRedirectUri: `${window.location.origin}/silent-check-sso.html`
   },
   config: {
     url: import.meta.env.VITE_KEYCLOAK_CLIENT_URL,
@@ -31,6 +33,6 @@ await vueKeycloak.install(app, {
   }
 })
 
-app.use(initRouter())
+app.use(router)
 app.use(vuetify)
 app.mount('#app')
