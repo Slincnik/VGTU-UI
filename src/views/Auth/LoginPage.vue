@@ -17,8 +17,8 @@
     >
       <v-card-title class="text-h3 font-weight-thin mb-3"> Авторизация</v-card-title>
       <v-text-field
-        class="elevation-0"
         v-model="DTO.login"
+        class="elevation-0"
         :rules="[rules.required]"
         density="compact"
         placeholder="Логин"
@@ -28,16 +28,16 @@
       />
 
       <v-text-field
+        v-model="DTO.password"
         :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
         :type="visible ? 'text' : 'password'"
-        v-model="DTO.password"
         :rules="[rules.required]"
         density="compact"
         placeholder="Пароль"
         variant="outlined"
-        @click:append-inner="visible = !visible"
         max-width="360"
         min-width="290"
+        @click:append-inner="visible = !visible"
       />
 
       <v-btn

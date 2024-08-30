@@ -1,8 +1,8 @@
 <template>
   <v-navigation-drawer
+    v-model="drawer"
     :rail
     :temporary="mobile"
-    v-model="drawer"
     :disable-resize-watcher="true"
     width="274"
     rail-width="88"

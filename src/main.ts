@@ -6,6 +6,7 @@ import '@/assets/main.css'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
 import router from './plugins/router'
 import { customSVGs } from './plugins/iconSet'
@@ -25,7 +26,18 @@ const vuetify = createVuetify({
 const app = createApp(App)
 
 app.use(createPinia())
-app.use(router())
-app.use(vuetify)
 
+app.use(router)
+app.use(vuetify)
+app.use(VueQueryPlugin, {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false
+      }
+    }
+  }
+})
 app.mount('#app')
