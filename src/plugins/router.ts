@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { loadLayoutMiddleware } from './middlewares/loadLayout'
-import { loadKeycloakToken } from './middlewares/checkAuth'
+import { checkAuthKeycloak } from './middlewares/checkAuth'
 
 const routes: readonly RouteRecordRaw[] = [
   {
@@ -15,7 +15,7 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(loadKeycloakToken)
 router.beforeEach(loadLayoutMiddleware)
+router.beforeEach(checkAuthKeycloak)
 
 export { router }
