@@ -1,5 +1,5 @@
-import { getToken } from '@josempgon/vue-keycloak'
 import axios, { AxiosError } from 'axios'
+import { authManager, getToken } from '@/service/keycloak/auth.config'
 
 const BASE_URL = import.meta.env.VITE_BASE_URL
 
@@ -15,12 +15,17 @@ api.interceptors.response.use(
   async config => {
     const token = await getToken()
 
-    config.headers.Authorization = `Bearer ${token}`
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
 
     return config
   },
   (error: AxiosError) => {
     switch (error.response?.status) {
+      case 401:
+        authManager.signinRedirect()
+        break
       default:
         console.log(error)
         break

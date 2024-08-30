@@ -8,18 +8,18 @@ importers:
 
   .:
     dependencies:
-      '@josempgon/vue-keycloak':
-        specifier: ^3.0.0
-        version: 3.0.0(keycloak-js@25.0.1)(vue@3.4.29(typescript@5.4.5))
       '@tanstack/vue-query':
         specifier: ^5.52.2
         version: 5.52.2(vue@3.4.29(typescript@5.4.5))
       axios:
         specifier: ^1.7.2
         version: 1.7.2
-      keycloak-js:
-        specifier: ^25.0.1
-        version: 25.0.1
+      jwt-decode:
+        specifier: ^4.0.0
+        version: 4.0.0
+      oidc-client-ts:
+        specifier: ^3.0.1
+        version: 3.0.1
       pinia:
         specifier: ^2.1.7
         version: 2.1.7(typescript@5.4.5)(vue@3.4.29(typescript@5.4.5))
@@ -435,12 +435,6 @@ packages:
   '@humanwhocodes/object-schema@2.0.3':
     resolution: {integrity: sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==}
     deprecated: Use @eslint/object-schema instead
-
-  '@josempgon/vue-keycloak@3.0.0':
-    resolution: {integrity: sha512-nYXRayueLoiVtpvfH5h/AklsEiyMn8xZoj2r0i0fM80A0893t0Wg1v+BHebYdWcEpy7pU1Jq22PuhoY9SPmJtA==}
-    peerDependencies:
-      keycloak-js: 18 - 25
-      vue: ^3.4.0
 
   '@jridgewell/gen-mapping@0.3.5':
     resolution: {integrity: sha512-IzL8ZoEDIBRWEzlCcRhOaCupYyN5gdIK+Q6fbFdPDg6HqX6jpkItn7DFIpW9LQzXG6Df9sA7+OKnq0qlz/GaQg==}
@@ -1680,9 +1674,6 @@ packages:
   iterator.prototype@1.1.2:
     resolution: {integrity: sha512-DR33HMMr8EzwuRL8Y9D3u2BMj8+RqSE850jfGu59kS7tbmPLzGkZmVSfyCFSDxuZiEY6Rzt3T2NA/qU+NwVj1w==}
 
-  js-sha256@0.11.0:
-    resolution: {integrity: sha512-6xNlKayMZvds9h1Y1VWc0fQHQ82BxTXizWPEtEeGvmOUYpBRy4gbWroHLpzowe6xiQhHpelCQiE7HEdznyBL9Q==}
-
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -1727,9 +1718,6 @@ packages:
   jwt-decode@4.0.0:
     resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
     engines: {node: '>=18'}
-
-  keycloak-js@25.0.1:
-    resolution: {integrity: sha512-ns5sKQ5Iz3UyVGIKq2XBBXNZTlTCg9bzybR+JB2Vn+fDHIo9EGgAY4kzrBWMwbeFuegY+qJwGs05N+W9jgY9tg==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -1888,6 +1876,10 @@ packages:
   object.values@1.2.0:
     resolution: {integrity: sha512-yBYjY9QX2hnRmZHAjG/f13MzmBzxzYgQhFrke06TTyKY5zSTEqkOeukBzIdVA3j3ulu8Qa3MbVFShV7T2RmGtQ==}
     engines: {node: '>= 0.4'}
+
+  oidc-client-ts@3.0.1:
+    resolution: {integrity: sha512-xX8unZNtmtw3sOz4FPSqDhkLFnxCDsdo2qhFEH2opgWnF/iXMFoYdBQzkwCxAZVgt3FT3DnuBY3k80EZHT0RYg==}
+    engines: {node: '>=18'}
 
   once@1.4.0:
     resolution: {integrity: sha512-lNaJgI+2Q5URQBkccEKHTQOPaXdUxnZZElQTZY0MFUAuaEqe1E+Nyvgdz/aIyNi6Z9MzO5dv1H8n58/GELp3+w==}
@@ -2791,11 +2783,6 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/object-schema@2.0.3': {}
-
-  '@josempgon/vue-keycloak@3.0.0(keycloak-js@25.0.1)(vue@3.4.29(typescript@5.4.5))':
-    dependencies:
-      keycloak-js: 25.0.1
-      vue: 3.4.29(typescript@5.4.5)
 
   '@jridgewell/gen-mapping@0.3.5':
     dependencies:
@@ -4352,8 +4339,6 @@ snapshots:
       reflect.getprototypeof: 1.0.6
       set-function-name: 2.0.2
 
-  js-sha256@0.11.0: {}
-
   js-tokens@4.0.0: {}
 
   js-yaml@4.1.0:
@@ -4390,11 +4375,6 @@ snapshots:
       object.values: 1.2.0
 
   jwt-decode@4.0.0: {}
-
-  keycloak-js@25.0.1:
-    dependencies:
-      js-sha256: 0.11.0
-      jwt-decode: 4.0.0
 
   keyv@4.5.4:
     dependencies:
@@ -4548,6 +4528,10 @@ snapshots:
       call-bind: 1.0.7
       define-properties: 1.2.1
       es-object-atoms: 1.0.0
+
+  oidc-client-ts@3.0.1:
+    dependencies:
+      jwt-decode: 4.0.0
 
   once@1.4.0:
     dependencies:

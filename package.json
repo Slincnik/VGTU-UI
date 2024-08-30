@@ -14,10 +14,10 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@josempgon/vue-keycloak": "^3.0.0",
     "@tanstack/vue-query": "^5.52.2",
     "axios": "^1.7.2",
-    "keycloak-js": "^25.0.1",
+    "jwt-decode": "^4.0.0",
+    "oidc-client-ts": "^3.0.1",
     "pinia": "^2.1.7",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.29",
