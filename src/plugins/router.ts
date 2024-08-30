@@ -15,7 +15,7 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(loadLayoutMiddleware)
 router.beforeEach(loadKeycloakToken)
+router.beforeEach(loadLayoutMiddleware)
 
 export { router }

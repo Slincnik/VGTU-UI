@@ -7,6 +7,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 import { vueKeycloak } from '@josempgon/vue-keycloak'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
 import { router } from './plugins/router'
 
@@ -35,4 +36,15 @@ await vueKeycloak.install(app, {
 
 app.use(router)
 app.use(vuetify)
+app.use(VueQueryPlugin, {
+  queryClientConfig: {
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        refetchOnReconnect: false
+      }
+    }
+  }
+})
 app.mount('#app')

@@ -1,24 +1,29 @@
 import { defineStore } from 'pinia'
 
-import KeyCloak, { type KeycloakTokenParsed } from 'keycloak-js'
+export type User = {
+  id: string
+  externalId: string
+  isDummy: true
+  lastModifyDate: Date
+  firstName: string
+  lastName: string
+  middleName: string
+  username: string
+  email: string
+}
 
 export type UserStore = {
-  keycloak: KeyCloak | null
-  profile: KeycloakTokenParsed | null
+  user: User | null
 }
 
 export const useAuthStore = defineStore({
   id: 'authStore',
   state: (): UserStore => ({
-    keycloak: null,
-    profile: null
+    user: null
   }),
   actions: {
-    setInstance(keycloak: KeyCloak) {
-      this.keycloak = keycloak
-    },
-    setProfile(profile: KeycloakTokenParsed) {
-      this.profile = profile
+    setUser(user: User) {
+      this.user = user
     }
   }
 })
