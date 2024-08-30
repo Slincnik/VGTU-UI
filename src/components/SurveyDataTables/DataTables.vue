@@ -1,5 +1,6 @@
 <template>
   <div class="mt-5">
+    <!-- @ts-ignore -->
     <v-data-table-server
       :items="serverItems"
       :headers
@@ -80,6 +81,7 @@ const loadItems = () => {
   })
 }
 
+// @ts-ignore
 const headers = [
   {
     key: 'name',
@@ -109,7 +111,6 @@ const headers = [
   {
     key: 'actions',
     title: 'Опции',
-    align: 'center',
     sortable: false
   }
 ]
