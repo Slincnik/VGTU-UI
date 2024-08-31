@@ -61,9 +61,11 @@ export const getDecodedToken = async () => {
 }
 
 authManager.events.addAccessTokenExpired(async () => {
+  await authManager.removeUser()
   await authManager.signinRedirect()
 })
 
 authManager.events.addSilentRenewError(async () => {
+  await authManager.removeUser()
   await authManager.signinRedirect()
 })
