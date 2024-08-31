@@ -1,7 +1,9 @@
 export enum AppLayoutsEnum {
-  default = 'default'
+  default = 'default',
+  notdefault = 'notdefault'
 }
 
 export const AppLayoutToFileMap: Record<AppLayoutsEnum, string> = {
-  default: 'AppLayoutDefault.vue'
+  default: 'AppLayoutDefault.vue',
+  notdefault: 'AppLayoutNotDefault.vue'
 }

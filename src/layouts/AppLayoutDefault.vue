@@ -1,26 +1,56 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const rail = ref(true)
-</script>
-
 <template>
-  <v-app>
-    <v-navigation-drawer
-      :rail="rail"
-      @click="rail = false"
-    />
+  <header-layout
+    v-model:drawer="drawer"
+    v-model:rail="rail"
+  />
 
-    <v-app-bar>
-      <v-app-bar-nav-icon @click.stop="rail = !rail" />
+  <navigation-drawer
+    v-model:drawer="drawer"
+    v-model:rail="rail"
+  />
 
-      <v-app-bar-title>Application</v-app-bar-title>
-    </v-app-bar>
-
-    <v-main>
-      <v-container>
-        <slot />
-      </v-container>
-    </v-main>
-  </v-app>
+  <v-main>
+    <v-container
+      fluid
+      class="h-100 px-0 py-0"
+    >
+      <slot />
+    </v-container>
+  </v-main>
 </template>
+
+<script setup lang="ts">
+import { onMounted, ref, watch } from 'vue'
+import { useDisplay } from 'vuetify'
+import HeaderLayout from '@/components/Header/HeaderLayout.vue'
+import NavigationDrawer from '@/components/Drawer/NavigationDrawer.vue'
+
+const drawer = ref(false)
+const rail = ref(false)
+
+const { mobile } = useDisplay()
+
+onMounted(() => {
+  if (!mobile.value) {
+    drawer.value = true
+    rail.value = true
+  }
+})
+
+watch(mobile, (newVal, oldVal) => {
+  if (!newVal && oldVal) {
+    if (!drawer.value && !rail.value) {
+      drawer.value = true
+      rail.value = true
+    }
+  } else if (newVal && !oldVal) {
+    if (rail.value) {
+      drawer.value = false
+      rail.value = false
+    }
+    if (!rail.value && drawer.value) {
+      drawer.value = true
+    }
+  }
+})
+</script>

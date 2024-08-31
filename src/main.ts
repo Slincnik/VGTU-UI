@@ -8,11 +8,18 @@ import { createVuetify } from 'vuetify'
 
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
-import { router } from './plugins/router'
+import router from './plugins/router'
+import { customSVGs } from './plugins/iconSet'
 
 const vuetify = createVuetify({
   theme: {
-    defaultTheme: 'dark'
+    defaultTheme: 'light'
+  },
+  icons: {
+    defaultSet: 'mdi',
+    sets: {
+      custom: customSVGs
+    }
   }
 })
 

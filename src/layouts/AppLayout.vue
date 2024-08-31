@@ -13,15 +13,18 @@ router.isReady().finally(() => {
 </script>
 
 <template>
-  <div v-if="!isRouterReady">
-    <v-progress-circular
-      indeterminate
-      :size="36"
-    />
-  </div>
-  <template v-else>
-    <component :is="route.meta.layoutComponent">
-      <slot />
-    </component>
-  </template>
+  <v-app>
+    <template v-if="!isRouterReady">
+      <v-progress-circular
+        class="mx-auto h-100"
+        indeterminate
+        :size="36"
+      />
+    </template>
+    <template v-else>
+      <component :is="route.meta.layoutComponent">
+        <slot />
+      </component>
+    </template>
+  </v-app>
 </template>

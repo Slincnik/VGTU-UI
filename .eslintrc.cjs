@@ -24,7 +24,6 @@ module.exports = {
     })
   },
   rules: {
-    'prettier/prettier': 'error',
     'import/no-extraneous-dependencies': 'off',
     'import/no-unresolved': 'off',
     'vue/html-self-closing': [
