@@ -5,11 +5,12 @@ lint-job:
   before_script:
     - corepack enable pnpm
   script:
-    - pnpm install --frozen-lockfile
+    - pnpm install --frozen-lockfile --ignore-scripts
     - pnpm lint
   artifacts:
     paths:
       - node_modules/
+    expire_in: "1 week"
 
 build-job:
   stage: build
@@ -24,3 +25,4 @@ build-job:
   artifacts:
     paths:
       - dist/
+    expire_in: "1 week"

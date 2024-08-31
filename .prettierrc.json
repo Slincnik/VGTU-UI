@@ -6,5 +6,14 @@
   "printWidth": 100,
   "singleAttributePerLine": true,
   "trailingComma": "none",
-  "endOfLine": "crlf"
+  "endOfLine": "crlf",
+  "arrowParens": "avoid",
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": {
+        "parser": "vue"
+      }
+    }
+  ]
 }
