@@ -6,5 +6,6 @@
   "printWidth": 100,
   "singleAttributePerLine": true,
   "trailingComma": "none",
-  "endOfLine": "crlf"
+  "endOfLine": "crlf",
+  "arrowParens": "avoid"
 }
