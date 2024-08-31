@@ -6,7 +6,7 @@ RUN corepack enable
 WORKDIR /usr/scr/app
 COPY package.json pnpm-lock.yaml ./
 COPY . .
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install -P --frozen-lockfile --ignore-scripts
 RUN pnpm run build
 
 # Stage 2

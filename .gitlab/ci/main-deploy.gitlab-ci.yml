@@ -5,7 +5,7 @@ lint-job:
   before_script:
     - corepack enable pnpm
   script:
-    - pnpm install -P --frozen-lockfile --ignore-scripts
+    - pnpm install --frozen-lockfile --ignore-scripts
     - pnpm lint
   artifacts:
     paths:
