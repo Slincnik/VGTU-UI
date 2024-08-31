@@ -32,6 +32,7 @@
         class="mr-5"
         icon="custom:iconLogout"
         :ripple="false"
+        @click.prevent="authManager.signoutRedirect()"
       />
     </template>
   </v-app-bar>
@@ -39,6 +40,7 @@
 
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
+import { authManager } from '@/service/keycloak/auth.config'
 
 const drawer = defineModel<boolean>('drawer', {
   required: true
