@@ -42,13 +42,13 @@ import { ref } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const items = ref([
-  { id: 1, title: 'Главная', icon: 'custom:iconHome', link: '/' },
-  { id: 2, title: 'Расписание', icon: 'custom:iconSchedule', link: '/schedule' },
-  { id: 3, title: 'Обучение', icon: 'custom:iconEducation', link: '/education' },
-  { id: 4, title: 'Портфолио', icon: 'custom:iconPortfolio', link: '/portfolio' },
-  { id: 5, title: 'Заявки', icon: 'custom:iconRequest', link: '/requests' },
-  { id: 6, title: 'Опросы', icon: 'custom:iconSurvey', link: '/surveys' },
-  { id: 7, title: 'Информация', icon: 'custom:iconInfo', link: '/info' }
+  { id: 1, title: 'Главная', icon: 'custom:home', link: '/' },
+  { id: 2, title: 'Расписание', icon: 'custom:schedule', link: '/schedule' },
+  { id: 3, title: 'Обучение', icon: 'custom:education', link: '/education' },
+  { id: 4, title: 'Портфолио', icon: 'custom:portfolio', link: '/portfolio' },
+  { id: 5, title: 'Заявки', icon: 'custom:request', link: '/requests' },
+  { id: 6, title: 'Опросы', icon: 'custom:survey', link: '/surveys' },
+  { id: 7, title: 'Информация', icon: 'custom:info', link: '/info' }
 ])
 
 const drawer = defineModel<boolean>('drawer', {

@@ -117,15 +117,15 @@ const headers = [
 const buttonActions = [
   {
     id: 1,
-    icon: 'custom:iconEdit'
+    icon: 'custom:edit'
   },
   {
     id: 2,
-    icon: 'custom:iconDownload'
+    icon: 'custom:download'
   },
   {
     id: 3,
-    icon: 'custom:iconTrash'
+    icon: 'custom:trash'
   }
 ]
 </script>

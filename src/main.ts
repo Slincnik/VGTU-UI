@@ -5,11 +5,12 @@ import '@/assets/main.css'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
+import { aliases } from 'vuetify/iconsets/mdi-svg'
 
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
 import router from './plugins/router'
-import { customSVGs } from './plugins/iconSet'
+import { custom } from './service/icons/icon.service'
 
 const vuetify = createVuetify({
   theme: {
@@ -17,8 +18,9 @@ const vuetify = createVuetify({
   },
   icons: {
     defaultSet: 'mdi',
+    aliases,
     sets: {
-      custom: customSVGs
+      custom
     }
   }
 })
