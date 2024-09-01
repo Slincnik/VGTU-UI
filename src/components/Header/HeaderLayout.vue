@@ -8,7 +8,7 @@
       class="ml-5"
       base-color="#8FBCBB"
       :ripple="false"
-      icon="custom:iconMenu"
+      icon="custom:menu"
       @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
     />
     <v-app-bar-title class="ml-5">
@@ -30,7 +30,7 @@
         variant="tonal"
         size="48"
         class="mr-5"
-        icon="custom:iconLogout"
+        icon="custom:logout"
         :ripple="false"
         @click.prevent="authManager.signoutRedirect()"
       />
