@@ -1,12 +1,10 @@
 import { defineStore } from 'pinia'
-import type { GradeBook, User, UserEducation } from '@/plugins/axios.types'
+import type { Student } from '@/api/student/student.types'
 
 export type UserStore = {
   id: string | null
-  user: User | null
-  gradeBooksIds: Array<string>
-  gradeBooks: GradeBook[]
-  educations: UserEducation[]
+  user: Student.User | null
+  educations: Student.Education[]
 }
 
 export const useAuthStore = defineStore({
@@ -14,23 +12,16 @@ export const useAuthStore = defineStore({
   state: (): UserStore => ({
     id: null,
     user: null,
-    gradeBooksIds: [],
-    gradeBooks: [],
     educations: []
   }),
   getters: {
-    getUser: state => state.user,
-    getGradeBooksIds: state =>
-      state.gradeBooksIds.map(studentGradeBook => `ids=${studentGradeBook}`).join('&')
+    getUser: state => state.user
   },
   actions: {
     setStore(store: UserStore) {
       this.$patch(store)
     },
-    setGradebooks(gradeBooks: GradeBook[]) {
-      this.gradeBooks = gradeBooks
-    },
-    setUserEducations(educations: UserEducation[]) {
+    setUserEducations(educations: Student.Education[]) {
       this.educations = educations
     }
   }

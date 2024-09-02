@@ -32,3 +32,32 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export interface ResponseEntity<T> {
+  content: T
+  pageable: {
+    sort: {
+      empty: boolean
+      unsorted: boolean
+      sorted: boolean
+    }
+    offset: number
+    pageNumber: number
+    pageSize: number
+    paged: boolean
+    unpaged: boolean
+  }
+  last: boolean
+  totalElements: number
+  totalPages: number
+  size: number
+  number: number
+  sort: {
+    empty: boolean
+    unsorted: boolean
+    sorted: boolean
+  }
+  numberOfElements: number
+  first: boolean
+  empty: boolean
+}

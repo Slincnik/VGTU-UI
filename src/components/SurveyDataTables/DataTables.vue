@@ -2,19 +2,18 @@
   <div class="mt-5">
     <!-- @ts-ignore -->
     <v-data-table-server
-      :items
+      :items="formattedItems"
       :headers
       :loading
       :items-length="items?.length ?? 0"
       hide-default-footer
-      @update:options="refetch"
     >
       <template #item.status="{ item }">
         <v-chip
           color="#8FBCBB"
           size="large"
           variant="flat"
-          :text="getValueSurveyStatus(item.status)"
+          :text="SurveyStatus.getValue(item.status)"
         />
       </template>
       <template #item.actions>
@@ -36,18 +35,24 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
-import { getAllSurveys } from '@/api/survey'
-import { getValueSurveyStatus } from '@/plugins/axios.types'
+import { getAllStudentSurveys } from '@/api/survey'
+import { SurveyStatus } from '@/api/survey/survey.types'
 
-const {
-  refetch,
-  isLoading: loading,
-  data: items
-} = useQuery({
+const { isLoading: loading, data: items } = useQuery({
   queryKey: ['surveys'],
-  queryFn: getAllSurveys,
-  enabled: false
+  queryFn: getAllStudentSurveys
+})
+
+const formattedItems = computed(() => {
+  return (
+    items.value?.map(item => ({
+      ...item,
+      dateStart: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateStart)),
+      dateEnd: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateEnd))
+    })) || []
+  )
 })
 
 // @ts-ignore

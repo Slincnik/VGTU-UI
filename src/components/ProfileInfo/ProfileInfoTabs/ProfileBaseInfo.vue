@@ -34,12 +34,12 @@
 </template>
 
 <script setup lang="ts">
+import type { Student } from '@/api/student/student.types'
 import { authManager } from '@/service/keycloak/auth.config'
-import type { User } from '@/stores/authStore'
 import { getInitials } from '@/utils/getInitials'
 
 type Props = {
-  user: User | null
+  user: Student.User | null
 }
 
 defineProps<Props>()
