@@ -21,19 +21,19 @@
         <v-list-item
           class="px-0"
           min-height="26"
-          prepend-icon="mdi:mdi-phone"
+          prepend-icon="custom:phone"
           title="+0 (000) 000-00-00"
         />
         <v-list-item
           class="px-0"
           min-height="26"
-          prepend-icon="mdi:mdi-email-open"
+          prepend-icon="custom:email_open"
           title="test@cchgeu.ru"
         />
         <v-list-item
           class="px-0"
           min-height="26"
-          prepend-icon="mdi:mdi-telegram"
+          prepend-icon="custom:telegram"
           title="@test"
         />
       </v-list>
