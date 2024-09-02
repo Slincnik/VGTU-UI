@@ -1,8 +1,8 @@
 import type { User as UserClient } from 'oidc-client-ts'
 import { computed } from 'vue'
-import type { User as UserStore } from '@/plugins/axios.types'
+import type { Student } from '@/api/student/student.types'
 
-export const getInitials = (user: UserClient | UserStore | null) =>
+export const getInitials = (user: UserClient | Student.User | null) =>
   computed(() => {
     if (!user) return ''
 

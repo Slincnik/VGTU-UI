@@ -1,16 +1,23 @@
-import { api } from '@/plugins/axios'
-import type { BaseSortedResponse, Survey } from '@/plugins/axios.types'
+import { useQueryClient } from '@tanstack/vue-query'
+import { api, type ResponseEntity } from '@/service/api/api.service'
 import { useAuthStore } from '@/stores/authStore'
-
-interface AxiosSurvey extends BaseSortedResponse {
-  content: Survey[]
-}
+import type { Survey } from './survey.types'
+import { getUser } from '../student'
 
 const authStore = useAuthStore()
 
-export const getAllSurveys = async () => {
-  const userId = authStore.id
-  const response = await api.get<AxiosSurvey>(`survey/student?studentRecipient=${userId}`)
+export const getAllStudentSurveys = async () => {
+  let userId = authStore.id
+  const queryClient = useQueryClient()
+
+  if (!userId) {
+    const { id } = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
+    userId = id
+  }
+
+  const response = await api.get<ResponseEntity<Survey.BaseSurvey[]>>(
+    `survey/student?studentRecipient=${userId}`
+  )
 
   return response.data.content
 }

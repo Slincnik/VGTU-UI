@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="isUserLoading || isEducationLoading"
+    v-if="isEducationLoading || isLoading"
     class="d-flex justify-center flex-column h-100"
   >
     <v-progress-circular
@@ -22,10 +22,15 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
-import { getUserEducations, getUser } from '@/api/student'
+import { storeToRefs } from 'pinia'
+import { getUser, getUserEducations } from '@/api/student'
 import ProfileTabs from '@/components/ProfileTabs/ProfileTabs.vue'
+import { useAuthStore } from '@/stores/authStore'
 
-const { data: user, isLoading: isUserLoading } = useQuery({
+const authStore = useAuthStore()
+const { user } = storeToRefs(authStore)
+
+const { isLoading } = useQuery({
   queryKey: ['user'],
   queryFn: getUser,
   retry: 0

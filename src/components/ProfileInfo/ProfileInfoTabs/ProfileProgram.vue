@@ -30,10 +30,10 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import type { UserEducation } from '@/stores/authStore'
+import type { Student } from '@/api/student/student.types'
 
 type Props = {
-  educations: UserEducation[]
+  educations: Student.Education[]
 }
 
 const { educations } = defineProps<Props>()
