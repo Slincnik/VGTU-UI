@@ -24,7 +24,7 @@
         :size="48"
         @click.stop="$router.push('/profile')"
       >
-        CХ
+        {{ getInitials(user) }}
       </v-avatar>
       <v-btn
         variant="tonal"
@@ -41,6 +41,7 @@
 <script setup lang="ts">
 import { useDisplay } from 'vuetify'
 import { authManager } from '@/service/keycloak/auth.config'
+import { getInitials } from '@/utils/getInitials'
 
 const drawer = defineModel<boolean>('drawer', {
   required: true
@@ -50,4 +51,6 @@ const rail = defineModel<boolean>('rail', {
 })
 
 const { mobile } = useDisplay()
+
+const user = await authManager.getUser()
 </script>

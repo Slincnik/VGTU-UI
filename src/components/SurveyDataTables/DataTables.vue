@@ -2,21 +2,23 @@
   <div class="mt-5">
     <!-- @ts-ignore -->
     <v-data-table-server
-      :items="serverItems"
+      :items
       :headers
       :loading
-      :items-length="totalItems"
-      show-select
+      :items-length="items?.length ?? 0"
       hide-default-footer
-      @update:options="loadItems"
+      @update:options="refetch"
     >
       <template #item.status="{ item }">
         <v-chip
           color="#8FBCBB"
           size="large"
           variant="flat"
-          :text="item.status"
+          :text="getValueSurveyStatus(item.status)"
         />
+      </template>
+      <template #item.type="{ item }">
+        {{ getValueSurveyType(item.type) }}
       </template>
       <template #item.actions>
         <v-btn
@@ -37,49 +39,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
+import { getAllSurveys } from '@/api/survey'
+import { getValueSurveyStatus, getValueSurveyType } from '@/plugins/axios.types'
 
-type Item = {
-  name: string
-  type: string
-  status: string
-  dateStart: string
-  dateEnd: string
-}
-
-const loading = ref(false)
-
-const items = [
-  {
-    name: '21421421',
-    type: 'Преподаватель глазами студента',
-    status: 'Опубликован',
-    dateStart: Intl.DateTimeFormat().format(Date.now()),
-    dateEnd: Intl.DateTimeFormat().format(Date.now())
-  }
-]
-
-const serverItems = reactive<Item[]>([])
-const totalItems = ref(0)
-
-const FakeAPI = {
-  async fetch(): Promise<{ items: Item[]; total: number }> {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ items, total: items.length })
-      }, 1000)
-    })
-  }
-}
-
-const loadItems = () => {
-  loading.value = true
-  FakeAPI.fetch().then(({ items: newItems, total }) => {
-    Object.assign(serverItems, newItems)
-    totalItems.value = total as number
-    loading.value = false
-  })
-}
+const {
+  refetch,
+  isLoading: loading,
+  data: items
+} = useQuery({
+  queryKey: ['surveys'],
+  queryFn: getAllSurveys,
+  enabled: false
+})
 
 // @ts-ignore
 const headers = [

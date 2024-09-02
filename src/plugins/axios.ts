@@ -5,20 +5,19 @@ const BASE_URL = import.meta.env.VITE_BASE_URL
 
 export const api = axios.create({
   baseURL: BASE_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  },
   withCredentials: true
+})
+
+api.interceptors.request.use(async config => {
+  const token = await getToken()
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
 })
 
 api.interceptors.response.use(
   async config => {
-    const token = await getToken()
-
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`
-    }
-
     return config
   },
   (error: AxiosError) => {
