@@ -17,9 +17,6 @@
           :text="getValueSurveyStatus(item.status)"
         />
       </template>
-      <template #item.type="{ item }">
-        {{ getValueSurveyType(item.type) }}
-      </template>
       <template #item.actions>
         <v-btn
           v-for="btnAction in buttonActions"
@@ -41,7 +38,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query'
 import { getAllSurveys } from '@/api/survey'
-import { getValueSurveyStatus, getValueSurveyType } from '@/plugins/axios.types'
+import { getValueSurveyStatus } from '@/plugins/axios.types'
 
 const {
   refetch,
@@ -58,11 +55,6 @@ const headers = [
   {
     key: 'name',
     title: 'Имя',
-    sortable: false
-  },
-  {
-    key: 'type',
-    title: 'Тип',
     sortable: false
   },
   {

@@ -68,7 +68,6 @@ export type Question = {
 export type Survey = {
   id: string
   name: string
-  type: SurveyType
   status: SurveyStatus
   questions: Question[]
   dateStart: Date

@@ -9,8 +9,8 @@ interface AxiosSurvey extends BaseSortedResponse {
 const authStore = useAuthStore()
 
 export const getAllSurveys = async () => {
-  const user = authStore.getUser
-  const response = await api.get<AxiosSurvey>(`survey/student?studentRecipient=${user?.id}`)
+  const userId = authStore.id
+  const response = await api.get<AxiosSurvey>(`survey/student?studentRecipient=${userId}`)
 
   return response.data.content
 }
