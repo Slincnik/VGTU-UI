@@ -2,20 +2,18 @@
   <div class="mt-5">
     <!-- @ts-ignore -->
     <v-data-table-server
-      :items="serverItems"
+      :items="formattedItems"
       :headers
       :loading
-      :items-length="totalItems"
-      show-select
+      :items-length="items?.length ?? 0"
       hide-default-footer
-      @update:options="loadItems"
     >
       <template #item.status="{ item }">
         <v-chip
           color="#8FBCBB"
           size="large"
           variant="flat"
-          :text="item.status"
+          :text="SurveyStatus.getValue(item.status)"
         />
       </template>
       <template #item.actions>
@@ -37,60 +35,31 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { computed } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
+import { getAllStudentSurveys } from '@/api/survey'
+import { SurveyStatus } from '@/api/survey/survey.types'
 
-type Item = {
-  name: string
-  type: string
-  status: string
-  dateStart: string
-  dateEnd: string
-}
+const { isLoading: loading, data: items } = useQuery({
+  queryKey: ['surveys'],
+  queryFn: getAllStudentSurveys
+})
 
-const loading = ref(false)
-
-const items = [
-  {
-    name: '21421421',
-    type: 'Преподаватель глазами студента',
-    status: 'Опубликован',
-    dateStart: Intl.DateTimeFormat().format(Date.now()),
-    dateEnd: Intl.DateTimeFormat().format(Date.now())
-  }
-]
-
-const serverItems = reactive<Item[]>([])
-const totalItems = ref(0)
-
-const FakeAPI = {
-  async fetch(): Promise<{ items: Item[]; total: number }> {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        resolve({ items, total: items.length })
-      }, 1000)
-    })
-  }
-}
-
-const loadItems = () => {
-  loading.value = true
-  FakeAPI.fetch().then(({ items: newItems, total }) => {
-    Object.assign(serverItems, newItems)
-    totalItems.value = total as number
-    loading.value = false
-  })
-}
+const formattedItems = computed(() => {
+  return (
+    items.value?.map(item => ({
+      ...item,
+      dateStart: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateStart)),
+      dateEnd: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateEnd))
+    })) || []
+  )
+})
 
 // @ts-ignore
 const headers = [
   {
     key: 'name',
     title: 'Имя',
-    sortable: false
-  },
-  {
-    key: 'type',
-    title: 'Тип',
     sortable: false
   },
   {

@@ -1,29 +1,28 @@
 import { defineStore } from 'pinia'
-
-export type User = {
-  id: string
-  externalId: string
-  isDummy: true
-  lastModifyDate: Date
-  firstName: string
-  lastName: string
-  middleName: string
-  username: string
-  email: string
-}
+import type { Student } from '@/api/student/student.types'
 
 export type UserStore = {
-  user: User | null
+  id: string | null
+  user: Student.User | null
+  educations: Student.Education[]
 }
 
 export const useAuthStore = defineStore({
   id: 'authStore',
   state: (): UserStore => ({
-    user: null
+    id: null,
+    user: null,
+    educations: []
   }),
+  getters: {
+    getUser: state => state.user
+  },
   actions: {
-    setUser(user: User) {
-      this.user = user
+    setStore(store: UserStore) {
+      this.$patch(store)
+    },
+    setUserEducations(educations: Student.Education[]) {
+      this.educations = educations
     }
   }
 })
