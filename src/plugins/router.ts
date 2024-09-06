@@ -17,7 +17,24 @@ const routes: readonly RouteRecordRaw[] = [
   {
     path: '/surveys',
     name: 'SurveysPage',
-    component: () => import('@/views/Surveys/SurveysView.vue')
+    component: () => import('@/views/Surveys/SurveysView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'SurveyList',
+        component: () => import('@/components/Surveys/SurveyList.vue')
+      },
+      {
+        path: 'create',
+        name: 'CreateSurvey',
+        component: () => import('@/components/Surveys/SurveyCreate.vue')
+      }
+      // {
+      //   path: ':id',
+      //   name: 'SurveyPage',
+      //   component: () => import('@/components/Surveys/SurveyView.vue')
+      // }
+    ]
   },
   {
     path: '/profile',

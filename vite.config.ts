@@ -24,7 +24,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://lk.edu.cchgeu.ru/',
+        target: 'http://172.16.12.33:8765/',
         changeOrigin: true
       }
     }
