@@ -65,14 +65,6 @@ authManager.events.addAccessTokenExpired(async () => {
   await authManager.signinRedirect()
 })
 
-authManager.events.addUserLoaded(user => {
-  console.log('User loaded:', user)
-})
-
-authManager.events.addUserUnloaded(() => {
-  console.log('User unloaded')
-})
-
 authManager.events.addSilentRenewError(async () => {
   await authManager.removeUser()
   await authManager.signinRedirect()
