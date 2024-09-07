@@ -73,6 +73,7 @@ export namespace SurveyMeta {
 }
 
 export type QuestionTemplate = {
+  id?: string
   title: string
   type: SurveyQuestionType.Enum
   choices: Survey.QuestionChoices[]

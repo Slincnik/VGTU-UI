@@ -183,7 +183,6 @@ const deleteChoice = (index: number) => {
 
 // Удаление вопроса по индексу
 const deleteQuestion = (index: number) => {
-  console.log(index, questions.value)
   questions.value.splice(index, 1)
   resetForm()
   closeDialog()

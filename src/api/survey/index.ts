@@ -6,7 +6,7 @@ import { getUser } from '../student'
 
 const authStore = useAuthStore()
 
-export const getAllStudentSurveys = async () => {
+export const getUserId = async () => {
   let userId = authStore.id
   const queryClient = useQueryClient()
 
@@ -14,6 +14,11 @@ export const getAllStudentSurveys = async () => {
     const { id } = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
     userId = id
   }
+  return userId
+}
+
+export const getAllStudentSurveys = async () => {
+  const userId = await getUserId()
 
   const response = await api.get<ResponseEntity<Survey.BaseSurvey[]>>(
     `survey/student?studentRecipient=${userId}`
@@ -24,5 +29,13 @@ export const getAllStudentSurveys = async () => {
 
 export const createSurveyMeta = async (dto: SurveyMeta.Base) => {
   const response = await api.post('survey/metadata', dto)
+  return response.data
+}
+
+export const getSurveyByIdAndStudent = async (id: string) => {
+  const userId = await getUserId()
+
+  const response = await api.get<Survey.BaseSurvey>(`survey/${id}/${userId}`)
+
   return response.data
 }

@@ -28,12 +28,12 @@ const routes: readonly RouteRecordRaw[] = [
         path: 'create',
         name: 'CreateSurvey',
         component: () => import('@/components/Surveys/SurveyCreate.vue')
+      },
+      {
+        path: ':id',
+        name: 'SurveyPage',
+        component: () => import('@/components/Surveys/SurveyPassing/SurveyPassing.vue')
       }
-      // {
-      //   path: ':id',
-      //   name: 'SurveyPage',
-      //   component: () => import('@/components/Surveys/SurveyView.vue')
-      // }
     ]
   },
   {
@@ -57,9 +57,7 @@ const routes: readonly RouteRecordRaw[] = [
         component: () => import('@/components/ProfileInfo/ProfileInfo.vue')
       }
     ],
-    redirect: () => {
-      return { name: 'ProfileMain' }
-    }
+    redirect: { name: 'ProfileMain' }
   },
   {
     path: '/:pathMatch(.*)*',
