@@ -28,6 +28,7 @@
             <v-icon
               :icon="item.icon"
               color="#2E3440"
+              size="26"
             />
           </v-btn>
           <v-list-item-title class="list-font-text"> {{ item.title }} </v-list-item-title>
@@ -38,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { shallowReadonly } from 'vue'
 import { useDisplay } from 'vuetify'
 
-const items = ref([
+const items = shallowReadonly([
   { id: 1, title: 'Главная', icon: 'custom:home', link: '/' },
   { id: 2, title: 'Расписание', icon: 'custom:schedule', link: '/schedule' },
   { id: 3, title: 'Обучение', icon: 'custom:education', link: '/education' },
@@ -64,7 +65,7 @@ const { mobile } = useDisplay()
 
 <style scoped>
 .list-font-text {
-  font-family: 'Fira Sans', sans-serif;
+  font-family: 'GothamPro', sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 16px;
