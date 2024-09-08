@@ -7,21 +7,21 @@ export namespace Survey {
     answer?: SurveyAnswer
   }
 
-  export type QuestionChoices = {
-    id: string
-    title: string
-  }
-
   export type SurveyAnswer = {
-    id: string
-    question: string
-    student: string
-    text: string
+    id?: string
+    question?: string
+    student?: string
+    text?: string
     answerChoices?: Array<{
       id: string
       questionChoiceId?: string
       selected?: boolean
     }>
+  }
+
+  export type QuestionChoices = {
+    id: string
+    title: string
   }
 
   export type BaseSurvey = {

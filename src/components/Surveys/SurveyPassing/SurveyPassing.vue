@@ -8,67 +8,14 @@
   >
     <v-progress-circular indeterminate />
   </div>
-  <div
+
+  <survey-passing-card
     v-else-if="actualQuestion"
-    class="mt-5 mx-5"
-  >
-    <v-sheet
-      tile
-      min-width="200"
-    >
-      <v-card>
-        <v-card-title> {{ actualQuestion?.title }} </v-card-title>
-        <v-card-text>
-          <template v-if="actualQuestion?.type === SurveyQuestionType.Enum.TEXT">
-            <v-text-field
-              v-model="response"
-              class="mx-5"
-              variant="outlined"
-              placeholder="Ваш ответ"
-            />
-          </template>
-          <template v-else-if="actualQuestion?.type === SurveyQuestionType.Enum.CHOICE">
-            <v-radio-group v-model="response">
-              <v-radio
-                v-for="choice in actualQuestion?.choices"
-                :key="choice.id"
-                :label="choice.title"
-                :value="choice.id"
-              />
-            </v-radio-group>
-          </template>
-          <template v-else-if="actualQuestion?.type === SurveyQuestionType.Enum.MULTI_CHOICE">
-            <v-checkbox
-              v-for="choice in actualQuestion?.choices"
-              :key="choice.id"
-              v-model="response"
-              :label="choice.title"
-              :value="choice.id"
-            />
-          </template>
-        </v-card-text>
-      </v-card>
-    </v-sheet>
-    <div class="d-flex ga-4">
-      <v-btn
-        :ripple="false"
-        :elevation="0"
-        variant="flat"
-        text="Следующий вопрос"
-        color="#ECEFF4"
-        @click="nextQuestion"
-      />
-      <v-btn
-        :ripple="false"
-        :elevation="0"
-        variant="flat"
-        text="Назад"
-        color="#ECEFF4"
-        :disabled="index === 0"
-        @click="previousQuestion"
-      />
-    </div>
-  </div>
+    v-model:index="index"
+    :data
+    :actual-question="actualQuestion"
+    @update-question="refetch()"
+  />
   <div v-else>
     <v-sheet
       class="pa-12 mx-auto"
@@ -105,11 +52,9 @@ import { useRoute } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { getSurveyByIdAndStudent } from '@/api/survey'
 import { getQuestionById } from '@/api/question'
-import { SurveyQuestionType } from '@/api/survey/survey.types'
+import SurveyPassingCard from './SurveyPassingCard.vue'
 
 const route = useRoute()
-
-const response = ref<string | string[] | null>(null)
 const index = ref(0)
 
 const { isLoading: isSurveyLoading, data } = useQuery({
@@ -130,17 +75,7 @@ const {
 } = useQuery({
   queryKey: ['question', index],
   queryFn: () => getQuestionById(questionId.value),
-  enabled
+  enabled,
+  gcTime: 0
 })
-
-const previousQuestion = () => {
-  if (index.value === 0) return
-  index.value--
-  refetch()
-}
-
-const nextQuestion = () => {
-  index.value++
-  refetch()
-}
 </script>
