@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { loadLayoutMiddleware } from './middlewares/loadLayout'
 import { checkAuthKeycloak } from './middlewares/checkAuth'
 import { AppLayoutsEnum } from '@/layouts/layouts.types'
+import { checkSurveyUser } from './middlewares/checkSurveyUser'
 
 const routes: readonly RouteRecordRaw[] = [
   {
@@ -27,7 +28,10 @@ const routes: readonly RouteRecordRaw[] = [
       {
         path: 'create',
         name: 'CreateSurvey',
-        component: () => import('@/components/Surveys/SurveyCreate.vue')
+        component: () => import('@/components/Surveys/SurveyCreate.vue'),
+        meta: {
+          surveyCheck: true
+        }
       },
       {
         path: ':id',
@@ -76,5 +80,6 @@ const router = createRouter({
 
 router.beforeEach(loadLayoutMiddleware)
 router.beforeEach(checkAuthKeycloak)
+router.beforeEach(checkSurveyUser)
 
 export default router

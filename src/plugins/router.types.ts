@@ -6,5 +6,6 @@ declare module 'vue-router' {
     layout?: AppLayoutsEnum
     layoutComponent?: VueElement
     guest?: boolean
+    surveyCheck?: boolean
   }
 }
