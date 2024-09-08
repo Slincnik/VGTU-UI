@@ -15,7 +15,7 @@
   <div>
     <v-list
       density="compact"
-      class="px-0 py-0"
+      class="pa-0"
     >
       <v-list-item
         class="px-0"

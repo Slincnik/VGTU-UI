@@ -3,23 +3,25 @@ export namespace Survey {
     id: string
     title: string
     type: SurveyQuestionType.Enum
-    choices: Array<{
-      id: string
-      title: string[]
-    }>
+    choices: QuestionChoices[]
     answer?: SurveyAnswer
   }
 
   export type SurveyAnswer = {
-    id: string
-    question: string
-    student: string
-    text: string
+    id?: string
+    question?: string
+    student?: string
+    text?: string
     answerChoices?: Array<{
       id: string
       questionChoiceId?: string
       selected?: boolean
     }>
+  }
+
+  export type QuestionChoices = {
+    id: string
+    title: string
   }
 
   export type BaseSurvey = {
@@ -32,6 +34,51 @@ export namespace Survey {
   }
 }
 
+export namespace SurveyMeta {
+  export type Base = {
+    id?: string
+    name: string
+    type: SurveyType.Enum
+    status?: SurveyMetaStatus
+    questions: QuestionTemplate[]
+    groups: Array<{
+      filterId: string
+      title: string
+    }>
+    dateStart?: Date
+    dateEnd?: Date
+  }
+
+  export enum SurveyMetaStatus {
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED',
+    EXPIRED = 'EXPIRED',
+    CLOSED = 'CLOSED'
+  }
+
+  export function getValue(value: SurveyMetaStatus): string {
+    switch (value) {
+      case SurveyMetaStatus.DRAFT:
+        return 'Черновик'
+      case SurveyMetaStatus.PUBLISHED:
+        return 'Опубликован'
+      case SurveyMetaStatus.EXPIRED:
+        return 'Завершен'
+      case SurveyMetaStatus.CLOSED:
+        return 'Принудительно завершен'
+      default:
+        throw new Error(`Non-existent value`)
+    }
+  }
+}
+
+export type QuestionTemplate = {
+  id?: string
+  title: string
+  type: SurveyQuestionType.Enum
+  choices: Survey.QuestionChoices[]
+}
+
 export namespace SurveyQuestionType {
   export enum Enum {
     TEXT = 'TEXT',
@@ -42,14 +89,17 @@ export namespace SurveyQuestionType {
   export function getValue(value: Enum): string {
     switch (value) {
       case Enum.TEXT:
-        return 'Развёрнутый ответ'
+        return 'Текстовый'
       case Enum.CHOICE:
-        return 'Один вариант ответа'
+        return 'Выбор'
       case Enum.MULTI_CHOICE:
         return 'Множественный выбор'
       default:
         throw new Error(`Non-existent value`)
     }
+  }
+  export function values() {
+    return [Enum.TEXT, Enum.CHOICE, Enum.MULTI_CHOICE]
   }
 }
 
@@ -95,5 +145,8 @@ export namespace SurveyType {
       default:
         throw new Error(`Non-existent value`)
     }
+  }
+  export function values() {
+    return [Enum.OTHER, Enum.STUDENT_EYES_TEACHERS]
   }
 }

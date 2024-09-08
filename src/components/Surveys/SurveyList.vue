@@ -1,6 +1,16 @@
 <template>
+  <div class="d-flex justify-space-between">
+    <span class="text-h5 font-weight-bold">Опросы</span>
+    <v-btn
+      v-show="isCanAccept"
+      :ripple="false"
+      :elevation="0"
+      text="Создание опроса"
+      color="#5E81AC"
+      @click="$router.push('/surveys/create')"
+    />
+  </div>
   <div class="mt-5">
-    <!-- @ts-ignore -->
     <v-data-table-server
       :items="formattedItems"
       :headers
@@ -39,6 +49,9 @@ import { computed } from 'vue'
 import { useQuery } from '@tanstack/vue-query'
 import { getAllStudentSurveys } from '@/api/survey'
 import { SurveyStatus } from '@/api/survey/survey.types'
+import { canAccept } from '@/utils/checkSurveyCreateUser'
+
+const isCanAccept = await canAccept()
 
 const { isLoading: loading, data: items } = useQuery({
   queryKey: ['surveys'],
@@ -59,7 +72,7 @@ const formattedItems = computed(() => {
 const headers = [
   {
     key: 'name',
-    title: 'Имя',
+    title: 'Название',
     sortable: false
   },
   {

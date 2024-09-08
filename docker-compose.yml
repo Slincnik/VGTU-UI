@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  ui:
+    container_name: cchgeu-ui-v2
+    image: cchgeu-ui-v2:latest
+    build: .
+    ports:
+      - "4200:80"
+    env_file: .env
+    networks:
+      - assistant
+
+networks:
+  assistant:
+    name: assistant
+    driver: bridge
+    external: true

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
 import { loadLayoutMiddleware } from './middlewares/loadLayout'
 import { checkAuthKeycloak } from './middlewares/checkAuth'
 import { AppLayoutsEnum } from '@/layouts/layouts.types'
+import { checkSurveyUser } from './middlewares/checkSurveyUser'
 
 const routes: readonly RouteRecordRaw[] = [
   {
@@ -17,7 +18,27 @@ const routes: readonly RouteRecordRaw[] = [
   {
     path: '/surveys',
     name: 'SurveysPage',
-    component: () => import('@/views/Surveys/SurveysView.vue')
+    component: () => import('@/views/Surveys/SurveysView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'SurveyList',
+        component: () => import('@/components/Surveys/SurveyList.vue')
+      },
+      {
+        path: 'create',
+        name: 'CreateSurvey',
+        component: () => import('@/components/Surveys/SurveyCreate.vue'),
+        meta: {
+          surveyCheck: true
+        }
+      },
+      {
+        path: ':id',
+        name: 'SurveyPage',
+        component: () => import('@/components/Surveys/SurveyPassing/SurveyPassing.vue')
+      }
+    ]
   },
   {
     path: '/profile',
@@ -40,9 +61,7 @@ const routes: readonly RouteRecordRaw[] = [
         component: () => import('@/components/ProfileInfo/ProfileInfo.vue')
       }
     ],
-    redirect: () => {
-      return { name: 'ProfileMain' }
-    }
+    redirect: { name: 'ProfileMain' }
   },
   {
     path: '/:pathMatch(.*)*',
@@ -61,5 +80,6 @@ const router = createRouter({
 
 router.beforeEach(loadLayoutMiddleware)
 router.beforeEach(checkAuthKeycloak)
+router.beforeEach(checkSurveyUser)
 
 export default router

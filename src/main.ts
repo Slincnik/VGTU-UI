@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import DateFnsAdapter from '@date-io/date-fns'
+import { ru } from 'date-fns/locale'
 
 import '@/assets/main.css'
 // Vuetify
@@ -12,6 +14,9 @@ import App from './App.vue'
 import router from './plugins/router'
 import { custom } from './service/icons/icon.service'
 
+const dateAdapted = new DateFnsAdapter({
+  locale: ru
+})
 const vuetify = createVuetify({
   theme: {
     defaultTheme: 'light'
@@ -22,6 +27,9 @@ const vuetify = createVuetify({
     sets: {
       custom
     }
+  },
+  date: {
+    adapter: dateAdapted
   }
 })
 
