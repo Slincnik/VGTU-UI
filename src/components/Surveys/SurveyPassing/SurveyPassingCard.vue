@@ -190,8 +190,10 @@ const previousQuestion = () => {
 }
 
 const nextQuestion = () => {
-  saveAnswer()
-  if (isLastQuestion.value) return
+  if (isLastQuestion.value) {
+    saveAnswer(true)
+    return
+  }
 
   index.value++
   emits('updateQuestion')
