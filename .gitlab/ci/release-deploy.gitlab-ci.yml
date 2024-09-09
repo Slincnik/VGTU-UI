@@ -86,5 +86,4 @@ deploy:
     - echo "$VITE_KEYCLOAK_CLIENT_URL" >> .env
     - echo "$VITE_KEYCLOAK_REALM" >> .env
   script:
-    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
     - docker --context remote compose up -d --pull "always" --force-recreate
