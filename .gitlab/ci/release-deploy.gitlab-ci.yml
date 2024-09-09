@@ -79,7 +79,6 @@ deploy:
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
-    - chmod 644 ~/.ssh/known_hosts
     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
     - docker context create remote --description "remote ssh" --docker "host=ssh://${DEV_USER}@${DEV_HOST}"
   script:
