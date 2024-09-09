@@ -6,5 +6,13 @@ services:
     image: ${CONTAINER_IMAGE_NAME}:latest
     build: .
     ports:
-      - '4200:80'
+      - "4200:80"
     env_file: .env
+    networks:
+      - assistant
+
+networks:
+  assistant:
+    name: assistant
+    driver: bridge
+    external: true
