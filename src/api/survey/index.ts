@@ -1,10 +1,6 @@
-import { useQueryClient } from '@tanstack/vue-query'
 import { api, type ResponseEntity } from '@/service/api/api.service'
-import { useAuthStore } from '@/stores/authStore'
 import { type Survey, type SurveyMeta } from './survey.types'
-import { getUser } from '../student'
-
-const authStore = useAuthStore()
+import { getStudentId } from '../student'
 
 export const fakeApiFunction = async (callback: () => void): Promise<void> => {
   return new Promise(resolve => {
@@ -13,17 +9,6 @@ export const fakeApiFunction = async (callback: () => void): Promise<void> => {
       resolve(result)
     }, 1000)
   })
-}
-
-export const getStudentId = async () => {
-  const studentId = authStore.id
-  const queryClient = useQueryClient()
-
-  if (!studentId) {
-    const { id } = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
-    return id
-  }
-  return studentId
 }
 
 export const getAllStudentSurveys = async () => {

@@ -13,7 +13,14 @@ const routes: readonly RouteRecordRaw[] = [
   {
     path: '/schedule',
     name: 'SchedulePage',
-    component: () => import('@/views/TestView.vue')
+    component: () => import('@/views/Schedule/ScheduleView.vue'),
+    children: [
+      {
+        path: '',
+        name: 'ScheduleCalendar',
+        component: () => import('@/components/Schedule/ScheduleComponent.vue')
+      }
+    ]
   },
   {
     path: '/surveys',

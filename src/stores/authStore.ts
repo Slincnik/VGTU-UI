@@ -5,6 +5,7 @@ export type UserStore = {
   id: string | null
   user: Student.User | null
   educations: Student.Education[]
+  gradeBooks: Student.GradeBook[]
 }
 
 export const useAuthStore = defineStore({
@@ -12,7 +13,8 @@ export const useAuthStore = defineStore({
   state: (): UserStore => ({
     id: null,
     user: null,
-    educations: []
+    educations: [],
+    gradeBooks: []
   }),
   getters: {
     getUser: state => state.user

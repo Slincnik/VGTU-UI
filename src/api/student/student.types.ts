@@ -24,4 +24,8 @@ export namespace Student {
     username: string
     email: string
   }
+  export type GradeBook = {
+    id: string
+    gradeBook: string
+  }
 }
