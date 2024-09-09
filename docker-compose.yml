@@ -5,6 +5,11 @@ services:
     container_name: cchgeu-ui-v2
     image: ${CONTAINER_IMAGE_NAME}:latest
     build: .
+    environment:
+      - VITE_BASE_URL=${VITE_BASE_URL}
+      - VITE_KEYCLOAK_CLIENT_ID=${VITE_KEYCLOAK_CLIENT_ID}
+      - VITE_KEYCLOAK_CLIENT_URL=${VITE_KEYCLOAK_CLIENT_URL}
+      - VITE_KEYCLOAK_REALM=${VITE_KEYCLOAK_REALM}
     ports:
       - "4200:80"
     networks:
