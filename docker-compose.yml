@@ -3,11 +3,14 @@ version: '3.8'
 services:
   ui:
     container_name: cchgeu-ui-v2
-    image: cchgeu-ui-v2:latest
-    build: .
+    image: ${CONTAINER_IMAGE_NAME}:latest
+    environment:
+      - VITE_BASE_URL=${VITE_BASE_URL}
+      - VITE_KEYCLOAK_CLIENT_ID=${VITE_KEYCLOAK_CLIENT_ID}
+      - VITE_KEYCLOAK_CLIENT_URL=${VITE_KEYCLOAK_CLIENT_URL}
+      - VITE_KEYCLOAK_REALM=${VITE_KEYCLOAK_REALM}
     ports:
       - "4200:80"
-    env_file: .env
     networks:
       - assistant
 
