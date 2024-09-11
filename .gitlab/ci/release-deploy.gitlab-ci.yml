@@ -46,29 +46,11 @@ docker-push-tag:
 #     name: 'Release $CI_COMMIT_TAG'
 #     description: 'Release created'
 
-# deploy-job:
-#   stage: deploy
-#   image: alpine:3.18
-#   rules:
-#     - if: '$CI_COMMIT_TAG'
-#   needs:
-#     - docker-push-tag
-#   before_script:
-#     - apk update && apk add --no-cache bash gettext openssh-client
-#     - eval $(ssh-agent -s)
-#     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-#     - mkdir -p ~/.ssh && chmod 700 ~/.ssh
-#     - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts && chmod 644 ~/.ssh/known_hosts
-#     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-#   script:
-#     - ssh ${DEV_USER}@${DEV_HOST} "mkdir -p /tmp/${CI_PROJECT_DIR}/frontend/"
-#     - scp ./deploy/front.conf ${DEV_USER}@${DEV_HOST}:/tmp/${CI_PROJECT_DIR}/frontend/default.conf
-#     - scp ./docker-compose.yml ${DEV_USER}@${DEV_HOST}:/tmp/${CI_PROJECT_DIR}/docker-compose.yml
-#     - envsubst < ./deploy/deploy.sh| ssh ${DEV_USER}@${DEV_HOST}
-
 deploy:
   stage: deploy
   image: docker:24.0.6-alpine3.18
+  services:
+    - docker:24.0.6-dind
   rules:
     - if: '$CI_COMMIT_TAG'
   needs:
@@ -80,10 +62,11 @@ deploy:
     - mkdir -p ~/.ssh
     - chmod 700 ~/.ssh
     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
-    - docker context create remote --description "remote ssh" --docker "host=ssh://${DEV_USER}@${DEV_HOST}"
-    - export VITE_BASE_URL="${VITE_BASE_URL}"
-    - export VITE_KEYCLOAK_CLIENT_ID="${VITE_KEYCLOAK_CLIENT_ID}"
-    - export VITE_KEYCLOAK_CLIENT_URL="${VITE_KEYCLOAK_CLIENT_URL}"
-    - export VITE_KEYCLOAK_REALM="${VITE_KEYCLOAK_REALM}"
+    # - docker context create remote --description "remote ssh" --docker "host=ssh://${DEV_USER}@${DEV_HOST}"
+    # - export VITE_BASE_URL="${VITE_BASE_URL}"
+    # - export VITE_KEYCLOAK_CLIENT_ID="${VITE_KEYCLOAK_CLIENT_ID}"
+    # - export VITE_KEYCLOAK_CLIENT_URL="${VITE_KEYCLOAK_CLIENT_URL}"
+    # - export VITE_KEYCLOAK_REALM="${VITE_KEYCLOAK_REALM}"
   script:
-    - docker --context remote compose up -d --pull "always" --force-recreate
+    - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
+    # - docker --context remote compose up -d --pull "always" --force-recreate
