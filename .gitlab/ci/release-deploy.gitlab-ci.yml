@@ -63,10 +63,10 @@ deploy:
     - chmod 700 ~/.ssh
     - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
     - docker context create remote --description "remote ssh" --docker "host=ssh://${DEV_USER}@${DEV_HOST}"
-    - export VITE_BASE_URL="${VITE_BASE_URL}"
-    - export VITE_KEYCLOAK_CLIENT_ID="${VITE_KEYCLOAK_CLIENT_ID}"
-    - export VITE_KEYCLOAK_CLIENT_URL="${VITE_KEYCLOAK_CLIENT_URL}"
-    - export VITE_KEYCLOAK_REALM="${VITE_KEYCLOAK_REALM}"
+    - echo "${VITE_BASE_URL}" > deploy.env
+    - echo "${VITE_KEYCLOAK_CLIENT_ID}" >> deploy.env
+    - echo "${VITE_KEYCLOAK_CLIENT_URL}" >> deploy.env
+    - echo "${VITE_KEYCLOAK_REALM}" >> deploy.env
   script:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
-    - docker --context remote compose up -d --pull "always" --force-recreate
+    - docker --context remote compose up --env-file deploy.env -d --pull "always" --force-recreate
