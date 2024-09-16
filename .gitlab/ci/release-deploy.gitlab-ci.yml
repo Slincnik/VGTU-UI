@@ -65,4 +65,4 @@ deploy:
     - docker context create remote --description "remote ssh" --docker "host=ssh://${DEV_USER}@${DEV_HOST}"
   script:
     - docker login -u $DOCKER_HUB_USER -p $DOCKER_HUB_TOKEN
-    - docker --context remote compose --env-file $DEPLOY_ENV up -d --pull "always" --force-recreate
+    - docker --context remote compose up -d --pull "always" --force-recreate
