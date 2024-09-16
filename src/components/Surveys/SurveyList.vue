@@ -8,7 +8,6 @@
       text="Создание опроса"
       color="#5E81AC"
       @click="$router.push('/surveys/create')"
-      @click:row="handleRowClick"
     />
   </div>
   <div class="mt-5">
@@ -18,6 +17,7 @@
       :loading
       :items-length="items?.length ?? 0"
       hide-default-footer
+      @click:row="handleRowClick"
     >
       <template #item.status="{ item }">
         <v-chip
