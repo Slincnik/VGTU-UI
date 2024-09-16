@@ -8,6 +8,7 @@
       text="Создание опроса"
       color="#5E81AC"
       @click="$router.push('/surveys/create')"
+      @click:row="handleRowClick"
     />
   </div>
   <div class="mt-5">
@@ -46,12 +47,14 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { getAllStudentSurveys } from '@/api/survey'
-import { SurveyStatus } from '@/api/survey/survey.types'
+import { SurveyStatus, type Survey } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
 const isCanAccept = await canAccept()
+const router = useRouter()
 
 const { isLoading: loading, data: items } = useQuery({
   queryKey: ['surveys'],
@@ -110,4 +113,10 @@ const buttonActions = [
     icon: 'custom:trash'
   }
 ]
+
+const handleRowClick = (_event: Event, { item }: { item: Survey.BaseSurvey }) => {
+  if (item.status === SurveyStatus.Enum.IN_PROGRESS) {
+    router.push(`/surveys/${item.id}`)
+  }
+}
 </script>
