@@ -26,6 +26,10 @@
   src: url('@/assets/fonts/gothampro_light.ttf');
 }
 
+:root {
+  --color-accent-nord7: #8fbcbb;
+}
+
 html {
   overflow-y: auto !important;
 }

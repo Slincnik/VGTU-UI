@@ -7,7 +7,11 @@ export const getGradebooks = async () => {
 
   if (!student.gradeBooks.length) return null
 
-  const idParams = student.gradeBooks.map(({ gradeBook }) => `ids=${gradeBook}`).join('&')
+  const uniqueGradeBooks = Array.from(new Set(student.gradeBooks.map(({ gradeBook }) => gradeBook)))
+  const idParams = new URLSearchParams(
+    uniqueGradeBooks.map(gradeBook => ['ids', gradeBook])
+  ).toString()
+
   const response = await api.get<ResponseEntity<GradeBook[]>>(
     `statement/grade/book/all?${idParams}`
   )

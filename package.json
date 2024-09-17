@@ -15,6 +15,11 @@
   },
   "dependencies": {
     "@date-io/date-fns": "^3.0.0",
+    "@schedule-x/calendar": "^1.63.1",
+    "@schedule-x/calendar-controls": "^1.63.1",
+    "@schedule-x/events-service": "^1.63.1",
+    "@schedule-x/theme-default": "^1.63.1",
+    "@schedule-x/vue": "^1.58.0",
     "@tanstack/vue-query": "^5.52.2",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",

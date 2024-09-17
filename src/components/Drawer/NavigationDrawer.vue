@@ -45,7 +45,7 @@ import { useDisplay } from 'vuetify'
 
 const items = shallowReadonly([
   { id: 1, title: 'Главная', icon: 'custom:home', link: '/' },
-  { id: 2, title: 'Расписание', icon: 'custom:schedule', link: '/schedule', disabled: true },
+  { id: 2, title: 'Расписание', icon: 'custom:schedule', link: '/schedule', disabled: false },
   { id: 3, title: 'Обучение', icon: 'custom:education', link: '/education', disabled: true },
   { id: 4, title: 'Портфолио', icon: 'custom:portfolio', link: '/portfolio', disabled: true },
   { id: 5, title: 'Заявки', icon: 'custom:request', link: '/requests', disabled: true },

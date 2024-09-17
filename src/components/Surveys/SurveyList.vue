@@ -53,8 +53,8 @@ import { getAllStudentSurveys } from '@/api/survey'
 import { SurveyStatus, type Survey } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
-const isCanAccept = await canAccept()
 const router = useRouter()
+const isCanAccept = await canAccept()
 
 const { isLoading: loading, data: items } = useQuery({
   queryKey: ['surveys'],
@@ -99,6 +99,7 @@ const headers = [
     sortable: false
   }
 ]
+
 const buttonActions = [
   {
     id: 1,

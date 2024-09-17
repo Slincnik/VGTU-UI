@@ -1,60 +1,96 @@
 <template>
-  <div class="d-flex">
-    <span class="text-h5">Расписание</span>
-  </div>
-  <div
-    v-if="isLoading"
-    class="d-flex justify-center align-center"
-  >
-    <v-progress-circular
-      indeterminate
-      size="36"
-    />
-  </div>
-  <div
-    v-else
-    class="mt2-5"
-  >
-    <v-select
-      v-model="selectedGradebook"
-      :items="gradebooks"
-      item-title="number"
-      item-value="id"
-      density="comfortable"
-      placeholder="Выберите зачетку"
-    />
+  <div>
+    <schedule-x-calendar :calendar-app="calendarApp">
+      <template #headerContent>
+        <header-backward-navigation
+          v-model:current-date="selectedDate"
+          :selected-view="selectedView"
+          @update-date="updateDate"
+        />
+        <header-d-w-picker
+          v-model:selected-view="selectedView"
+          @update-view="updateView"
+        />
+      </template>
+      <template #timeGridEvent="{ calendarEvent }">
+        <calendar-event
+          class="event"
+          :event="calendarEvent"
+        />
+      </template>
+    </schedule-x-calendar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
-import { computed, ref } from 'vue'
-import { getGradebooks } from '@/api/gradebook'
-import { getScheduleByGradeBookId } from '@/api/schedule'
+import { ScheduleXCalendar } from '@schedule-x/vue'
+import HeaderBackwardNavigation from './HeaderContent/HeaderBackwardNavigation.vue'
+import HeaderDWPicker from './HeaderContent/HeaderDWPicker.vue'
+import CalendarEvent from './CalendarEvent.vue'
+import { useCalendarSetup } from '@/composables/useCalendarSetup'
+import '@schedule-x/theme-default/dist/index.css'
 
-const selectedGradebook = ref<string | null>(null)
+const { calendarApp, selectedDate, selectedView, calendarControls } = useCalendarSetup()
 
-const isGradebookSelected = computed(() => selectedGradebook.value !== null)
-
-const { data: gradebooks, isLoading } = useQuery({
-  queryKey: ['gradebooks'],
-  queryFn: () => getGradebooks(),
-  select(data) {
-    return data?.content.filter(gradebook => !gradebook.isDummy)
-  },
-  retry: 0
-})
-
-useQuery({
-  queryKey: ['schedule', selectedGradebook],
-  queryFn: () => getScheduleByGradeBookId(selectedGradebook.value!),
-  enabled: isGradebookSelected,
-  retry: 0
-})
+const updateDate = (date: string) => calendarControls.setDate(date)
+const updateView = (view: string) => calendarControls.setView(view)
 </script>
 
-<style scoped>
-.mt2-5 {
-  margin-top: 10px;
+<style>
+:root {
+  --sx-border: none;
+}
+
+.sx__time-grid-event {
+  user-select: auto;
+  -webkit-user-select: auto;
+}
+
+.sx__calendar-header {
+  margin: 20px 0 20px 0;
+  padding: 0;
+}
+
+.schedule-x-event-content {
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 200px;
+}
+
+.sx__calendar {
+  border: none;
+}
+
+.sx__week-grid__date {
+  flex-flow: row;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin-bottom: 6px;
+
+  > div {
+    font-size: 16px;
+    color: #000;
+  }
+}
+
+.sx__week-grid__hour {
+  font-size: 16px;
+  > span {
+    color: #000;
+  }
+}
+
+.sx__week-grid__date--is-today {
+  font-weight: 700;
+  > .sx__week-grid__date-number {
+    background-color: var(--color-accent-nord7);
+    color: #000;
+    border-radius: 50%;
+  }
+  > .sx__week-grid__day-name {
+    color: #000;
+  }
 }
 </style>
