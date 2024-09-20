@@ -1,11 +1,10 @@
 <template>
   <div class="dw-picker">
     <v-btn-toggle
-      v-model="selectedView"
+      v-model="state.selectedView"
       :ripple="false"
       selected-class="dw-picker--selected"
       class="dw-picker"
-      @click="selectView"
     >
       <v-btn value="day">День</v-btn>
       <v-btn
@@ -20,16 +19,15 @@
 <script setup lang="ts">
 import { computed, watch } from 'vue'
 import { useDisplay } from 'vuetify'
+import { useCalendarSetup, Views } from '@/composables/useCalendarSetup'
+
+const emit = defineEmits<{
+  (e: 'update-view', view: Views): void
+}>()
 
 const { width } = useDisplay()
 
-const emit = defineEmits<{
-  (e: 'update-view', view: string): void
-}>()
-
-const selectedView = defineModel<string>('selectedView', {
-  default: 'week'
-})
+const { setSelectedView, state } = useCalendarSetup()
 
 const isMobileView = computed(() => {
   return width.value < 757
@@ -39,16 +37,21 @@ watch(
   isMobileView,
   newValue => {
     if (newValue) {
-      selectedView.value = 'day'
-      emit('update-view', 'day')
+      setSelectedView(Views.DAY)
+      emit('update-view', Views.DAY)
     }
   },
   { immediate: true }
 )
 
-const selectView = () => {
-  emit('update-view', selectedView.value)
-}
+watch(
+  () => state.selectedView,
+  (newValue, oldValue) => {
+    if (newValue === oldValue) return
+    if (!newValue) return
+    emit('update-view', newValue)
+  }
+)
 </script>
 
 <style scoped>

@@ -34,14 +34,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useCalendarSetup, Views } from '@/composables/useCalendarSetup'
 
-const currentDate = defineModel<Date>('currentDate', {
-  default: new Date()
-})
-
-const selectedView = defineModel<string>('selectedView', {
-  default: 'week'
-})
+const { state, setSelectedDate } = useCalendarSetup()
 
 const emits = defineEmits<{
   (e: 'update-date', date: string): void
@@ -49,18 +44,19 @@ const emits = defineEmits<{
 
 const formattedDate = computed(() => {
   const options: Intl.DateTimeFormatOptions = { month: 'long', year: 'numeric' }
-  const dateString = currentDate.value.toLocaleDateString('ru-RU', options)
+  const dateString = state.selectedDate.toLocaleDateString('ru-RU', options)
   return dateString.charAt(0).toUpperCase() + dateString.slice(1)
 })
 
 const changeDate = (increment: number) => {
-  const newDate = new Date(currentDate.value)
-  if (selectedView.value === 'day') {
+  const newDate = new Date(state.selectedDate)
+  if (state.selectedView === Views.DAY) {
     newDate.setDate(newDate.getDate() + increment)
   } else {
-    newDate.setDate(newDate.getDate() + (increment * 7))
+    // eslint-disable-next-line no-mixed-operators
+    newDate.setDate(newDate.getDate() + increment * 7)
   }
-  currentDate.value = newDate
+  setSelectedDate(newDate)
   emits('update-date', newDate.toISOString().split('T')[0])
 }
 </script>

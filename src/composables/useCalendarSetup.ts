@@ -1,25 +1,41 @@
-import { computed, ref, type ComputedRef, type Ref } from 'vue'
+import { computed, reactive, type ComputedRef } from 'vue'
 import { CalendarApp, createCalendar, createViewDay, createViewWeek } from '@schedule-x/calendar'
 import { createCalendarControlsPlugin } from '@schedule-x/calendar-controls'
+import { createEventsServicePlugin } from '@schedule-x/events-service'
+
+export enum Views {
+  DAY = 'day',
+  WEEK = 'week'
+}
+
+interface CalendarState {
+  selectedDate: Date
+  selectedView: Views
+}
+
+const state = reactive<CalendarState>({
+  selectedDate: new Date(),
+  selectedView: Views.WEEK
+})
 
 export const useCalendarSetup = (): {
   calendarApp: CalendarApp
-  selectedDate: Ref<Date>
+  state: CalendarState
   formattedSelectedDate: ComputedRef<string>
-  selectedView: Ref<'day' | 'week'>
   calendarControls: ReturnType<typeof createCalendarControlsPlugin>
+  calendarEvents: ReturnType<typeof createEventsServicePlugin>
+  setSelectedView: (view: Views) => void
+  setSelectedDate: (date: Date) => void
 } => {
-  const selectedDate = ref<Date>(new Date())
-  const selectedView = ref<'day' | 'week'>('week')
-
   const formattedSelectedDate = computed(() => {
-    const date = selectedDate.value
+    const date = state.selectedDate
     return date.toISOString().split('T')[0]
   })
 
   const viewWeek = createViewWeek()
 
   const calendarControls = createCalendarControlsPlugin()
+  const calendarEvents = createEventsServicePlugin()
 
   const calendarApp = createCalendar({
     selectedDate: formattedSelectedDate.value,
@@ -29,37 +45,29 @@ export const useCalendarSetup = (): {
       end: '20:00'
     },
     views: [createViewDay(), viewWeek],
-    plugins: [calendarControls],
+    plugins: [calendarControls, calendarEvents],
     defaultView: viewWeek.name,
     weekOptions: {
       gridHeight: 823,
       timeAxisFormatOptions: { hour: 'numeric', minute: '2-digit' }
-    },
-    events: [
-      {
-        id: 1,
-        title: 'Предмет с очень очень очень очень длинным названием',
-        description: 'Лекция',
-        start: '2024-09-09 08:00',
-        end: '2024-09-09 09:35',
-        location: 'Аудитория 101'
-      },
-      {
-        id: 2,
-        title: 'Предмет с очень очень очень очень длинным названием',
-        description: 'Лекция',
-        start: '2024-09-09 09:45',
-        end: '2024-09-09 11:20',
-        location: 'Аудитория 101'
-      }
-    ]
+    }
   })
+
+  const setSelectedView = (view: Views) => {
+    state.selectedView = view
+  }
+
+  const setSelectedDate = (date: Date) => {
+    state.selectedDate = date
+  }
 
   return {
     calendarApp,
-    selectedDate,
+    state,
     formattedSelectedDate,
-    selectedView,
-    calendarControls
+    calendarControls,
+    calendarEvents,
+    setSelectedView,
+    setSelectedDate
   }
 }

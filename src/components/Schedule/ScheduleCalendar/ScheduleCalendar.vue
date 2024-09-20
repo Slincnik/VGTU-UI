@@ -2,15 +2,8 @@
   <div>
     <schedule-x-calendar :calendar-app="calendarApp">
       <template #headerContent>
-        <header-backward-navigation
-          v-model:current-date="selectedDate"
-          :selected-view="selectedView"
-          @update-date="updateDate"
-        />
-        <header-d-w-picker
-          v-model:selected-view="selectedView"
-          @update-view="updateView"
-        />
+        <header-backward-navigation @update-date="updateDate" />
+        <header-d-w-picker @update-view="updateView" />
       </template>
       <template #timeGridEvent="{ calendarEvent }">
         <calendar-event
@@ -23,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { ScheduleXCalendar } from '@schedule-x/vue'
 import HeaderBackwardNavigation from './HeaderContent/HeaderBackwardNavigation.vue'
 import HeaderDWPicker from './HeaderContent/HeaderDWPicker.vue'
@@ -30,10 +24,30 @@ import CalendarEvent from './CalendarEvent.vue'
 import { useCalendarSetup } from '@/composables/useCalendarSetup'
 import '@schedule-x/theme-default/dist/index.css'
 
-const { calendarApp, selectedDate, selectedView, calendarControls } = useCalendarSetup()
+const { calendarApp, calendarEvents, calendarControls } = useCalendarSetup()
 
 const updateDate = (date: string) => calendarControls.setDate(date)
 const updateView = (view: string) => calendarControls.setView(view)
+onMounted(() => {
+  calendarEvents.set([
+    {
+      id: 1,
+      title: 'Предмет с очень очень очень очень длинным названием',
+      description: 'Лекция',
+      start: '2024-09-09 08:00',
+      end: '2024-09-09 09:35',
+      location: 'Аудитория 101'
+    },
+    {
+      id: 2,
+      title: 'Предмет с очень очень очень очень длинным названием',
+      description: 'Лекция',
+      start: '2024-09-09 09:45',
+      end: '2024-09-09 11:20',
+      location: 'Аудитория 101'
+    }
+  ])
+})
 </script>
 
 <style>

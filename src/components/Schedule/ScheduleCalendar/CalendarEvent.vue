@@ -39,6 +39,7 @@ defineProps<{
   background-color: var(--color-accent-nord7);
   text-align: center;
   gap: 2px;
+  padding: 6.5px;
   border-radius: 8px;
   cursor: auto;
   > span {
