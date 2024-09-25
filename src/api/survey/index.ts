@@ -36,6 +36,12 @@ export const getAllStudentSurveys = async () => {
   return response.data.content
 }
 
+export const getAllSurveys = async () => {
+  const response = await api.get<ResponseEntity<Survey.SurveyMeta[]>>('survey/metadata/all')
+
+  return response.data.content
+}
+
 export const createSurveyMeta = async (dto: SurveyMeta.Base) => {
   const response = await api.post('survey/metadata', dto)
   return response.data
