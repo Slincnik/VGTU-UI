@@ -20,13 +20,13 @@
       <v-list-item
         class="px-0"
         min-height="26"
-        prepend-icon="custom:phone"
+        prepend-icon="phone"
         :title="userKeycloak?.profile.phone_number ?? 'Не указано'"
       />
       <v-list-item
         class="px-0"
         min-height="26"
-        prepend-icon="custom:email_open"
+        prepend-icon="email_open"
         :title="user?.email ?? 'Не указано'"
       />
     </v-list>

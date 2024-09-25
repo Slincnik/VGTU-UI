@@ -4,7 +4,7 @@
     color="grey"
     variant="outlined"
     :ripple="false"
-    append-icon="custom:schedule"
+    append-icon="schedule"
   >
     {{ date ? new Intl.DateTimeFormat().format(date) : text }}
     <v-menu

@@ -44,13 +44,13 @@ import { shallowReadonly } from 'vue'
 import { useDisplay } from 'vuetify'
 
 const items = shallowReadonly([
-  { id: 1, title: 'Главная', icon: 'custom:home', link: '/' },
-  { id: 2, title: 'Расписание', icon: 'custom:schedule', link: '/schedule', disabled: true },
-  { id: 3, title: 'Обучение', icon: 'custom:education', link: '/education', disabled: true },
-  { id: 4, title: 'Портфолио', icon: 'custom:portfolio', link: '/portfolio', disabled: true },
-  { id: 5, title: 'Заявки', icon: 'custom:request', link: '/requests', disabled: true },
-  { id: 6, title: 'Опросы', icon: 'custom:survey', link: '/surveys' },
-  { id: 7, title: 'Информация', icon: 'custom:info', link: '/info', disabled: true }
+  { id: 1, title: 'Главная', icon: 'home', link: '/' },
+  { id: 2, title: 'Расписание', icon: 'schedule', link: '/schedule', disabled: true },
+  { id: 3, title: 'Обучение', icon: 'education', link: '/education', disabled: true },
+  { id: 4, title: 'Портфолио', icon: 'portfolio', link: '/portfolio', disabled: true },
+  { id: 5, title: 'Заявки', icon: 'request', link: '/requests', disabled: true },
+  { id: 6, title: 'Опросы', icon: 'survey', link: '/surveys' },
+  { id: 7, title: 'Информация', icon: 'info', link: '/info', disabled: true }
 ])
 
 const drawer = defineModel<boolean>('drawer', {

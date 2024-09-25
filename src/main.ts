@@ -7,7 +7,6 @@ import '@/assets/main.css'
 // Vuetify
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
-import { aliases } from 'vuetify/iconsets/mdi-svg'
 
 import { VueQueryPlugin } from '@tanstack/vue-query'
 import App from './App.vue'
@@ -22,8 +21,7 @@ const vuetify = createVuetify({
     defaultTheme: 'light'
   },
   icons: {
-    defaultSet: 'mdi',
-    aliases,
+    defaultSet: 'custom',
     sets: {
       custom
     }

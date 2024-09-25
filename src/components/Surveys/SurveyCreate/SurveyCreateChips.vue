@@ -22,7 +22,7 @@
       variant="outlined"
       :ripple="false"
       text="Добавить вопрос"
-      append-icon="custom:plus_circle"
+      append-icon="plus_circle"
       rounded="xl"
       @click="openDialog()"
     />
@@ -83,7 +83,7 @@
                     density="compact"
                     max-width="208"
                     min-width="130"
-                    append-inner-icon="custom:close"
+                    append-inner-icon="close"
                     @click:append-inner="deleteChoice(key)"
                   />
 
@@ -91,7 +91,7 @@
                     elevation="0"
                     bg-color="white"
                     density="compact"
-                    icon="custom:plus"
+                    icon="plus"
                     @click="addChoice"
                   />
                 </div>
