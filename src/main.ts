@@ -9,6 +9,7 @@ import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 
 import { VueQueryPlugin } from '@tanstack/vue-query'
+import { aliases } from 'vuetify/iconsets/mdi-svg'
 import App from './App.vue'
 import router from './plugins/router'
 import { custom } from './service/icons/icon.service'
@@ -22,6 +23,7 @@ const vuetify = createVuetify({
   },
   icons: {
     defaultSet: 'custom',
+    aliases,
     sets: {
       custom
     }
