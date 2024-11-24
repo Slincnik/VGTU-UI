@@ -32,6 +32,16 @@ export namespace Survey {
     dateStart: Date
     dateEnd: Date
   }
+
+  export type SurveyMeta = {
+    id: string
+    name: string
+    type: SurveyType.Enum
+    status: SurveyStatus.Enum
+    questions?: SurveyQuestion[]
+    dateStart: Date
+    dateEnd: Date
+  }
 }
 
 export namespace SurveyMeta {
