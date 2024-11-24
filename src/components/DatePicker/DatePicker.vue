@@ -10,6 +10,7 @@
     <v-menu
       activator="parent"
       location="top"
+      :close-on-content-click="false"
     >
       <v-date-picker
         v-model="date"

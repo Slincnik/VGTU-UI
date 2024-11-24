@@ -48,7 +48,7 @@ export namespace SurveyMeta {
   export type Base = {
     id?: string
     name: string
-    type: SurveyType.Enum
+    type: SurveyType.Enum | null
     status?: SurveyMetaStatus
     questions: QuestionTemplate[]
     groups: Array<{
@@ -119,7 +119,8 @@ export namespace SurveyStatus {
     IN_PROGRESS = 'IN_PROGRESS',
     FINISHED = 'FINISHED',
     CLOSED = 'CLOSED',
-    EXPIRED = 'EXPIRED'
+    EXPIRED = 'EXPIRED',
+    DRAFT = 'DRAFT'
   }
 
   export function getValue(value: Enum): string {
@@ -134,6 +135,8 @@ export namespace SurveyStatus {
         return 'Принудительно завершен'
       case Enum.EXPIRED:
         return 'Завершен'
+      case Enum.DRAFT:
+        return 'Черновик'
       default:
         throw new Error(`Non-existent value`)
     }
@@ -157,6 +160,6 @@ export namespace SurveyType {
     }
   }
   export function values() {
-    return [Enum.OTHER, Enum.STUDENT_EYES_TEACHERS]
+    return [Enum.STUDENT_EYES_TEACHERS]
   }
 }

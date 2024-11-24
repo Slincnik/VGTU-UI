@@ -7,6 +7,7 @@
     <v-text-field
       v-model="surveyData.name"
       variant="outlined"
+      aria-autocomplete="none"
       placeholder="Введите название опроса"
       density="comfortable"
       hide-details="auto"
@@ -135,7 +136,7 @@ import { createSurveyMeta } from '@/api/survey'
 // Данные опроса
 const surveyData = reactive<SurveyMeta.Base>({
   name: '',
-  type: SurveyType.Enum.OTHER,
+  type: null,
   dateStart: undefined,
   dateEnd: undefined,
   groups: [],
