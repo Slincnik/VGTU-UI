@@ -13,7 +13,7 @@
       hide-details="auto"
       :rules="[v => !!v || 'Название обязательно']"
       required
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
   </div>
 
@@ -34,7 +34,7 @@
       class="flex-1-1-0"
       :style="{ 'min-width': '290px' }"
       :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы один тип']"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     >
       <template #selection="{ item }">
         <span class="text-subtitle-2">
@@ -48,7 +48,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
     <date-picker
       v-model="surveyData.dateEnd"
@@ -56,7 +56,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
   </div>
 
@@ -66,18 +66,17 @@
     label="Выберите группу"
     variant="outlined"
     density="comfortable"
+    item-title="title"
     multiple
     hide-details
     required
     :item-value="item => item"
-    item-title="title"
     :loading="isLoadingDictionary"
-    :items="transformedItems"
+    :items
     :width="425"
     :hide-no-data="isLoadingDictionary"
     :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы одну группу']"
-    :disabled="isPending"
-    @update:menu="onMenuUpdate"
+    :disabled="isPending || isSurveyPending || isLoadingDictionary"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -97,7 +96,10 @@
     </template>
   </v-autocomplete>
 
-  <question-chips :questions="surveyData.questions" />
+  <question-chips
+    :questions="surveyData.questions"
+    :disabled="isPending || isSurveyPending"
+  />
 
   <div class="mt-5 d-flex ga-4">
     <v-btn
@@ -106,32 +108,31 @@
       size="large"
       text="Назад"
       color="#ECEFF4"
-      :loading="isPending"
+      :loading="isPending || isSurveyPending"
       @click="$router.back()"
     />
     <v-btn
       :ripple="false"
       :elevation="0"
       :disabled="!isFormValid"
-      text="Создать опрос"
+      :text="!surveyIsExist ? 'Создать опрос' : 'Изменить опрос'"
       color="#5E81AC"
       size="large"
-      :loading="isPending"
-      @click="createSurvey"
+      :loading="isPending || isSurveyPending"
+      @click="handleClick"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { getAllDictionary } from '@/api/dictionary'
-import type { Dictionary } from '@/api/dictionary/dictionary.types'
 import { SurveyMeta, SurveyType } from '@/api/survey/survey.types'
-import { createSurveyMeta } from '@/api/survey'
+import { createSurveyMeta, getSurveyById, updateSurveyMeta } from '@/api/survey'
 
 // Данные опроса
 const surveyData = reactive<SurveyMeta.Base>({
@@ -144,15 +145,9 @@ const surveyData = reactive<SurveyMeta.Base>({
 })
 
 const router = useRouter()
+const route = useRoute()
 
-const items = ref<Dictionary.StructureGroup[]>([])
-
-const transformedItems = computed(() =>
-  items.value.map(item => ({
-    filterId: item.id,
-    title: item.name
-  }))
-)
+const surveyIdIsExist = computed(() => !!route.query.id)
 
 // Проверка, что все обязательные поля заполнены
 const isFormValid = computed(() => {
@@ -167,34 +162,46 @@ const isFormValid = computed(() => {
 })
 
 // Загрузка данных словаря
-const {
-  data,
-  isLoading: isLoadingDictionary,
-  refetch
-} = useQuery({
+const { data: items, isLoading: isLoadingDictionary } = useQuery({
   queryKey: ['dictionaryGroups'],
   queryFn: getAllDictionary,
-  enabled: false
+  select: data => {
+    return data.map(item => ({
+      filterId: item.id,
+      title: item.name
+    }))
+  }
+})
+
+const { data: surveyIsExist, isLoading: isSurveyPending } = useQuery({
+  queryKey: ['survey', route.query.id],
+  queryFn: () => getSurveyById(route.query.id as string),
+  enabled: surveyIdIsExist,
+  select(data) {
+    if (!data) return false
+    Object.assign(surveyData, {
+      ...data,
+      dateStart: new Date(data.dateStart as unknown as string),
+      dateEnd: new Date(data.dateEnd as unknown as string)
+    })
+    return true
+  }
+})
+
+const mutationFn = computed(() => {
+  if (!surveyIsExist.value) return createSurveyMeta
+  return updateSurveyMeta
 })
 
 const { isPending, mutate } = useMutation({
-  mutationFn: (newSurvey: SurveyMeta.Base) => createSurveyMeta(newSurvey),
+  mutationFn: (newSurvey: SurveyMeta.Base) => mutationFn.value(newSurvey),
   onSuccess: () => {
     router.push('/surveys')
   }
 })
 
-const onMenuUpdate = async (isOpen: boolean) => {
-  if (isOpen && !items.value.length) {
-    refetch().then(() => {
-      if (!data.value) return
-      items.value = data.value
-    })
-  }
-}
-
-// Метод создания опроса
-const createSurvey = () => {
+// Метод создания/обновления опроса
+const handleClick = () => {
   if (!isFormValid.value) return
   mutate(surveyData)
 }

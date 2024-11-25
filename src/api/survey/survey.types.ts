@@ -65,21 +65,6 @@ export namespace SurveyMeta {
     EXPIRED = 'EXPIRED',
     CLOSED = 'CLOSED'
   }
-
-  export function getValue(value: SurveyMetaStatus): string {
-    switch (value) {
-      case SurveyMetaStatus.DRAFT:
-        return 'Черновик'
-      case SurveyMetaStatus.PUBLISHED:
-        return 'Опубликован'
-      case SurveyMetaStatus.EXPIRED:
-        return 'Завершен'
-      case SurveyMetaStatus.CLOSED:
-        return 'Принудительно завершен'
-      default:
-        throw new Error(`Non-existent value`)
-    }
-  }
 }
 
 export type QuestionTemplate = {
@@ -120,7 +105,8 @@ export namespace SurveyStatus {
     FINISHED = 'FINISHED',
     CLOSED = 'CLOSED',
     EXPIRED = 'EXPIRED',
-    DRAFT = 'DRAFT'
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED'
   }
 
   export function getValue(value: Enum): string {
@@ -137,8 +123,10 @@ export namespace SurveyStatus {
         return 'Завершен'
       case Enum.DRAFT:
         return 'Черновик'
+      case Enum.PUBLISHED:
+        return 'Опубликован'
       default:
-        throw new Error(`Non-existent value`)
+        return 'Неизвестно'
     }
   }
 }
@@ -156,7 +144,7 @@ export namespace SurveyType {
       case Enum.STUDENT_EYES_TEACHERS:
         return 'Преподаватель глазами студента'
       default:
-        throw new Error(`Non-existent value`)
+        return 'Неизвестно'
     }
   }
   export function values() {

@@ -6,15 +6,6 @@ import { getUser } from '../student'
 
 const authStore = useAuthStore()
 
-export const fakeApiFunction = async (callback: () => void): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const result = callback()
-      resolve(result)
-    }, 1000)
-  })
-}
-
 export const getStudentId = async () => {
   const studentId = authStore.id
   const queryClient = useQueryClient()
@@ -42,9 +33,37 @@ export const getAllSurveys = async () => {
   return response.data.content
 }
 
+export const getSurveyById = async (id: string) => {
+  const response = await api.get<SurveyMeta.Base>(`survey/metadata/${id}`)
+  return response.data
+}
+
 export const createSurveyMeta = async (dto: SurveyMeta.Base) => {
   const response = await api.post('survey/metadata', dto)
   return response.data
+}
+
+export const updateSurveyMeta = async (dto: SurveyMeta.Base) => {
+  const response = await api.put('survey/metadata', dto)
+  return response.data
+}
+
+export const deleteSurveyMeta = async (id: string) => {
+  await api.delete(`survey/metadata/${id}`)
+}
+
+export const downloadSurveyMeta = async (id: string) => {
+  const response = await api.get<Blob>(`survey/metadata/download/${id}`, { responseType: 'blob' })
+  return response.data
+}
+
+export const copySurveyMeta = async (id: string) => {
+  const response = await api.put<SurveyMeta.Base>(`survey/metadata/copy/${id}`)
+  return response.data
+}
+
+export const closeSurveyMeta = async (id: string) => {
+  await api.put(`survey/metadata/close/${id}`)
 }
 
 export const getSurveyByIdAndStudent = async (id: string) => {
@@ -75,6 +94,12 @@ export const finishingPassingSurvey = async (id: string, answer: Survey.SurveyAn
   answer.student = studentId
 
   const response = await api.put(`survey/answer/${id}/finished`, answer)
+
+  return response.data
+}
+
+export const publishSurvey = async (id: string) => {
+  const response = await api.put(`survey/metadata/published/${id}`)
 
   return response.data
 }
