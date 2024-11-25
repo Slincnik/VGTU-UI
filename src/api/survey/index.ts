@@ -6,15 +6,6 @@ import { getUser } from '../student'
 
 const authStore = useAuthStore()
 
-export const fakeApiFunction = async (callback: () => void): Promise<void> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const result = callback()
-      resolve(result)
-    }, 1000)
-  })
-}
-
 export const getStudentId = async () => {
   const studentId = authStore.id
   const queryClient = useQueryClient()
