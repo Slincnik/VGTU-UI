@@ -48,6 +48,24 @@ export const updateSurveyMeta = async (dto: SurveyMeta.Base) => {
   return response.data
 }
 
+export const deleteSurveyMeta = async (id: string) => {
+  await api.delete(`survey/metadata/${id}`)
+}
+
+export const downloadSurveyMeta = async (id: string) => {
+  const response = await api.get<Blob>(`survey/metadata/download/${id}`, { responseType: 'blob' })
+  return response.data
+}
+
+export const copySurveyMeta = async (id: string) => {
+  const response = await api.put<SurveyMeta.Base>(`survey/metadata/copy/${id}`)
+  return response.data
+}
+
+export const closeSurveyMeta = async (id: string) => {
+  await api.put(`survey/metadata/close/${id}`)
+}
+
 export const getSurveyByIdAndStudent = async (id: string) => {
   const userId = await getStudentId()
 

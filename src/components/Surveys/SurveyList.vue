@@ -68,8 +68,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { useQuery } from '@tanstack/vue-query'
-import { getAllStudentSurveys, getAllSurveys, publishSurvey } from '@/api/survey'
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import {
+  closeSurveyMeta,
+  copySurveyMeta,
+  deleteSurveyMeta,
+  downloadSurveyMeta,
+  getAllStudentSurveys,
+  getAllSurveys,
+  publishSurvey
+} from '@/api/survey'
 import { SurveyStatus, SurveyType, type Survey } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
@@ -81,6 +89,7 @@ enum Align {
 
 const isCanAccept = await canAccept()
 const router = useRouter()
+const queryClient = useQueryClient()
 
 const userType = computed(() => {
   return isCanAccept ? 'teacher' : 'student'
@@ -124,34 +133,88 @@ const headers = computed(() => {
   return commonHeaders
 })
 
+const surveyIsDraft = (item: Survey.BaseSurvey) => {
+  return item.status !== SurveyStatus.Enum.DRAFT
+}
+
 const buttonActions = [
   {
     id: 1,
-    icon: 'edit',
-    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT,
+    icon: 'copy',
+    disabled: (item: Survey.BaseSurvey) => item.status === SurveyStatus.Enum.DRAFT,
     onClick: (item: Survey.BaseSurvey) => {
-      router.push(`/surveys/create?id=${item.id}`)
+      copySurveyMeta(item.id).then(it => {
+        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) => [
+          ...old,
+          it
+        ])
+      })
     }
   },
   {
     id: 2,
+    icon: 'edit',
+    disabled: (item: Survey.BaseSurvey) => surveyIsDraft(item),
+    onClick: (item: Survey.BaseSurvey) => {
+      if (surveyIsDraft(item)) return
+      router.push(`/surveys/create?id=${item.id}`)
+    }
+  },
+  {
+    id: 3,
     icon: 'download',
     disabled: (item: Survey.BaseSurvey) =>
       ![SurveyStatus.Enum.FINISHED, SurveyStatus.Enum.EXPIRED, SurveyStatus.Enum.CLOSED].includes(
         item.status
+      ),
+    onClick: async (item: Survey.BaseSurvey) => {
+      if (
+        ![SurveyStatus.Enum.FINISHED, SurveyStatus.Enum.EXPIRED, SurveyStatus.Enum.CLOSED].includes(
+          item.status
+        )
       )
-  },
-  {
-    id: 3,
-    icon: 'trash',
-    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT
+        return
+      const file = await downloadSurveyMeta(item.id)
+      window.open(URL.createObjectURL(file))
+    }
   },
   {
     id: 4,
+    icon: 'trash',
+    disabled: (item: Survey.BaseSurvey) => surveyIsDraft(item),
+    onClick: (item: Survey.BaseSurvey) => {
+      if (surveyIsDraft(item)) return
+      deleteSurveyMeta(item.id).then(() => {
+        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+          old.filter(it => it.id !== item.id)
+        )
+      })
+    }
+  },
+  {
+    id: 5,
     icon: 'publish',
     disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT,
-    onClick: (item: Survey.BaseSurvey) =>
-      item.status === SurveyStatus.Enum.PUBLISHED || publishSurvey(item.id)
+    onClick: (item: Survey.BaseSurvey) => {
+      if (item.status === SurveyStatus.Enum.PUBLISHED) return
+      publishSurvey(item.id).then(() => {
+        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+          old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.PUBLISHED } : it))
+        )
+      })
+    }
+  },
+  {
+    id: 6,
+    icon: 'close',
+    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.PUBLISHED,
+    onClick: (item: Survey.BaseSurvey) => {
+      closeSurveyMeta(item.id).then(() => {
+        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+          old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.CLOSED } : it))
+        )
+      })
+    }
   }
 ]
 const handleRowClick = (_event: Event, { item }: { item: Survey.BaseSurvey }) => {
