@@ -39,16 +39,21 @@
           :text="SurveyStatus.getValue(item.status)"
         />
       </template>
-      <template #item.actions>
+      <template #item.actions="{ item }">
         <v-btn
           v-for="btnAction in buttonActions"
           :key="btnAction.id"
           icon
+          variant="text"
           elevation="0"
+          :title="btnAction.icon"
           :ripple="false"
+          :disabled="btnAction.disabled(item)"
+          @click="btnAction.onClick?.(item)"
         >
           <v-icon
             :size="28"
+            :disabled="btnAction.disabled(item)"
             :icon="btnAction.icon"
           />
         </v-btn>
@@ -61,7 +66,7 @@
 import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
-import { getAllStudentSurveys, getAllSurveys } from '@/api/survey'
+import { getAllStudentSurveys, getAllSurveys, publishSurvey } from '@/api/survey'
 import { SurveyStatus, SurveyType, type Survey } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
@@ -111,9 +116,42 @@ const headers = computed(() => {
 })
 
 const buttonActions = [
-  { id: 1, icon: 'edit' },
-  { id: 2, icon: 'download' },
-  { id: 3, icon: 'trash' }
+  {
+    id: 1,
+    icon: 'edit',
+    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
+      return item.status !== SurveyStatus.Enum.DRAFT
+    }
+  },
+  {
+    id: 2,
+    icon: 'download',
+    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
+      return (
+        item.status !== SurveyStatus.Enum.FINISHED &&
+        item.status !== SurveyStatus.Enum.EXPIRED &&
+        item.status !== SurveyStatus.Enum.CLOSED
+      )
+    }
+  },
+  {
+    id: 3,
+    icon: 'trash',
+    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
+      return item.status !== SurveyStatus.Enum.DRAFT
+    }
+  },
+  {
+    id: 4,
+    icon: 'publish',
+    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
+      return item.status !== SurveyStatus.Enum.DRAFT
+    },
+    onClick: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
+      if (item.status === SurveyStatus.Enum.PUBLISHED) return
+      publishSurvey(item.id)
+    }
+  }
 ]
 
 const handleRowClick = (_event: Event, { item }: { item: Survey.BaseSurvey }) => {

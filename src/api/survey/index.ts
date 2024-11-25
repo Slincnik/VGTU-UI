@@ -78,3 +78,9 @@ export const finishingPassingSurvey = async (id: string, answer: Survey.SurveyAn
 
   return response.data
 }
+
+export const publishSurvey = async (id: string) => {
+  const response = await api.put(`survey/metadata/published/${id}`)
+
+  return response.data
+}
