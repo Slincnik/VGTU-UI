@@ -11,7 +11,7 @@
     />
   </div>
   <div class="mt-5">
-    <v-data-table-server
+    <v-data-table
       :items="formattedItems"
       :headers
       :loading
@@ -39,7 +39,10 @@
           :text="SurveyStatus.getValue(item.status)"
         />
       </template>
-      <template #item.actions="{ item }">
+      <template
+        v-if="userType === 'teacher'"
+        #item.actions="{ item }"
+      >
         <v-btn
           v-for="btnAction in buttonActions"
           :key="btnAction.id"
@@ -58,7 +61,7 @@
           />
         </v-btn>
       </template>
-    </v-data-table-server>
+    </v-data-table>
   </div>
 </template>
 
@@ -69,6 +72,12 @@ import { useQuery } from '@tanstack/vue-query'
 import { getAllStudentSurveys, getAllSurveys, publishSurvey } from '@/api/survey'
 import { SurveyStatus, SurveyType, type Survey } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
+
+enum Align {
+  CENTER = 'center',
+  START = 'start',
+  END = 'end'
+}
 
 const isCanAccept = await canAccept()
 const router = useRouter()
@@ -96,67 +105,54 @@ const formattedItems = computed(() => {
   )
 })
 
+const commonHeaders = [
+  { key: 'name', title: 'Название', align: Align.CENTER, sortable: false },
+  { key: 'status', title: 'Статус', align: Align.CENTER, sortable: false },
+  { key: 'dateStart', title: 'Дата начала', align: Align.CENTER, sortable: false },
+  { key: 'dateEnd', title: 'Дата окончания', align: Align.CENTER, sortable: false }
+]
+
+const teacherSpecificHeaders = [
+  { key: 'type', title: 'Тип', align: Align.CENTER, sortable: false },
+  { key: 'actions', title: 'Опции', align: Align.CENTER, sortable: false }
+]
+
 const headers = computed(() => {
   if (userType.value === 'teacher') {
-    return [
-      { key: 'name', title: 'Название', sortable: false },
-      { key: 'type', title: 'Тип', sortable: false },
-      { key: 'status', title: 'Статус', sortable: false },
-      { key: 'dateStart', title: 'Дата начала', sortable: false },
-      { key: 'dateEnd', title: 'Дата окончания', sortable: false },
-      { key: 'actions', title: 'Опции', sortable: false }
-    ]
+    return [...commonHeaders, ...teacherSpecificHeaders]
   }
-  return [
-    { key: 'name', title: 'Название', sortable: false },
-    { key: 'status', title: 'Статус', sortable: false },
-    { key: 'dateStart', title: 'Дата начала', sortable: false },
-    { key: 'dateEnd', title: 'Дата окончания', sortable: false }
-  ]
+  return commonHeaders
 })
 
 const buttonActions = [
   {
     id: 1,
     icon: 'edit',
-    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
-      return item.status !== SurveyStatus.Enum.DRAFT
-    }
+    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT
   },
   {
     id: 2,
     icon: 'download',
-    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
-      return (
-        item.status !== SurveyStatus.Enum.FINISHED &&
-        item.status !== SurveyStatus.Enum.EXPIRED &&
-        item.status !== SurveyStatus.Enum.CLOSED
+    disabled: (item: Survey.BaseSurvey) =>
+      ![SurveyStatus.Enum.FINISHED, SurveyStatus.Enum.EXPIRED, SurveyStatus.Enum.CLOSED].includes(
+        item.status
       )
-    }
   },
   {
     id: 3,
     icon: 'trash',
-    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
-      return item.status !== SurveyStatus.Enum.DRAFT
-    }
+    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT
   },
   {
     id: 4,
     icon: 'publish',
-    disabled: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
-      return item.status !== SurveyStatus.Enum.DRAFT
-    },
-    onClick: (item: Survey.SurveyMeta | Survey.BaseSurvey) => {
-      if (item.status === SurveyStatus.Enum.PUBLISHED) return
-      publishSurvey(item.id)
-    }
+    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT,
+    onClick: (item: Survey.BaseSurvey) =>
+      item.status === SurveyStatus.Enum.PUBLISHED || publishSurvey(item.id)
   }
 ]
-
 const handleRowClick = (_event: Event, { item }: { item: Survey.BaseSurvey }) => {
-  if (item.status === SurveyStatus.Enum.IN_PROGRESS) {
-    router.push(`/surveys/${item.id}`)
-  }
+  if (item.status !== SurveyStatus.Enum.IN_PROGRESS) return
+  router.push(`/surveys/${item.id}`)
 }
 </script>

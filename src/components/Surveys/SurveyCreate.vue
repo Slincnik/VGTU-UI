@@ -66,18 +66,17 @@
     label="Выберите группу"
     variant="outlined"
     density="comfortable"
+    item-title="title"
     multiple
     hide-details
     required
     :item-value="item => item"
-    item-title="title"
     :loading="isLoadingDictionary"
-    :items="transformedItems"
+    :items
     :width="425"
     :hide-no-data="isLoadingDictionary"
     :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы одну группу']"
     :disabled="isPending"
-    @update:menu="onMenuUpdate"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -123,13 +122,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive } from 'vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
 import { useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { getAllDictionary } from '@/api/dictionary'
-import type { Dictionary } from '@/api/dictionary/dictionary.types'
 import { SurveyMeta, SurveyType } from '@/api/survey/survey.types'
 import { createSurveyMeta } from '@/api/survey'
 
@@ -145,15 +143,6 @@ const surveyData = reactive<SurveyMeta.Base>({
 
 const router = useRouter()
 
-const items = ref<Dictionary.StructureGroup[]>([])
-
-const transformedItems = computed(() =>
-  items.value.map(item => ({
-    filterId: item.id,
-    title: item.name
-  }))
-)
-
 // Проверка, что все обязательные поля заполнены
 const isFormValid = computed(() => {
   return (
@@ -167,14 +156,15 @@ const isFormValid = computed(() => {
 })
 
 // Загрузка данных словаря
-const {
-  data,
-  isLoading: isLoadingDictionary,
-  refetch
-} = useQuery({
+const { data: items, isLoading: isLoadingDictionary } = useQuery({
   queryKey: ['dictionaryGroups'],
   queryFn: getAllDictionary,
-  enabled: false
+  select: data => {
+    return data.map(item => ({
+      filterId: item.id,
+      title: item.name
+    }))
+  }
 })
 
 const { isPending, mutate } = useMutation({
@@ -183,15 +173,6 @@ const { isPending, mutate } = useMutation({
     router.push('/surveys')
   }
 })
-
-const onMenuUpdate = async (isOpen: boolean) => {
-  if (isOpen && !items.value.length) {
-    refetch().then(() => {
-      if (!data.value) return
-      items.value = data.value
-    })
-  }
-}
 
 // Метод создания опроса
 const createSurvey = () => {
