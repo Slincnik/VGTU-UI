@@ -13,7 +13,7 @@
       hide-details="auto"
       :rules="[v => !!v || 'Название обязательно']"
       required
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
   </div>
 
@@ -34,7 +34,7 @@
       class="flex-1-1-0"
       :style="{ 'min-width': '290px' }"
       :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы один тип']"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     >
       <template #selection="{ item }">
         <span class="text-subtitle-2">
@@ -48,7 +48,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
     <date-picker
       v-model="surveyData.dateEnd"
@@ -56,7 +56,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending"
+      :disabled="isPending || isSurveyPending"
     />
   </div>
 
@@ -76,7 +76,7 @@
     :width="425"
     :hide-no-data="isLoadingDictionary"
     :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы одну группу']"
-    :disabled="isPending"
+    :disabled="isPending || isSurveyPending || isLoadingDictionary"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -96,7 +96,10 @@
     </template>
   </v-autocomplete>
 
-  <question-chips :questions="surveyData.questions" />
+  <question-chips
+    :questions="surveyData.questions"
+    :disabled="isPending || isSurveyPending"
+  />
 
   <div class="mt-5 d-flex ga-4">
     <v-btn
@@ -105,18 +108,18 @@
       size="large"
       text="Назад"
       color="#ECEFF4"
-      :loading="isPending"
+      :loading="isPending || isSurveyPending"
       @click="$router.back()"
     />
     <v-btn
       :ripple="false"
       :elevation="0"
       :disabled="!isFormValid"
-      text="Создать опрос"
+      :text="!surveyIsExist ? 'Создать опрос' : 'Изменить опрос'"
       color="#5E81AC"
       size="large"
-      :loading="isPending"
-      @click="createSurvey"
+      :loading="isPending || isSurveyPending"
+      @click="handleClick"
     />
   </div>
 </template>
@@ -124,12 +127,12 @@
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
 import { useMutation, useQuery } from '@tanstack/vue-query'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { getAllDictionary } from '@/api/dictionary'
 import { SurveyMeta, SurveyType } from '@/api/survey/survey.types'
-import { createSurveyMeta } from '@/api/survey'
+import { createSurveyMeta, getSurveyById, updateSurveyMeta } from '@/api/survey'
 
 // Данные опроса
 const surveyData = reactive<SurveyMeta.Base>({
@@ -142,6 +145,9 @@ const surveyData = reactive<SurveyMeta.Base>({
 })
 
 const router = useRouter()
+const route = useRoute()
+
+const surveyIdIsExist = computed(() => !!route.query.id)
 
 // Проверка, что все обязательные поля заполнены
 const isFormValid = computed(() => {
@@ -167,15 +173,35 @@ const { data: items, isLoading: isLoadingDictionary } = useQuery({
   }
 })
 
+const { data: surveyIsExist, isLoading: isSurveyPending } = useQuery({
+  queryKey: ['survey', route.query.id],
+  queryFn: () => getSurveyById(route.query.id as string),
+  enabled: surveyIdIsExist,
+  select(data) {
+    if (!data) return false
+    Object.assign(surveyData, {
+      ...data,
+      dateStart: new Date(data.dateStart as unknown as string),
+      dateEnd: new Date(data.dateEnd as unknown as string)
+    })
+    return true
+  }
+})
+
+const mutationFn = computed(() => {
+  if (!surveyIsExist.value) return createSurveyMeta
+  return updateSurveyMeta
+})
+
 const { isPending, mutate } = useMutation({
-  mutationFn: (newSurvey: SurveyMeta.Base) => createSurveyMeta(newSurvey),
+  mutationFn: (newSurvey: SurveyMeta.Base) => mutationFn.value(newSurvey),
   onSuccess: () => {
     router.push('/surveys')
   }
 })
 
-// Метод создания опроса
-const createSurvey = () => {
+// Метод создания/обновления опроса
+const handleClick = () => {
   if (!isFormValid.value) return
   mutate(surveyData)
 }

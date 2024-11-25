@@ -128,7 +128,10 @@ const buttonActions = [
   {
     id: 1,
     icon: 'edit',
-    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT
+    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT,
+    onClick: (item: Survey.BaseSurvey) => {
+      router.push(`/surveys/create?id=${item.id}`)
+    }
   },
   {
     id: 2,

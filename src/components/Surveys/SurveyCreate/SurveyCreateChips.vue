@@ -3,6 +3,7 @@
     <v-chip-group
       column
       class="py-0"
+      :disabled="$props.disabled"
       variant="outlined"
     >
       <v-slide-x-transition group>
@@ -24,6 +25,7 @@
       text="Добавить вопрос"
       append-icon="plus_circle"
       rounded="xl"
+      :disabled="$props.disabled"
       @click="openDialog()"
     />
   </div>
@@ -138,6 +140,10 @@
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
 import { SurveyQuestionType, type QuestionTemplate } from '@/api/survey/survey.types'
+
+defineProps<{
+  disabled: boolean
+}>()
 
 const questions = defineModel<QuestionTemplate[]>('questions', {
   required: true
