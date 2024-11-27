@@ -126,7 +126,7 @@
 
 <script setup lang="ts">
 import { computed, reactive } from 'vue'
-import { useMutation, useQuery } from '@tanstack/vue-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
 import { useRoute, useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
@@ -146,6 +146,7 @@ const surveyData = reactive<SurveyMeta.Base>({
 
 const router = useRouter()
 const route = useRoute()
+const queryClient = useQueryClient()
 
 const surveyIdIsExist = computed(() => !!route.query.id)
 
@@ -195,8 +196,15 @@ const mutationFn = computed(() => {
 
 const { isPending, mutate } = useMutation({
   mutationFn: (newSurvey: SurveyMeta.Base) => mutationFn.value(newSurvey),
-  onSuccess: () => {
+  onSuccess: data => {
     router.push('/surveys')
+    if (!surveyIdIsExist.value) {
+      queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) => [...old, data])
+    } else {
+      queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) =>
+        old.map(item => (item.id === data.id ? Object.assign(item, data) : item))
+      )
+    }
   }
 })
 

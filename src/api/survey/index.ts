@@ -39,12 +39,12 @@ export const getSurveyById = async (id: string) => {
 }
 
 export const createSurveyMeta = async (dto: SurveyMeta.Base) => {
-  const response = await api.post('survey/metadata', dto)
+  const response = await api.post<SurveyMeta.Base>('survey/metadata', dto)
   return response.data
 }
 
 export const updateSurveyMeta = async (dto: SurveyMeta.Base) => {
-  const response = await api.put('survey/metadata', dto)
+  const response = await api.put<SurveyMeta.Base>('survey/metadata', dto)
   return response.data
 }
 
