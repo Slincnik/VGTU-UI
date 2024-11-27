@@ -197,14 +197,18 @@ const mutationFn = computed(() => {
 const { isPending, mutate } = useMutation({
   mutationFn: (newSurvey: SurveyMeta.Base) => mutationFn.value(newSurvey),
   onSuccess: data => {
-    router.push('/surveys')
-    if (!surveyIdIsExist.value) {
-      queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) => [...old, data])
-    } else {
-      queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) =>
-        old.map(item => (item.id === data.id ? Object.assign(item, data) : item))
+    queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) =>
+      surveyIdIsExist.value
+        ? old.map(item => (item.id === data.id ? { ...item, ...data } : item))
+        : [...old, data]
+    )
+
+    if (surveyIdIsExist.value) {
+      queryClient.setQueryData(['survey', data.id], (oldData: SurveyMeta.Base) =>
+        oldData ? { id: oldData.id, ...data } : oldData
       )
     }
+    router.push('/surveys')
   }
 })
 
