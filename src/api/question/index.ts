@@ -1,5 +1,5 @@
 import { api } from '@/service/api/api.service'
-import { getStudentId } from '../survey'
+import { getStudentId } from '../student'
 import { type Survey } from '../survey/survey.types'
 
 export const getQuestionById = async (id: string | null) => {

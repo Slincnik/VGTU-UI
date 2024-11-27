@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/vue-query'
 import { api } from '@/service/api/api.service'
 import { useAuthStore, type UserStore } from '@/stores/authStore'
 import { getDecodedToken } from '@/service/keycloak/auth.config'
@@ -17,6 +18,27 @@ export const getUser = async () => {
 
   authStore.setStore(transformedData)
   return transformedData
+}
+
+export const getStudent = async () => {
+  const student = authStore.getUser
+  const queryClient = useQueryClient()
+
+  if (!student) {
+    const stud = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
+    return stud
+  }
+
+  return student
+}
+
+export const getStudentId = async () => {
+  const studentId = authStore.id
+  if (!studentId) {
+    const { id } = await getStudent()
+    return id
+  }
+  return studentId
 }
 
 export const getUserEducations = async () => {
