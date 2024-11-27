@@ -19,7 +19,7 @@
           @click.stop="mobile ? (drawer = !drawer) : (rail = !rail)"
         >
           <v-icon
-            icon="custom:menu"
+            icon="menu"
             size="30"
             color="#2E3440"
           />
@@ -42,7 +42,7 @@
         bg-color="#ECEFF4"
         density="comfortable"
         class="search-bar"
-        prepend-inner-icon="custom:magnify"
+        prepend-inner-icon="magnify"
         style="max-width: 250px"
       />
 
@@ -59,7 +59,7 @@
         <v-btn
           variant="tonal"
           size="48"
-          icon="custom:logout"
+          icon="logout"
           :ripple="false"
           @click.prevent="authManager.signoutRedirect()"
         />

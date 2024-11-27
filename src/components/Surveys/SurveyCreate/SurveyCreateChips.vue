@@ -3,6 +3,7 @@
     <v-chip-group
       column
       class="py-0"
+      :disabled="$props.disabled"
       variant="outlined"
     >
       <v-slide-x-transition group>
@@ -22,8 +23,9 @@
       variant="outlined"
       :ripple="false"
       text="Добавить вопрос"
-      append-icon="custom:plus_circle"
+      append-icon="plus_circle"
       rounded="xl"
+      :disabled="$props.disabled"
       @click="openDialog()"
     />
   </div>
@@ -83,7 +85,7 @@
                     density="compact"
                     max-width="208"
                     min-width="130"
-                    append-inner-icon="custom:close"
+                    append-inner-icon="close"
                     @click:append-inner="deleteChoice(key)"
                   />
 
@@ -91,7 +93,7 @@
                     elevation="0"
                     bg-color="white"
                     density="compact"
-                    icon="custom:plus"
+                    icon="plus"
                     @click="addChoice"
                   />
                 </div>
@@ -139,6 +141,10 @@
 import { ref, reactive, watch, computed } from 'vue'
 import { SurveyQuestionType, type QuestionTemplate } from '@/api/survey/survey.types'
 
+defineProps<{
+  disabled: boolean
+}>()
+
 const questions = defineModel<QuestionTemplate[]>('questions', {
   required: true
 })
@@ -184,7 +190,6 @@ const deleteChoice = (index: number) => {
 // Удаление вопроса по индексу
 const deleteQuestion = (index: number) => {
   questions.value.splice(index, 1)
-  resetForm()
   closeDialog()
 }
 

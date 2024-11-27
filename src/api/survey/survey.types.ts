@@ -32,13 +32,23 @@ export namespace Survey {
     dateStart: Date
     dateEnd: Date
   }
+
+  export type SurveyMeta = {
+    id: string
+    name: string
+    type: SurveyType.Enum
+    status: SurveyStatus.Enum
+    questions?: SurveyQuestion[]
+    dateStart: Date
+    dateEnd: Date
+  }
 }
 
 export namespace SurveyMeta {
   export type Base = {
     id?: string
     name: string
-    type: SurveyType.Enum
+    type: SurveyType.Enum | null
     status?: SurveyMetaStatus
     questions: QuestionTemplate[]
     groups: Array<{
@@ -54,21 +64,6 @@ export namespace SurveyMeta {
     PUBLISHED = 'PUBLISHED',
     EXPIRED = 'EXPIRED',
     CLOSED = 'CLOSED'
-  }
-
-  export function getValue(value: SurveyMetaStatus): string {
-    switch (value) {
-      case SurveyMetaStatus.DRAFT:
-        return 'Черновик'
-      case SurveyMetaStatus.PUBLISHED:
-        return 'Опубликован'
-      case SurveyMetaStatus.EXPIRED:
-        return 'Завершен'
-      case SurveyMetaStatus.CLOSED:
-        return 'Принудительно завершен'
-      default:
-        throw new Error(`Non-existent value`)
-    }
   }
 }
 
@@ -109,7 +104,9 @@ export namespace SurveyStatus {
     IN_PROGRESS = 'IN_PROGRESS',
     FINISHED = 'FINISHED',
     CLOSED = 'CLOSED',
-    EXPIRED = 'EXPIRED'
+    EXPIRED = 'EXPIRED',
+    DRAFT = 'DRAFT',
+    PUBLISHED = 'PUBLISHED'
   }
 
   export function getValue(value: Enum): string {
@@ -124,8 +121,12 @@ export namespace SurveyStatus {
         return 'Принудительно завершен'
       case Enum.EXPIRED:
         return 'Завершен'
+      case Enum.DRAFT:
+        return 'Черновик'
+      case Enum.PUBLISHED:
+        return 'Опубликован'
       default:
-        throw new Error(`Non-existent value`)
+        return 'Неизвестно'
     }
   }
 }
@@ -143,10 +144,10 @@ export namespace SurveyType {
       case Enum.STUDENT_EYES_TEACHERS:
         return 'Преподаватель глазами студента'
       default:
-        throw new Error(`Non-existent value`)
+        return 'Неизвестно'
     }
   }
   export function values() {
-    return [Enum.OTHER, Enum.STUDENT_EYES_TEACHERS]
+    return [Enum.STUDENT_EYES_TEACHERS]
   }
 }
