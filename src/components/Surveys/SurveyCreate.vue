@@ -43,7 +43,7 @@
       </template>
     </v-select>
     <date-picker
-      v-model="surveyData.dateStart"
+      v-model="surveyData.startDate"
       text="Дата начала"
       required
       class="flex-1-1-0"
@@ -51,7 +51,7 @@
       :disabled="isPending || isSurveyPending"
     />
     <date-picker
-      v-model="surveyData.dateEnd"
+      v-model="surveyData.endDate"
       text="Дата окончания"
       required
       class="flex-1-1-0"
@@ -61,7 +61,7 @@
   </div>
 
   <v-autocomplete
-    v-model="surveyData.groups"
+    v-model="surveyData.filters"
     class="mt-5"
     label="Выберите группу"
     variant="outlined"
@@ -91,7 +91,7 @@
         v-if="index === 2"
         class="text-grey text-subtitle-2 align-self-center"
       >
-        (+{{ surveyData.groups.length - 2 }} еще)
+        (+{{ surveyData.filters.length - 2 }} еще)
       </span>
     </template>
   </v-autocomplete>
@@ -131,16 +131,18 @@ import { useRoute, useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { getAllDictionary } from '@/api/dictionary'
-import { SurveyMeta, SurveyType } from '@/api/survey/survey.types'
-import { createSurveyMeta, getSurveyById, updateSurveyMeta } from '@/api/survey'
+import { type SurveyMeta, SurveyStatus, SurveyType } from '@/api/survey/survey.types'
+import { createSurveyMeta, getSurveyMetaById, updateSurveyMeta } from '@/api/survey/survey.meta'
 
 // Данные опроса
 const surveyData = reactive<SurveyMeta.Base>({
+  id: '',
   name: '',
-  type: null,
-  dateStart: undefined,
-  dateEnd: undefined,
-  groups: [],
+  status: SurveyStatus.Enum.DRAFT,
+  type: SurveyType.Enum.STUDENT_EYES_TEACHERS,
+  filters: [],
+  startDate: new Date(),
+  endDate: new Date(),
   questions: []
 })
 
@@ -154,11 +156,11 @@ const surveyIdIsExist = computed(() => !!route.query.id)
 const isFormValid = computed(() => {
   return (
     surveyData.name &&
-    surveyData.dateStart &&
-    surveyData.dateEnd &&
-    surveyData.groups.length > 0 &&
+    surveyData.startDate &&
+    surveyData.endDate &&
+    surveyData.filters.length > 0 &&
     surveyData.questions.length > 0 &&
-    new Date(surveyData.dateStart) < new Date(surveyData.dateEnd)
+    new Date(surveyData.startDate) < new Date(surveyData.endDate)
   )
 })
 
@@ -176,14 +178,14 @@ const { data: items, isLoading: isLoadingDictionary } = useQuery({
 
 const { data: surveyIsExist, isLoading: isSurveyPending } = useQuery({
   queryKey: ['survey', route.query.id],
-  queryFn: () => getSurveyById(route.query.id as string),
+  queryFn: () => getSurveyMetaById(route.query.id as string),
   enabled: surveyIdIsExist,
   select(data) {
     if (!data) return false
     Object.assign(surveyData, {
       ...data,
-      dateStart: new Date(data.dateStart as unknown as string),
-      dateEnd: new Date(data.dateEnd as unknown as string)
+      startDate: new Date(data.startDate as unknown as string),
+      endDate: new Date(data.endDate as unknown as string)
     })
     return true
   }
@@ -205,7 +207,7 @@ const { isPending, mutate } = useMutation({
 
     if (surveyIdIsExist.value) {
       queryClient.setQueryData(['survey', data.id], (oldData: SurveyMeta.Base) =>
-        oldData ? { id: oldData.id, ...data } : oldData
+        oldData ? { ...oldData, ...data } : oldData
       )
     }
     router.push('/surveys')
