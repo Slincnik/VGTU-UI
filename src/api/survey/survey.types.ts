@@ -1,3 +1,20 @@
+export type SurveyMetaDTO = {
+  name: string
+  type: SurveyType.Enum | null
+  filters: Array<{
+    objectId: string
+    type: FilterType.Enum
+    title: string
+  }>
+  startDate: Date | undefined
+  endDate: Date | undefined
+  questions: Array<{
+    title: string
+    type: SurveyQuestionType.Enum
+    choices: Survey.QuestionChoices[]
+  }>
+}
+
 export namespace Survey {
   export type Base = {
     id: string

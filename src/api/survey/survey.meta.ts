@@ -1,5 +1,5 @@
 import { api, type ResponseEntity } from '@/service/api/api.service'
-import { type SurveyMeta } from './survey.types'
+import { type SurveyMeta, type SurveyMetaDTO } from './survey.types'
 
 export const getAllSurveysMeta = async () => {
   const response = await api.get<ResponseEntity<SurveyMeta.Base[]>>('survey/metadata/all')
@@ -12,12 +12,12 @@ export const getSurveyMetaById = async (id: string) => {
   return response.data
 }
 
-export const createSurveyMeta = async (dto: SurveyMeta.Base) => {
+export const createSurveyMeta = async (dto: SurveyMetaDTO) => {
   const response = await api.post<SurveyMeta.Base>('survey/metadata', dto)
   return response.data
 }
 
-export const updateSurveyMeta = async (dto: SurveyMeta.Base) => {
+export const updateSurveyMeta = async (dto: SurveyMetaDTO) => {
   const response = await api.put<SurveyMeta.Base>('survey/metadata', dto)
   return response.data
 }

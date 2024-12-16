@@ -131,18 +131,21 @@ import { useRoute, useRouter } from 'vue-router'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { getAllDictionary } from '@/api/dictionary'
-import { type SurveyMeta, SurveyStatus, SurveyType } from '@/api/survey/survey.types'
+import {
+  FilterType,
+  type SurveyMeta,
+  type SurveyMetaDTO,
+  SurveyType
+} from '@/api/survey/survey.types'
 import { createSurveyMeta, getSurveyMetaById, updateSurveyMeta } from '@/api/survey/survey.meta'
 
 // Данные опроса
-const surveyData = reactive<SurveyMeta.Base>({
-  id: '',
+const surveyData = reactive<SurveyMetaDTO>({
   name: '',
-  status: SurveyStatus.Enum.DRAFT,
   type: SurveyType.Enum.STUDENT_EYES_TEACHERS,
   filters: [],
-  startDate: new Date(),
-  endDate: new Date(),
+  startDate: undefined,
+  endDate: undefined,
   questions: []
 })
 
@@ -170,7 +173,8 @@ const { data: items, isLoading: isLoadingDictionary } = useQuery({
   queryFn: getAllDictionary,
   select: data => {
     return data.content.map(item => ({
-      filterId: item.id,
+      objectId: item.id,
+      type: FilterType.Enum.GROUP,
       title: item.name
     }))
   }
@@ -197,7 +201,7 @@ const mutationFn = computed(() => {
 })
 
 const { isPending, mutate } = useMutation({
-  mutationFn: (newSurvey: SurveyMeta.Base) => mutationFn.value(newSurvey),
+  mutationFn: (newSurvey: SurveyMetaDTO) => mutationFn.value(newSurvey),
   onSuccess: data => {
     queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) =>
       surveyIdIsExist.value
