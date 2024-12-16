@@ -169,7 +169,7 @@ const { data: items, isLoading: isLoadingDictionary } = useQuery({
   queryKey: ['dictionaryGroups'],
   queryFn: getAllDictionary,
   select: data => {
-    return data.map(item => ({
+    return data.content.map(item => ({
       filterId: item.id,
       title: item.name
     }))
