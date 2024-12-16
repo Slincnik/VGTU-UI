@@ -215,7 +215,7 @@ const buttonActions = [
   }
 ]
 const handleRowClick = (_event: Event, { item }: { item: CommonSurveyType }) => {
-  if (item.status !== SurveyStatus.Enum.IN_PROGRESS) return
+  if (![SurveyStatus.Enum.IN_PROGRESS, SurveyStatus.Enum.NOT_STARTED].includes(item.status)) return
   router.push(`/surveys/${item.id}`)
 }
 </script>
