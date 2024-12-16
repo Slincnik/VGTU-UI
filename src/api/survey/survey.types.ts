@@ -14,7 +14,7 @@ export namespace Survey {
     title: string
     type: SurveyQuestionType.Enum
     choices: QuestionChoices[]
-    answer: Answer
+    answer?: Answer
   }
 
   export type Answer = {
