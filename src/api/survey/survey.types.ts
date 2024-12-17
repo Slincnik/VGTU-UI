@@ -1,77 +1,110 @@
+export type SurveyMetaDTO = {
+  name: string
+  type: SurveyType.Enum | null
+  filters: Array<{
+    objectId: string
+    type: FilterType.Enum
+    title: string
+  }>
+  startDate: Date | undefined
+  endDate: Date | undefined
+  questions: Array<{
+    title: string
+    type: SurveyQuestionType.Enum
+    choices: Survey.QuestionChoices[]
+  }>
+}
+
 export namespace Survey {
-  export type SurveyQuestion = {
+  export type Base = {
+    id: string
+    name: string
+    status: SurveyStatus.Enum
+    type: SurveyType.Enum
+    questions: Question[]
+    startDate: Date
+    endDate: Date
+  }
+
+  export type Question = {
     id: string
     title: string
     type: SurveyQuestionType.Enum
     choices: QuestionChoices[]
-    answer?: SurveyAnswer
+    answer?: Answer
   }
 
-  export type SurveyAnswer = {
-    id?: string
-    question?: string
-    student?: string
-    text?: string
-    answerChoices?: Array<{
+  export type Answer = {
+    id: string
+    answerChoices: Array<{
       id: string
-      questionChoiceId?: string
-      selected?: boolean
+      questionChoiceId: string
+      selected: boolean
     }>
+    question: string
+    text: string
   }
 
   export type QuestionChoices = {
     id: string
     title: string
   }
-
-  export type BaseSurvey = {
-    id: string
-    name: string
-    status: SurveyStatus.Enum
-    questions?: SurveyQuestion[]
-    dateStart: Date
-    dateEnd: Date
-  }
-
-  export type SurveyMeta = {
-    id: string
-    name: string
-    type: SurveyType.Enum
-    status: SurveyStatus.Enum
-    questions?: SurveyQuestion[]
-    dateStart: Date
-    dateEnd: Date
-  }
 }
 
 export namespace SurveyMeta {
   export type Base = {
-    id?: string
+    id: string
     name: string
-    type: SurveyType.Enum | null
-    status?: SurveyMetaStatus
-    questions: QuestionTemplate[]
-    groups: Array<{
-      filterId: string
-      title: string
-    }>
-    dateStart?: Date
-    dateEnd?: Date
+    type: SurveyType.Enum
+    status: SurveyStatus.Enum
+    filters: Filter[]
+    questions: Question[]
+    startDate: Date
+    endDate: Date
   }
 
-  export enum SurveyMetaStatus {
-    DRAFT = 'DRAFT',
-    PUBLISHED = 'PUBLISHED',
-    EXPIRED = 'EXPIRED',
-    CLOSED = 'CLOSED'
+  export type Question = {
+    id?: string
+    title: string
+    type: SurveyQuestionType.Enum
+    choices: Survey.QuestionChoices[]
+  }
+
+  export type Filter = {
+    id: string
+    objectId: string
+    type: FilterType.Enum
+    title: string
   }
 }
 
-export type QuestionTemplate = {
-  id?: string
-  title: string
-  type: SurveyQuestionType.Enum
-  choices: Survey.QuestionChoices[]
+export type CommonSurveyType = Survey.Base | SurveyMeta.Base
+
+export namespace FilterType {
+  export enum Enum {
+    FACULTY = 'FACULTY',
+    COURSE = 'COURSE',
+    GROUP = 'GROUP',
+    DIRECTION = 'DIRECTION'
+  }
+
+  export function getValue(value: Enum): string {
+    switch (value) {
+      case Enum.FACULTY:
+        return 'Факультет'
+      case Enum.COURSE:
+        return 'Курс'
+      case Enum.GROUP:
+        return 'Группа'
+      case Enum.DIRECTION:
+        return 'Направление'
+      default:
+        return 'Неизвестно'
+    }
+  }
+  export function values() {
+    return [Enum.FACULTY, Enum.COURSE, Enum.GROUP, Enum.DIRECTION]
+  }
 }
 
 export namespace SurveyQuestionType {

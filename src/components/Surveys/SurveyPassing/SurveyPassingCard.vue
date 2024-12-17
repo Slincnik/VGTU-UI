@@ -85,7 +85,7 @@ import { ref, computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
 import { SurveyQuestionType, type Survey } from '@/api/survey/survey.types'
-import { finishingPassingSurvey, saveAnswerResponse } from '@/api/survey'
+import { finishingPassingSurvey, saveAnswerResponse } from '@/api/survey/survey.base'
 
 const emits = defineEmits<{
   (e: 'updateQuestion'): void
@@ -94,8 +94,8 @@ const emits = defineEmits<{
 const route = useRoute()
 
 const index = defineModel<number>('index', { required: true })
-const data = defineModel<Survey.BaseSurvey>('data')
-const actualQuestion = defineModel<Survey.SurveyQuestion>('actualQuestion')
+const data = defineModel<Survey.Base>('data')
+const actualQuestion = defineModel<Survey.Question>('actualQuestion')
 
 const textResponse = ref<string>(actualQuestion.value?.answer?.text || '')
 const choiceResponse = ref<string>(
@@ -124,15 +124,19 @@ const checkDisabledBtn = computed(() => {
 })
 
 const saveAnswer = (isLast: boolean = false) => {
-  const answer = reactive<Survey.SurveyAnswer>({})
+  const answer = reactive<Survey.Answer>({
+    id: '',
+    answerChoices: [],
+    question: '',
+    text: ''
+  })
   const question = actualQuestion.value
 
   if (!question) return
 
   const baseAnswerData = {
     id: question.answer?.id,
-    question: question.id,
-    student: question.answer?.student
+    question: question.id
   }
 
   switch (question.type) {

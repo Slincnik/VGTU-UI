@@ -21,6 +21,7 @@
     "@schedule-x/theme-default": "^1.63.1",
     "@schedule-x/vue": "^1.58.0",
     "@tanstack/vue-query": "^5.52.2",
+    "@vueuse/core": "^12.0.0",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
     "jwt-decode": "^4.0.0",

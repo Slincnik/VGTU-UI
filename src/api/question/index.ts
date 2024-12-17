@@ -6,6 +6,6 @@ export const getQuestionById = async (id: string | null) => {
   if (!id) return null
 
   const userId = await getStudentId()
-  const { data } = await api.get<Survey.SurveyQuestion>(`survey/question/${id}/${userId}`)
+  const { data } = await api.get<Survey.Question>(`survey/question/${id}/${userId}`)
   return data
 }

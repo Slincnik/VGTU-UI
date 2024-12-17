@@ -50,7 +50,7 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useQuery } from '@tanstack/vue-query'
-import { getSurveyByIdAndStudent } from '@/api/survey'
+import { getSurveyByIdAndStudent } from '@/api/survey/survey.base'
 import { getQuestionById } from '@/api/question'
 import SurveyPassingCard from './SurveyPassingCard.vue'
 

@@ -139,19 +139,19 @@
 
 <script setup lang="ts">
 import { ref, reactive, watch, computed } from 'vue'
-import { SurveyQuestionType, type QuestionTemplate } from '@/api/survey/survey.types'
+import { SurveyQuestionType, type SurveyMeta } from '@/api/survey/survey.types'
 
 defineProps<{
   disabled: boolean
 }>()
 
-const questions = defineModel<QuestionTemplate[]>('questions', {
+const questions = defineModel<SurveyMeta.Question[]>('questions', {
   required: true
 })
 
 const dialog = ref(false)
 const dialogTitle = ref('Добавление вопроса')
-const questionData = reactive<QuestionTemplate>({
+const questionData = reactive<SurveyMeta.Question>({
   title: '',
   type: SurveyQuestionType.Enum.TEXT,
   choices: []
@@ -202,7 +202,7 @@ const isFormValid = computed(() => {
 })
 
 // Открытие диалога для добавления/редактирования
-const openDialog = (question: QuestionTemplate | null = null, index: number | null = null) => {
+const openDialog = (question: SurveyMeta.Question | null = null, index: number | null = null) => {
   if (question) {
     dialogTitle.value = 'Редактирование вопроса'
     Object.assign(questionData, question)

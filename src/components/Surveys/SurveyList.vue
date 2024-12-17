@@ -74,11 +74,11 @@ import {
   copySurveyMeta,
   deleteSurveyMeta,
   downloadSurveyMeta,
-  getAllStudentSurveys,
-  getAllSurveys,
-  publishSurvey
-} from '@/api/survey'
-import { SurveyStatus, SurveyType, type Survey } from '@/api/survey/survey.types'
+  getAllSurveysMeta,
+  publishSurveyMeta
+} from '@/api/survey/survey.meta'
+import { getAllStudentSurveys } from '@/api/survey/survey.base'
+import { SurveyStatus, SurveyType, type CommonSurveyType } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
 enum Align {
@@ -95,11 +95,11 @@ const userType = computed(() => {
   return isCanAccept ? 'teacher' : 'student'
 })
 
-const surveyFn = computed<typeof getAllSurveys | typeof getAllStudentSurveys>(() => {
-  return userType.value === 'teacher' ? getAllSurveys : getAllStudentSurveys
+const surveyFn = computed<typeof getAllSurveysMeta | typeof getAllStudentSurveys>(() => {
+  return userType.value === 'teacher' ? getAllSurveysMeta : getAllStudentSurveys
 })
 
-const { isLoading: loading, data: items } = useQuery({
+const { isLoading: loading, data: items } = useQuery<CommonSurveyType[]>({
   queryKey: ['surveys'],
   queryFn: surveyFn.value
 })
@@ -108,21 +108,21 @@ const formattedItems = computed(() => {
   return (
     (items.value?.map(item => ({
       ...item,
-      dateStart: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateStart)),
-      dateEnd: new Intl.DateTimeFormat('ru-RU').format(new Date(item.dateEnd))
-    })) as unknown as Survey.BaseSurvey[] | Survey.SurveyMeta[]) || []
+      startDate: new Intl.DateTimeFormat('ru-RU').format(new Date(item.startDate)),
+      endDate: new Intl.DateTimeFormat('ru-RU').format(new Date(item.endDate))
+    })) as unknown as CommonSurveyType[]) || []
   )
 })
 
 const commonHeaders = [
   { key: 'name', title: 'Название', align: Align.CENTER, sortable: false },
+  { key: 'type', title: 'Тип', align: Align.CENTER, sortable: false },
   { key: 'status', title: 'Статус', align: Align.CENTER, sortable: false },
-  { key: 'dateStart', title: 'Дата начала', align: Align.CENTER, sortable: false },
-  { key: 'dateEnd', title: 'Дата окончания', align: Align.CENTER, sortable: false }
+  { key: 'startDate', title: 'Дата начала', align: Align.CENTER, sortable: false },
+  { key: 'endDate', title: 'Дата окончания', align: Align.CENTER, sortable: false }
 ]
 
 const teacherSpecificHeaders = [
-  { key: 'type', title: 'Тип', align: Align.CENTER, sortable: false },
   { key: 'actions', title: 'Опции', align: Align.CENTER, sortable: false }
 ]
 
@@ -133,7 +133,7 @@ const headers = computed(() => {
   return commonHeaders
 })
 
-const surveyIsDraft = (item: Survey.BaseSurvey) => {
+const surveyIsDraft = (item: CommonSurveyType) => {
   return item.status !== SurveyStatus.Enum.DRAFT
 }
 
@@ -141,21 +141,18 @@ const buttonActions = [
   {
     id: 1,
     icon: 'copy',
-    disabled: (item: Survey.BaseSurvey) => item.status === SurveyStatus.Enum.DRAFT,
-    onClick: (item: Survey.BaseSurvey) => {
+    disabled: (item: CommonSurveyType) => item.status === SurveyStatus.Enum.DRAFT,
+    onClick: (item: CommonSurveyType) => {
       copySurveyMeta(item.id).then(it => {
-        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) => [
-          ...old,
-          it
-        ])
+        queryClient.setQueryData(['surveys'], (old: CommonSurveyType[]) => [...old, it])
       })
     }
   },
   {
     id: 2,
     icon: 'edit',
-    disabled: (item: Survey.BaseSurvey) => surveyIsDraft(item),
-    onClick: (item: Survey.BaseSurvey) => {
+    disabled: (item: CommonSurveyType) => surveyIsDraft(item),
+    onClick: (item: CommonSurveyType) => {
       if (surveyIsDraft(item)) return
       router.push(`/surveys/create?id=${item.id}`)
     }
@@ -163,11 +160,11 @@ const buttonActions = [
   {
     id: 3,
     icon: 'download',
-    disabled: (item: Survey.BaseSurvey) =>
+    disabled: (item: CommonSurveyType) =>
       ![SurveyStatus.Enum.FINISHED, SurveyStatus.Enum.EXPIRED, SurveyStatus.Enum.CLOSED].includes(
         item.status
       ),
-    onClick: async (item: Survey.BaseSurvey) => {
+    onClick: async (item: CommonSurveyType) => {
       if (
         ![SurveyStatus.Enum.FINISHED, SurveyStatus.Enum.EXPIRED, SurveyStatus.Enum.CLOSED].includes(
           item.status
@@ -181,11 +178,11 @@ const buttonActions = [
   {
     id: 4,
     icon: 'trash',
-    disabled: (item: Survey.BaseSurvey) => surveyIsDraft(item),
-    onClick: (item: Survey.BaseSurvey) => {
+    disabled: (item: CommonSurveyType) => surveyIsDraft(item),
+    onClick: (item: CommonSurveyType) => {
       if (surveyIsDraft(item)) return
       deleteSurveyMeta(item.id).then(() => {
-        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+        queryClient.setQueryData(['surveys'], (old: CommonSurveyType[]) =>
           old.filter(it => it.id !== item.id)
         )
       })
@@ -194,11 +191,11 @@ const buttonActions = [
   {
     id: 5,
     icon: 'publish',
-    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.DRAFT,
-    onClick: (item: Survey.BaseSurvey) => {
+    disabled: (item: CommonSurveyType) => item.status !== SurveyStatus.Enum.DRAFT,
+    onClick: (item: CommonSurveyType) => {
       if (item.status === SurveyStatus.Enum.PUBLISHED) return
-      publishSurvey(item.id).then(() => {
-        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+      publishSurveyMeta(item.id).then(() => {
+        queryClient.setQueryData(['surveys'], (old: CommonSurveyType[]) =>
           old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.PUBLISHED } : it))
         )
       })
@@ -207,18 +204,18 @@ const buttonActions = [
   {
     id: 6,
     icon: 'close',
-    disabled: (item: Survey.BaseSurvey) => item.status !== SurveyStatus.Enum.PUBLISHED,
-    onClick: (item: Survey.BaseSurvey) => {
+    disabled: (item: CommonSurveyType) => item.status !== SurveyStatus.Enum.PUBLISHED,
+    onClick: (item: CommonSurveyType) => {
       closeSurveyMeta(item.id).then(() => {
-        queryClient.setQueryData(['surveys'], (old: Survey.BaseSurvey[] | Survey.SurveyMeta[]) =>
+        queryClient.setQueryData(['surveys'], (old: CommonSurveyType[]) =>
           old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.CLOSED } : it))
         )
       })
     }
   }
 ]
-const handleRowClick = (_event: Event, { item }: { item: Survey.BaseSurvey }) => {
-  if (item.status !== SurveyStatus.Enum.IN_PROGRESS) return
+const handleRowClick = (_event: Event, { item }: { item: CommonSurveyType }) => {
+  if (![SurveyStatus.Enum.IN_PROGRESS, SurveyStatus.Enum.NOT_STARTED].includes(item.status)) return
   router.push(`/surveys/${item.id}`)
 }
 </script>
