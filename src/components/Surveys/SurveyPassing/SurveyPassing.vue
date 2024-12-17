@@ -115,7 +115,6 @@ const saveAnswer = async (object: EmitData) => {
     default:
       console.warn('Неизвестный тип вопроса:', object.question.type)
   }
-  console.log(object.isLast, data.value?.questions.length, index.value)
 
   if (object.isLast) {
     finishingPassingSurvey(answer)
