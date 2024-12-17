@@ -122,6 +122,7 @@ const saveAnswer = async (object: EmitData) => {
     client.setQueryData(['surveys'], (oldData: Survey.Base[]) =>
       oldData.map(s => (s.id === data.value?.id ? { ...s, status: SurveyStatus.Enum.FINISHED } : s))
     )
+    return
   }
 
   const answerResponse = await saveAnswerResponse(answer)
