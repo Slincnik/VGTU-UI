@@ -13,7 +13,7 @@
       hide-details="auto"
       :rules="[v => !!v || 'Название обязательно']"
       required
-      :disabled="isPending || isSurveyPending"
+      :disabled="isDisabled"
     />
   </div>
 
@@ -28,13 +28,13 @@
       density="comfortable"
       hide-details
       required
-      :items="SurveyType.values()"
+      :items="surveyTypes"
       :item-title="item => SurveyType.getValue(item)"
       :item-value="item => item"
       class="flex-1-1-0"
       :style="{ 'min-width': '290px' }"
       :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы один тип']"
-      :disabled="isPending || isSurveyPending"
+      :disabled="isDisabled"
     >
       <template #selection="{ item }">
         <span class="text-subtitle-2">
@@ -48,7 +48,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending || isSurveyPending"
+      :disabled="isDisabled"
     />
     <date-picker
       v-model="surveyData.endDate"
@@ -56,7 +56,7 @@
       required
       class="flex-1-1-0"
       :style="{ 'min-width': '200px' }"
-      :disabled="isPending || isSurveyPending"
+      :disabled="isDisabled"
     />
   </div>
 
@@ -74,9 +74,9 @@
     :loading="isLoadingDictionary"
     :items
     :width="425"
-    :hide-no-data="isLoadingDictionary"
     :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы одну группу']"
-    :disabled="isPending || isSurveyPending || isLoadingDictionary"
+    :disabled="isDisabled"
+    @update:search="val => (search = val)"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -98,7 +98,7 @@
 
   <question-chips
     :questions="surveyData.questions"
-    :disabled="isPending || isSurveyPending"
+    :disabled="isDisabled"
   />
 
   <div class="mt-5 d-flex ga-4">
@@ -108,119 +108,38 @@
       size="large"
       text="Назад"
       color="#ECEFF4"
-      :loading="isPending || isSurveyPending"
+      :loading="isDisabled"
       @click="$router.back()"
     />
     <v-btn
       :ripple="false"
       :elevation="0"
       :disabled="!isFormValid"
-      :text="!surveyIsExist ? 'Создать опрос' : 'Изменить опрос'"
+      :text="!isSurveyExist ? 'Создать опрос' : 'Изменить опрос'"
       color="#5E81AC"
       size="large"
-      :loading="isPending || isSurveyPending"
+      :loading="isDisabled"
       @click="handleClick"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive } from 'vue'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query'
-import { useRoute, useRouter } from 'vue-router'
+import { SurveyType } from '@/api/survey/survey.types'
+import { useSurveyForm } from '@/composables/useSurveyForm'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
 import DatePicker from '@/components/DatePicker/DatePicker.vue'
-import { getAllDictionary } from '@/api/dictionary'
-import {
-  FilterType,
-  type SurveyMeta,
-  type SurveyMetaDTO,
-  SurveyType
-} from '@/api/survey/survey.types'
-import { createSurveyMeta, getSurveyMetaById, updateSurveyMeta } from '@/api/survey/survey.meta'
 
-// Данные опроса
-const surveyData = reactive<SurveyMetaDTO>({
-  name: '',
-  type: SurveyType.Enum.STUDENT_EYES_TEACHERS,
-  filters: [],
-  startDate: undefined,
-  endDate: undefined,
-  questions: []
-})
+const {
+  surveyData,
+  search,
+  items,
+  isLoadingDictionary,
+  isSurveyExist,
+  isFormValid,
+  isDisabled,
+  handleClick
+} = useSurveyForm()
 
-const router = useRouter()
-const route = useRoute()
-const queryClient = useQueryClient()
-
-const surveyIdIsExist = computed(() => !!route.query.id)
-
-// Проверка, что все обязательные поля заполнены
-const isFormValid = computed(() => {
-  return (
-    surveyData.name &&
-    surveyData.startDate &&
-    surveyData.endDate &&
-    surveyData.filters.length > 0 &&
-    surveyData.questions.length > 0 &&
-    new Date(surveyData.startDate) < new Date(surveyData.endDate)
-  )
-})
-
-// Загрузка данных словаря
-const { data: items, isLoading: isLoadingDictionary } = useQuery({
-  queryKey: ['dictionaryGroups'],
-  queryFn: getAllDictionary,
-  select: data => {
-    return data.content.map(item => ({
-      objectId: item.id,
-      type: FilterType.Enum.GROUP,
-      title: item.name
-    }))
-  }
-})
-
-const { data: surveyIsExist, isLoading: isSurveyPending } = useQuery({
-  queryKey: ['survey', route.query.id],
-  queryFn: () => getSurveyMetaById(route.query.id as string),
-  enabled: surveyIdIsExist,
-  select(data) {
-    if (!data) return false
-    Object.assign(surveyData, {
-      ...data,
-      startDate: new Date(data.startDate as unknown as string),
-      endDate: new Date(data.endDate as unknown as string)
-    })
-    return true
-  }
-})
-
-const mutationFn = computed(() => {
-  if (!surveyIsExist.value) return createSurveyMeta
-  return updateSurveyMeta
-})
-
-const { isPending, mutate } = useMutation({
-  mutationFn: (newSurvey: SurveyMetaDTO) => mutationFn.value(newSurvey),
-  onSuccess: data => {
-    queryClient.setQueryData(['surveys'], (old: SurveyMeta.Base[]) =>
-      surveyIdIsExist.value
-        ? old.map(item => (item.id === data.id ? { ...item, ...data } : item))
-        : [...old, data]
-    )
-
-    if (surveyIdIsExist.value) {
-      queryClient.setQueryData(['survey', data.id], (oldData: SurveyMeta.Base) =>
-        oldData ? { ...oldData, ...data } : oldData
-      )
-    }
-    router.push('/surveys')
-  }
-})
-
-// Метод создания/обновления опроса
-const handleClick = () => {
-  if (!isFormValid.value) return
-  mutate(surveyData)
-}
+const surveyTypes = SurveyType.values()
 </script>
