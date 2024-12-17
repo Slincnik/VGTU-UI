@@ -19,10 +19,7 @@
       hide-default-footer
       @click:row="handleRowClick"
     >
-      <template
-        v-if="userType === 'teacher'"
-        #item.type="{ item }"
-      >
+      <template #item.type="{ item }">
         <v-chip
           v-if="'type' in item"
           color="#8FBCBB"
