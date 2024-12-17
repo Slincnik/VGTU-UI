@@ -3,18 +3,18 @@
     <span class="text-h5 font-weight-bold">Опрос</span>
   </div>
   <div
-    v-if="isSurveyLoading || isQuestionLoading"
+    v-if="isSurveyLoading"
     class="d-flex justify-center align-center"
   >
     <v-progress-circular indeterminate />
   </div>
 
   <survey-passing-card
-    v-else-if="actualQuestion"
+    v-else-if="actualQuestion && data"
     v-model:index="index"
-    :data
+    :questions-length="data.questions.length"
     :actual-question="actualQuestion"
-    @update-question="refetch()"
+    @update-question="saveAnswer"
   />
   <div v-else>
     <v-sheet
@@ -49,33 +49,89 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { useQuery } from '@tanstack/vue-query'
-import { getSurveyByIdAndStudent } from '@/api/survey/survey.base'
-import { getQuestionById } from '@/api/question'
+import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { finishingPassingSurvey, getSurveyById, saveAnswerResponse } from '@/api/survey/survey.base'
 import SurveyPassingCard from './SurveyPassingCard.vue'
+import { SurveyQuestionType, type Survey } from '@/api/survey/survey.types'
+
+type EmitData = {
+  isLast: boolean
+  textResponse: string
+  choiceResponse: string
+  multiChoiceResponse: string[]
+  question: Survey.Question
+}
 
 const route = useRoute()
 const index = ref(0)
+const client = useQueryClient()
 
 const { isLoading: isSurveyLoading, data } = useQuery({
   queryKey: ['surveyQuestion', route.params.id],
-  queryFn: () => getSurveyByIdAndStudent(route.params.id as string)
+  queryFn: () => getSurveyById(route.params.id as string),
+  retry: 1
 })
+const actualQuestion = computed(() => data.value?.questions?.[index.value] ?? null)
 
-const enabled = computed(() => !!data.value?.id)
-const questionId = computed(() => {
-  if (!data.value?.questions) return null
-  return data.value.questions[index.value].id
-})
+const saveAnswer = async (object: EmitData) => {
+  if (object.question.answer) return
 
-const {
-  isLoading: isQuestionLoading,
-  data: actualQuestion,
-  refetch
-} = useQuery({
-  queryKey: ['question', index],
-  queryFn: () => getQuestionById(questionId.value),
-  enabled,
-  gcTime: 0
-})
+  const answer = {
+    id: '',
+    answerChoices: [],
+    question: '',
+    text: ''
+  }
+
+  const baseAnswerData = {
+    question: object.question.id
+  }
+
+  const buildAnswerChoices = (choices: Survey.QuestionChoices[], selectedIds: string[] | string) =>
+    choices?.map(choice => ({
+      questionChoiceId: choice.id,
+      selected: Array.isArray(selectedIds)
+        ? selectedIds.includes(choice.id)
+        : selectedIds === choice.id
+    }))
+
+  switch (object.question.type) {
+    case SurveyQuestionType.Enum.TEXT:
+      Object.assign(answer, { ...baseAnswerData, text: object.textResponse })
+      break
+    case SurveyQuestionType.Enum.CHOICE:
+      Object.assign(answer, {
+        ...baseAnswerData,
+        answerChoices: buildAnswerChoices(object.question.choices, object.choiceResponse)
+      })
+      break
+    case SurveyQuestionType.Enum.MULTI_CHOICE:
+      Object.assign(answer, {
+        ...baseAnswerData,
+        answerChoices: buildAnswerChoices(object.question.choices, object.multiChoiceResponse)
+      })
+      break
+    default:
+      console.warn('Неизвестный тип вопроса:', object.question.type)
+      return
+  }
+
+  if (object.isLast) {
+    finishingPassingSurvey(answer)
+    return
+  }
+
+  const answerResponse = await saveAnswerResponse(answer)
+
+  client.setQueryData(['surveyQuestion', route.params.id], (oldData: Survey.Base) => {
+    if (!oldData) return null // На случай, если данные отсутствуют
+    const newQuestions = oldData.questions.map(q =>
+      q.id === object.question?.id ? { ...q, answer: answerResponse } : q
+    )
+    return {
+      ...oldData,
+      questions: newQuestions
+    }
+  })
+}
 </script>
