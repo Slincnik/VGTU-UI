@@ -118,8 +118,8 @@ const commonHeaders = [
   { key: 'name', title: 'Название', align: Align.CENTER, sortable: false },
   { key: 'type', title: 'Тип', align: Align.CENTER, sortable: false },
   { key: 'status', title: 'Статус', align: Align.CENTER, sortable: false },
-  { key: 'dateStart', title: 'Дата начала', align: Align.CENTER, sortable: false },
-  { key: 'dateEnd', title: 'Дата окончания', align: Align.CENTER, sortable: false }
+  { key: 'startDate', title: 'Дата начала', align: Align.CENTER, sortable: false },
+  { key: 'endDate', title: 'Дата окончания', align: Align.CENTER, sortable: false }
 ]
 
 const teacherSpecificHeaders = [
