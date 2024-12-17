@@ -5,9 +5,7 @@ import { getStudentId } from '../student'
 export const getAllStudentSurveys = async () => {
   const userId = await getStudentId()
 
-  const response = await api.get<ResponseEntity<Survey.Base[]>>(
-    `survey/student?studentRecipient=${userId}`
-  )
+  const response = await api.get<ResponseEntity<Survey.Base[]>>(`survey/all?student=${userId}`)
 
   return response.data.content
 }
