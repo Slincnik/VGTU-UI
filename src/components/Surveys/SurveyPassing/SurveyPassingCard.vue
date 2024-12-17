@@ -11,11 +11,11 @@
             variant="flat"
             :text="`${index + 1} вопрос`"
           />
-          <span class="card-title-subtitle"> из {{ data?.questions?.length }} </span>
+          <span class="card-title-subtitle"> из {{ questionsLength }} </span>
         </v-card-title>
         <v-card-text class="mt-3">
           <span>{{ actualQuestion?.title }}</span>
-          <template v-if="actualQuestion?.type === SurveyQuestionType.Enum.TEXT">
+          <template v-if="isTextQuestion">
             <v-text-field
               v-model="textResponse"
               class="mt-4"
@@ -24,7 +24,7 @@
               required
             />
           </template>
-          <template v-else-if="actualQuestion?.type === SurveyQuestionType.Enum.CHOICE">
+          <template v-else-if="isChoiceQuestion">
             <v-radio-group
               v-model="choiceResponse"
               class="mt-4"
@@ -40,7 +40,7 @@
               />
             </v-radio-group>
           </template>
-          <template v-else-if="actualQuestion?.type === SurveyQuestionType.Enum.MULTI_CHOICE">
+          <template v-else-if="isMultiChoiceQuestion">
             <div class="mt-5">
               <v-checkbox-btn
                 v-for="choice in actualQuestion?.choices"
@@ -81,37 +81,59 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-import { useQuery } from '@tanstack/vue-query'
+import { ref, computed, watchEffect } from 'vue'
 import { SurveyQuestionType, type Survey } from '@/api/survey/survey.types'
-import { finishingPassingSurvey, saveAnswerResponse } from '@/api/survey/survey.base'
 
 const emits = defineEmits<{
-  (e: 'updateQuestion'): void
+  (
+    e: 'updateQuestion',
+    data: {
+      isLast: boolean
+      textResponse: string
+      choiceResponse: string
+      multiChoiceResponse: string[]
+      question: Survey.Question
+    }
+  ): void
 }>()
 
-const route = useRoute()
-
 const index = defineModel<number>('index', { required: true })
-const data = defineModel<Survey.Base>('data')
-const actualQuestion = defineModel<Survey.Question>('actualQuestion')
+const questionsLength = defineModel<number>('questionsLength', { required: true })
+const actualQuestion = defineModel<Survey.Question>('actualQuestion', { required: true })
 
-const textResponse = ref<string>(actualQuestion.value?.answer?.text || '')
-const choiceResponse = ref<string>(
-  actualQuestion.value?.answer?.answerChoices?.filter(choice => choice.selected)[0]
-    ?.questionChoiceId || ''
-)
-const multiChoiceResponse = ref<string[]>(
-  actualQuestion.value?.answer?.answerChoices?.map(choice => choice.questionChoiceId!) || []
-)
+const textResponse = ref<string>('')
+const choiceResponse = ref<string>('')
+const multiChoiceResponse = ref<string[]>([])
 
-const isLastQuestion = computed(() => index.value + 1 === data.value?.questions?.length)
+const isLastQuestion = computed(() => index.value + 1 === questionsLength.value)
+const isTextQuestion = computed(() => actualQuestion.value?.type === SurveyQuestionType.Enum.TEXT)
+const isChoiceQuestion = computed(
+  () => actualQuestion.value?.type === SurveyQuestionType.Enum.CHOICE
+)
+const isMultiChoiceQuestion = computed(
+  () => actualQuestion.value?.type === SurveyQuestionType.Enum.MULTI_CHOICE
+)
 
 const renderTextBtn = computed(() => {
   if (isLastQuestion.value) return 'Завершить'
   return 'Следующий вопрос'
 })
+
+watchEffect(() => {
+  if (!actualQuestion.value) return
+  const { answer } = actualQuestion.value
+
+  textResponse.value = answer?.text || ''
+  choiceResponse.value =
+    answer?.answerChoices?.find(choice => choice.selected)?.questionChoiceId || ''
+  multiChoiceResponse.value = answer?.answerChoices?.map(choice => choice.questionChoiceId) || []
+})
+
+const resetResponses = () => {
+  textResponse.value = ''
+  choiceResponse.value = ''
+  multiChoiceResponse.value = []
+}
 
 const checkDisabledBtn = computed(() => {
   if (actualQuestion.value?.type === SurveyQuestionType.Enum.TEXT) {
@@ -123,84 +145,40 @@ const checkDisabledBtn = computed(() => {
   return multiChoiceResponse.value.length === 0
 })
 
-const saveAnswer = (isLast: boolean = false) => {
-  const answer = reactive<Survey.Answer>({
-    id: '',
-    answerChoices: [],
-    question: '',
-    text: ''
-  })
-  const question = actualQuestion.value
-
-  if (!question) return
-
-  const baseAnswerData = {
-    id: question.answer?.id,
-    question: question.id
-  }
-
-  switch (question.type) {
-    case SurveyQuestionType.Enum.TEXT:
-      Object.assign(answer, {
-        ...baseAnswerData,
-        text: textResponse.value
-      })
-      break
-
-    case SurveyQuestionType.Enum.CHOICE:
-      Object.assign(answer, {
-        ...baseAnswerData,
-        answerChoices: question.choices?.map(choice => ({
-          questionChoiceId: choice.id,
-          selected: choiceResponse.value === choice.id
-        }))
-      })
-      break
-
-    case SurveyQuestionType.Enum.MULTI_CHOICE:
-      Object.assign(answer, {
-        ...baseAnswerData,
-        answerChoices: question.choices?.map(choice => ({
-          questionChoiceId: choice.id,
-          selected: multiChoiceResponse.value.includes(choice.id)
-        }))
-      })
-      break
-
-    default:
-      console.warn('Неизвестный тип вопроса:', question.type)
-      break
-  }
-
-  if (isLast) {
-    useQuery({
-      queryKey: ['finishAnswer'],
-      queryFn: () => finishingPassingSurvey(String(route.params.id), answer),
-      gcTime: 0
-    })
-  }
-
-  useQuery({
-    queryKey: ['answer', route.params.id],
-    queryFn: () => saveAnswerResponse(String(route.params.id), answer),
-    gcTime: 0
-  })
-}
-
 const previousQuestion = () => {
   if (index.value === 0) return
   index.value--
-  emits('updateQuestion')
+  emits('updateQuestion', {
+    isLast: false,
+    textResponse: textResponse.value,
+    choiceResponse: choiceResponse.value,
+    multiChoiceResponse: multiChoiceResponse.value,
+    question: actualQuestion.value
+  })
+  resetResponses()
 }
 
 const nextQuestion = () => {
+  const dataObject = {
+    isLast: false,
+    textResponse: textResponse.value,
+    choiceResponse: choiceResponse.value,
+    multiChoiceResponse: multiChoiceResponse.value,
+    question: actualQuestion.value
+  }
+
   if (isLastQuestion.value) {
-    saveAnswer(true)
+    emits('updateQuestion', {
+      ...dataObject,
+      isLast: true
+    })
+    resetResponses()
     return
   }
 
   index.value++
-  emits('updateQuestion')
+  emits('updateQuestion', dataObject)
+  resetResponses()
 }
 </script>
 
