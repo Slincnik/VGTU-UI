@@ -62,6 +62,7 @@
 
   <v-autocomplete
     v-model="surveyData.filters"
+    v-model:search="search"
     class="mt-5"
     label="Выберите группу"
     variant="outlined"
@@ -76,7 +77,7 @@
     :width="425"
     :rules="[v => v.length > 0 || 'Нужно выбрать хотя бы одну группу']"
     :disabled="isDisabled"
-    @update:search="val => (search = val)"
+    :no-data-text="dataText"
   >
     <template #selection="{ item, index }">
       <v-chip
@@ -125,6 +126,7 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { SurveyType } from '@/api/survey/survey.types'
 import { useSurveyForm } from '@/composables/useSurveyForm'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
@@ -140,6 +142,12 @@ const {
   isDisabled,
   handleClick
 } = useSurveyForm()
+
+const dataText = computed(() => {
+  if (isLoadingDictionary.value) return 'Загрузка...'
+  if (!items.value?.length && !search.value) return 'Введите данные'
+  return 'Ничего не найдено'
+})
 
 const surveyTypes = SurveyType.values()
 </script>
