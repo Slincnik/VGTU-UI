@@ -45,7 +45,7 @@ export function useSurveyForm() {
     isLoading: isLoadingDictionary,
     refetch
   } = useQuery({
-    queryKey: ['dictionaryGroups'],
+    queryKey: ['dictionaryGroups', search],
     queryFn: () => getDictionaryByName(search.value),
     select: data => {
       return data.content.map(item => ({
@@ -63,7 +63,7 @@ export function useSurveyForm() {
       if (!newValue) return
       refetch()
     },
-    { debounce: 500 }
+    { debounce: 300 }
   )
 
   const { data: isSurveyExist, isLoading: isSurveyPending } = useQuery({

@@ -48,11 +48,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
 import { finishingPassingSurvey, getSurveyById, saveAnswerResponse } from '@/api/survey/survey.base'
 import SurveyPassingCard from './SurveyPassingCard.vue'
-import { SurveyQuestionType, type Survey } from '@/api/survey/survey.types'
+import { SurveyQuestionType, SurveyStatus, type Survey } from '@/api/survey/survey.types'
 
 type EmitData = {
   isLast: boolean
@@ -63,6 +63,7 @@ type EmitData = {
 }
 
 const route = useRoute()
+const router = useRouter()
 const index = ref(0)
 const client = useQueryClient()
 
@@ -113,11 +114,14 @@ const saveAnswer = async (object: EmitData) => {
       break
     default:
       console.warn('Неизвестный тип вопроса:', object.question.type)
-      return
   }
 
   if (object.isLast) {
     finishingPassingSurvey(answer)
+    router.push('/surveys')
+    client.setQueryData(['surveys'], (oldData: Survey.Base[]) =>
+      oldData.map(s => (s.id === data.value?.id ? { ...s, status: SurveyStatus.Enum.FINISHED } : s))
+    )
     return
   }
 
