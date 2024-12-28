@@ -3,7 +3,7 @@ lint-job:
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == "dev"
-    - if: '$CI_MERGE_REQUEST_IID'
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - corepack enable pnpm
     - pnpm install --frozen-lockfile --ignore-scripts
