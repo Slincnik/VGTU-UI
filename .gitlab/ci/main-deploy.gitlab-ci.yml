@@ -1,16 +1,19 @@
 lint-job:
   stage: lint
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  before_script:
-    - corepack enable pnpm
-  script:
-    - pnpm install --frozen-lockfile --ignore-scripts
-    - pnpm lint
-  artifacts:
+  cache:
+    key: "node-modules-cache-${CI_COMMIT_REF_SLUG}-$(sha256sum pnpm-lock.yaml | cut -d' ' -f1)"
     paths:
       - node_modules/
-    expire_in: "1 week"
+    policy: push
+    expire_in: "2 weeks"
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: '$CI_MERGE_REQUEST_IID'
+  before_script:
+    - corepack enable pnpm
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - pnpm lint'
 
 build-job:
   stage: build
@@ -18,11 +21,5 @@ build-job:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
   needs:
     - lint-job
-  before_script:
-    - corepack enable pnpm
   script:
     - pnpm run build
-  artifacts:
-    paths:
-      - dist/
-    expire_in: "1 week"
