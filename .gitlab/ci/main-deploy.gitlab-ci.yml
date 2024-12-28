@@ -1,10 +1,5 @@
 lint-job:
   stage: lint
-  cache:
-    key: "node-modules-cache-${CI_COMMIT_REF_SLUG}-$(sha256sum pnpm-lock.yaml | cut -d' ' -f1)"
-    paths:
-      - node_modules/
-    policy: push
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == "dev"
@@ -14,6 +9,9 @@ lint-job:
     - pnpm install --frozen-lockfile --ignore-scripts
   script:
     - pnpm lint
+  artifacts:
+    paths:
+      - node_modules/
 
 build-job:
   stage: build
@@ -23,6 +21,7 @@ build-job:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == "dev"
   needs:
-    - lint-job
+    - job: lint-job
+      artifacts: true
   script:
     - pnpm run build
