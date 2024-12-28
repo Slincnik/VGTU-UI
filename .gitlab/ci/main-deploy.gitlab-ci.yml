@@ -17,6 +17,8 @@ lint-job:
 
 build-job:
   stage: build
+  before_script:
+    - corepack enable pnpm
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_REF_NAME == "dev"
