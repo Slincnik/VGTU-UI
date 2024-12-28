@@ -13,7 +13,7 @@ lint-job:
     - corepack enable pnpm
     - pnpm install --frozen-lockfile --ignore-scripts
   script:
-    - pnpm lint'
+    - pnpm lint
 
 build-job:
   stage: build
