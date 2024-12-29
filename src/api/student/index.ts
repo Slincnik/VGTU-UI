@@ -13,7 +13,8 @@ export const getUser = async () => {
   const transformedData: UserStore = {
     id: response.data.id,
     user: response.data.user,
-    educations: []
+    educations: [],
+    gradeBooks: response.data.gradeBooks
   }
 
   authStore.setStore(transformedData)
@@ -21,24 +22,19 @@ export const getUser = async () => {
 }
 
 export const getStudent = async () => {
-  const student = authStore.getUser
   const queryClient = useQueryClient()
 
-  if (!student) {
-    const stud = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
-    return stud
+  if (!authStore.id) {
+    const student = await queryClient.fetchQuery({ queryKey: ['user'], queryFn: getUser })
+    return student
   }
-
-  return student
+  return authStore
 }
 
 export const getStudentId = async () => {
-  const studentId = authStore.id
-  if (!studentId) {
-    const { id } = await getStudent()
-    return id
-  }
-  return studentId
+  const { id } = await getStudent()
+
+  return id
 }
 
 export const getUserEducations = async () => {

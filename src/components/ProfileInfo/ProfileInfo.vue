@@ -19,6 +19,6 @@ const { user, educations } = storeToRefs(authStore)
 
 <style>
 .profile-info > * {
-  margin-top: 20px;
+  margin-top: 19px;
 }
 </style>
