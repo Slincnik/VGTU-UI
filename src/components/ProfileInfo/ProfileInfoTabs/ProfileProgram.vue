@@ -5,7 +5,7 @@
       <v-sheet
         v-for="(education, idx) in programData"
         :key="idx"
-        class="pa-4 fill-sheet"
+        class="pa-4 mb-0 fill-sheet"
         elevation="0"
         color="#ECEFF4"
       >
