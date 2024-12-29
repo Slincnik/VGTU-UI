@@ -7,17 +7,17 @@
     <v-tab
       variant="text"
       to="main"
-    >Общие сведения</v-tab
+      >Общие сведения</v-tab
     >
     <v-tab
       variant="text"
       to="orders"
-    >Приказы</v-tab
+      >Приказы</v-tab
     >
     <v-tab
       variant="text"
       to="payments"
-    >Оплата обучения</v-tab
+      >Оплата обучения</v-tab
     >
   </v-tabs>
 </template>

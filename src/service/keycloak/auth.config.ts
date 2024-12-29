@@ -1,5 +1,5 @@
-import { UserManager, WebStorageStateStore, type UserManagerSettings } from 'oidc-client-ts'
 import { jwtDecode } from 'jwt-decode'
+import { UserManager, type UserManagerSettings, WebStorageStateStore } from 'oidc-client-ts'
 
 const oidcConfig: UserManagerSettings = {
   authority: `${import.meta.env.VITE_KEYCLOAK_CLIENT_URL}/realms/${import.meta.env.VITE_KEYCLOAK_REALM}`,

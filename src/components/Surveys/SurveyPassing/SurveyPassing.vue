@@ -48,11 +48,11 @@
 
 <script setup lang="ts">
 import { computed, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useRoute, useRouter } from 'vue-router'
 import { finishingPassingSurvey, getSurveyById, saveAnswerResponse } from '@/api/survey/survey.base'
+import { type Survey, SurveyQuestionType, SurveyStatus } from '@/api/survey/survey.types'
 import SurveyPassingCard from './SurveyPassingCard.vue'
-import { SurveyQuestionType, SurveyStatus, type Survey } from '@/api/survey/survey.types'
 
 type EmitData = {
   isLast: boolean

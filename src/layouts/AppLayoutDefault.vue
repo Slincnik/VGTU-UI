@@ -22,8 +22,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue'
 import { useDisplay } from 'vuetify'
-import HeaderLayout from '@/components/Header/HeaderLayout.vue'
 import NavigationDrawer from '@/components/Drawer/NavigationDrawer.vue'
+import HeaderLayout from '@/components/Header/HeaderLayout.vue'
 
 const drawer = ref(false)
 const rail = ref(false)

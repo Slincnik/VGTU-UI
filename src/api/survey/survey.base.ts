@@ -1,6 +1,6 @@
-import { api, type ResponseEntity } from '@/service/api/api.service'
-import { type Survey } from './survey.types'
+import { type ResponseEntity, api } from '@/service/api/api.service'
 import { getStudentId } from '../student'
+import { type Survey } from './survey.types'
 
 export const getAllStudentSurveys = async () => {
   const userId = await getStudentId()

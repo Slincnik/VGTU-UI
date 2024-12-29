@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query'
 import { computed } from 'vue'
+import { useQuery } from '@tanstack/vue-query'
 import { storeToRefs } from 'pinia'
 import { getUser, getUserEducations } from '@/api/student'
 import ProfileTabs from '@/components/ProfileTabs/ProfileTabs.vue'

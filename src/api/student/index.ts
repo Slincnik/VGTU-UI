@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/vue-query'
 import { api } from '@/service/api/api.service'
-import { useAuthStore, type UserStore } from '@/stores/authStore'
 import { getDecodedToken } from '@/service/keycloak/auth.config'
+import { type UserStore, useAuthStore } from '@/stores/authStore'
 import type { Student } from './student.types'
 
 const authStore = useAuthStore()

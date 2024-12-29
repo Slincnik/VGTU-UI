@@ -1,5 +1,5 @@
-import type { User as UserClient } from 'oidc-client-ts'
 import { computed } from 'vue'
+import type { User as UserClient } from 'oidc-client-ts'
 import type { Student } from '@/api/student/student.types'
 
 export const getInitials = (user: UserClient | Student.User | null) =>

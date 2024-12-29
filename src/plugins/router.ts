@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router'
-import { loadLayoutMiddleware } from './middlewares/loadLayout'
-import { checkAuthKeycloak } from './middlewares/checkAuth'
+import { type RouteRecordRaw, createRouter, createWebHistory } from 'vue-router'
 import { AppLayoutsEnum } from '@/layouts/layouts.types'
+import { checkAuthKeycloak } from './middlewares/checkAuth'
 import { checkSurveyUser } from './middlewares/checkSurveyUser'
+import { loadLayoutMiddleware } from './middlewares/loadLayout'
 
 const routes: readonly RouteRecordRaw[] = [
   {

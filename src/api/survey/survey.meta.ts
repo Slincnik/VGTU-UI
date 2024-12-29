@@ -1,4 +1,4 @@
-import { api, type ResponseEntity } from '@/service/api/api.service'
+import { type ResponseEntity, api } from '@/service/api/api.service'
 import { type SurveyMeta, type SurveyMetaDTO } from './survey.types'
 
 export const getAllSurveysMeta = async () => {
