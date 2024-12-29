@@ -2,27 +2,26 @@ lint-job:
   stage: lint
   rules:
     - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "dev"
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
   before_script:
     - corepack enable pnpm
-  script:
     - pnpm install --frozen-lockfile --ignore-scripts
+  script:
     - pnpm lint
   artifacts:
     paths:
       - node_modules/
-    expire_in: "1 week"
 
 build-job:
   stage: build
-  rules:
-    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
-  needs:
-    - lint-job
   before_script:
     - corepack enable pnpm
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+    - if: $CI_COMMIT_REF_NAME == "dev"
+  needs:
+    - job: lint-job
+      artifacts: true
   script:
     - pnpm run build
-  artifacts:
-    paths:
-      - dist/
-    expire_in: "1 week"
