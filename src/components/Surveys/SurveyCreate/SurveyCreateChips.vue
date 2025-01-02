@@ -138,8 +138,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch, computed } from 'vue'
-import { SurveyQuestionType, type SurveyMeta } from '@/api/survey/survey.types'
+import { computed, reactive, ref, watch } from 'vue'
+import { type SurveyMeta, SurveyQuestionType } from '@/api/survey/survey.types'
 
 defineProps<{
   disabled: boolean

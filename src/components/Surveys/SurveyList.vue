@@ -64,8 +64,9 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { useQuery, useQueryClient } from '@tanstack/vue-query'
+import { useRouter } from 'vue-router'
+import { getAllStudentSurveys } from '@/api/survey/survey.base'
 import {
   closeSurveyMeta,
   copySurveyMeta,
@@ -74,8 +75,7 @@ import {
   getAllSurveysMeta,
   publishSurveyMeta
 } from '@/api/survey/survey.meta'
-import { getAllStudentSurveys } from '@/api/survey/survey.base'
-import { SurveyStatus, SurveyType, type CommonSurveyType } from '@/api/survey/survey.types'
+import { type CommonSurveyType, SurveyStatus, SurveyType } from '@/api/survey/survey.types'
 import { canAccept } from '@/utils/checkSurveyCreateUser'
 
 enum Align {

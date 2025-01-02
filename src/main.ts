@@ -1,15 +1,13 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import DateFnsAdapter from '@date-io/date-fns'
+import { VueQueryPlugin } from '@tanstack/vue-query'
 import { ru } from 'date-fns/locale'
-
-import '@/assets/main.css'
+import { createPinia } from 'pinia'
+import { createVuetify } from 'vuetify'
+import { aliases } from 'vuetify/iconsets/mdi-svg'
 // Vuetify
 import 'vuetify/styles'
-import { createVuetify } from 'vuetify'
-
-import { VueQueryPlugin } from '@tanstack/vue-query'
-import { aliases } from 'vuetify/iconsets/mdi-svg'
+import '@/assets/main.css'
 import App from './App.vue'
 import router from './plugins/router'
 import { custom } from './service/icons/icon.service'

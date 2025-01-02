@@ -8,6 +8,14 @@
   "trailingComma": "none",
   "endOfLine": "crlf",
   "arrowParens": "avoid",
+  "importOrder": [
+    "^vue$",
+    "<THIRD_PARTY_MODULES>",
+    "<BUILTIN_MODULES>",
+    "^@/(.*)$",
+    "^[.]"
+  ],
+  "importOrderSortSpecifiers": true,
   "overrides": [
     {
       "files": "*.vue",
@@ -15,5 +23,8 @@
         "parser": "vue"
       }
     }
+  ],
+  "plugins": [
+    "@trivago/prettier-plugin-sort-imports"
   ]
 }

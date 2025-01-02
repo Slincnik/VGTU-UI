@@ -29,7 +29,7 @@ function generateAliases(iconModules: Record<string, any>): Record<string, any> 
 const aliases = generateAliases(icons)
 
 const custom: IconSet = {
-  // @ts-ignore
+  // @ts-expect-error: any
   component: (props: IconProps) => h(aliases[props.icon])
 }
 

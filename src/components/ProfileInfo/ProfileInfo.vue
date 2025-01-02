@@ -9,9 +9,9 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/authStore'
+import ProfileBaseInfo from './ProfileInfoTabs/ProfileBaseInfo.vue'
 import ProfileProgram from './ProfileInfoTabs/ProfileProgram.vue'
 import ProfileRoles from './ProfileInfoTabs/ProfileRoles.vue'
-import ProfileBaseInfo from './ProfileInfoTabs/ProfileBaseInfo.vue'
 
 const authStore = useAuthStore()
 const { user, educations } = storeToRefs(authStore)

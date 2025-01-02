@@ -128,9 +128,9 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { SurveyType } from '@/api/survey/survey.types'
+import DatePicker from '@/components/DatePicker/DatePicker.vue'
 import { useSurveyForm } from '@/composables/useSurveyForm'
 import QuestionChips from './SurveyCreate/SurveyCreateChips.vue'
-import DatePicker from '@/components/DatePicker/DatePicker.vue'
 
 const {
   surveyData,

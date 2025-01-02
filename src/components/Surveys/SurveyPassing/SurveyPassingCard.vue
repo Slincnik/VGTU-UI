@@ -81,8 +81,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watchEffect } from 'vue'
-import { SurveyQuestionType, type Survey } from '@/api/survey/survey.types'
+import { computed, ref, watchEffect } from 'vue'
+import { type Survey, SurveyQuestionType } from '@/api/survey/survey.types'
 
 const emits = defineEmits<{
   (
