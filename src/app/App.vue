@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DefaultLayout } from '@/shared/ui/layouts'
-import { DrawerWidget } from '@/widgets/drawer'
-import { HeaderWidget } from '@/widgets/header'
+import { DrawerWidget } from '@/widgets/drawer-widget'
+import { HeaderWidget } from '@/widgets/header-widget'
 
 const route = useRoute()
 const router = useRouter()
