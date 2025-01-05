@@ -17,17 +17,20 @@ router.isReady().finally(() => {
 </script>
 
 <template>
-  <template v-if="!isRouterReady">
-    <div class="d-flex justify-center align-center h-screen">
-      <v-progress-circular
-        class="mx-auto"
-        indeterminate
-        :size="36"
-      />
-    </div>
-  </template>
-  <v-app v-else>
-    <component :is="layout">
+  <v-app>
+    <template v-if="!isRouterReady">
+      <div class="d-flex justify-center align-center h-screen">
+        <v-progress-circular
+          class="mx-auto"
+          indeterminate
+          :size="36"
+        />
+      </div>
+    </template>
+    <component
+      :is="layout"
+      v-else
+    >
       <template #header>
         <header-widget />
       </template>
