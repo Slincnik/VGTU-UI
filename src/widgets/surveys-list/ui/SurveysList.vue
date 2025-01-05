@@ -16,6 +16,8 @@
       :headers
       :loading
       :items-length="items?.length ?? 0"
+      no-data-text="Ничего не найдено"
+      loading-text="Загрузка..."
       hide-default-footer
       @click:row="handleRowClick"
     >
