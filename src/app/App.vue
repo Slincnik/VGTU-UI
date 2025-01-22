@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { DefaultLayout } from '@/shared/ui/layouts'
-import { DrawerWidget } from '@/widgets/drawer'
-import { HeaderWidget } from '@/widgets/header'
+import { DrawerWidget } from '@/widgets/drawer-widget'
+import { HeaderWidget } from '@/widgets/header-widget'
 
 const route = useRoute()
 const router = useRouter()
@@ -17,17 +17,20 @@ router.isReady().finally(() => {
 </script>
 
 <template>
-  <template v-if="!isRouterReady">
-    <div class="d-flex justify-center align-center h-screen">
-      <v-progress-circular
-        class="mx-auto"
-        indeterminate
-        :size="36"
-      />
-    </div>
-  </template>
-  <v-app v-else>
-    <component :is="layout">
+  <v-app>
+    <template v-if="!isRouterReady">
+      <div class="d-flex justify-center align-center h-screen">
+        <v-progress-circular
+          class="mx-auto"
+          indeterminate
+          :size="36"
+        />
+      </div>
+    </template>
+    <component
+      :is="layout"
+      v-else
+    >
       <template #header>
         <header-widget />
       </template>

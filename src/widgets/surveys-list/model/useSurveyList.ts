@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { type CommonSurveyType, SurveyStatus, canAccept } from '@/entities/Survey'
+import { canAccept } from '@/entities/Survey'
 import { surveyApi } from '@/features/surveys'
 
 enum Align {
@@ -42,9 +42,5 @@ export async function useSurveyList() {
     return commonHeaders
   })
 
-  const surveyIsDraft = (item: CommonSurveyType) => {
-    return item.status !== SurveyStatus.Enum.DRAFT
-  }
-
-  return { isCanAccept, userType, surveyFn, headers, surveyIsDraft }
+  return { isCanAccept, userType, surveyFn, headers }
 }

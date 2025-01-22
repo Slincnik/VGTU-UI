@@ -1,4 +1,3 @@
-import { h } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 import { AppLayoutsEnum } from '@/shared/ui/layouts'
 
@@ -6,7 +5,7 @@ export const routes: readonly RouteRecordRaw[] = [
   {
     path: '/',
     name: 'home',
-    component: () => h('div', 'Welcome to the home page!')
+    component: () => import('@/pages/home')
   },
   {
     path: '/schedule',
