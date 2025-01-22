@@ -29,6 +29,7 @@ function generateAliases(iconModules: Record<string, any>): Record<string, any> 
 const aliases = generateAliases(icons)
 
 const custom: IconSet = {
+  // @ts-expect-error: I don't know how to fix this
   component: (props: IconProps) => h(aliases[props.icon])
 }
 
