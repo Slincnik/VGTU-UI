@@ -28,7 +28,7 @@ export const SURVEY_ACTIONS: TableButtonAction[] = [
       )
   },
   {
-    id: 'trash',
+    id: 'remove',
     icon: 'trash',
     title: 'Удалить опрос',
     isDisabled: (status: SurveyStatus.Enum) => surveyIsDraft(status)
