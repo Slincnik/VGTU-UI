@@ -1,0 +1,28 @@
+lint-job:
+  stage: lint
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  before_script:
+    - corepack enable pnpm
+  script:
+    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm lint
+  artifacts:
+    paths:
+      - node_modules/
+    expire_in: "1 week"
+
+build-job:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_REF_NAME == $CI_DEFAULT_BRANCH
+  needs:
+    - lint-job
+  before_script:
+    - corepack enable pnpm
+  script:
+    - pnpm run build
+  artifacts:
+    paths:
+      - dist/
+    expire_in: "1 week"

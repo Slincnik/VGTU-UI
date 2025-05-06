@@ -1,0 +1,1 @@
+import{_ as o,i as t,o as c,h as r,e as s}from"./index-q8JYQkNK.js";const n={},a={class:"pa-5"};function _(i,d){const e=t("router-view");return c(),r("div",a,[s(e)])}const p=o(n,[["render",_]]);export{p as default};
