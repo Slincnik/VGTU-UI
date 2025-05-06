@@ -29,5 +29,5 @@ export default defineConfig({
       }
     }
   },
-  base: "/VGTU-UI/"
+  base: "/cchgeu_ui/"
 })
