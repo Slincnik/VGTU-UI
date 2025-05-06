@@ -1,1 +1,0 @@
-import{_ as o,o as s,h as a,e as n,w as c,u as r,q as d,y as l}from"./index-CLv8fEXV.js";const _={},u={class:"d-flex flex-column"},f=d("span",null," 404 Not Found ",-1);function i(t,e){return s(),a("div",u,[f,n(r,{onClick:e[0]||(e[0]=x=>t.$router.back())},{default:c(()=>[l("Back")]),_:1})])}const m=o(_,[["render",i]]);export{m as default};

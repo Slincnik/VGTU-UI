@@ -1,0 +1,1 @@
+import{_ as o,i as t,o as r,h as s,e as c}from"./index-B_e1Idry.js";const n={},_={class:"px-5 py-5"};function a(i,p){const e=t("router-view");return r(),s("div",_,[c(e)])}const f=o(n,[["render",a]]);export{f as default};

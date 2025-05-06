@@ -1,0 +1,1 @@
+import{a as e}from"./index-B_e1Idry.js";import{a as n}from"./index-D9k7jJmQ.js";const o=async()=>{const s=await n();return(await e.get(`survey/all?student=${s}`)).data.content},p=async s=>(await e.get(`survey/${s}`)).data,u=async s=>(await e.post("survey/answer",s)).data,c=async s=>(await e.post("survey/answer/finished",s)).data;export{p as a,c as f,o as g,u as s};
