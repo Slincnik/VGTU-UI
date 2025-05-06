@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 import { authManager, getToken } from '../service/auth'
 
-const baseURL = import.meta.env.VITE_BASE_URL
+const baseURL = ''
 
 export const api = axios.create({
   baseURL,

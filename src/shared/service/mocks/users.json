@@ -1,0 +1,46 @@
+[
+    {
+        "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb2",
+        "user": {
+            "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb2",
+            "externalId": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb2",
+            "isDummy": false,
+            "lastModifyDate": "2023-10-01T12:00:00Z",
+            "firstName": "testuseradmin",
+            "lastName": "testuseradmin",
+            "middleName": "testuseradmin",
+            "username": "testuseradmin",
+            "email": "testadmin@test.ru"
+        },
+        "gradeBooks": [
+            {
+                "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb2",
+                "gradeBook": "Grade Book 1"
+            },
+            {
+                "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb2",
+                "gradeBook": "Grade Book 2"
+            }
+        ]
+    },
+    {
+        "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb1",
+        "user": {
+            "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb1",
+            "externalId": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb1",
+            "isDummy": false,
+            "lastModifyDate": "2023-10-01T12:00:00Z",
+            "firstName": "Test",
+            "lastName": "Test",
+            "middleName": "Test",
+            "username": "testuser",
+            "email": "test@test.ru"
+        },
+        "gradeBooks": [
+            {
+                "id": "2c5b7c98-d1a0-11ea-f88d-36863ec15fb1",
+                "gradeBook": "Grade Book 1"
+            }
+        ]
+    }
+]

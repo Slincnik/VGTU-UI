@@ -4,8 +4,8 @@ import { UserManager, type UserManagerSettings, WebStorageStateStore } from 'oid
 const oidcConfig: UserManagerSettings = {
   authority: `${import.meta.env.VITE_KEYCLOAK_CLIENT_URL}/realms/${import.meta.env.VITE_KEYCLOAK_REALM}`,
   client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
-  redirect_uri: `${window.location.origin}/callback`,
-  post_logout_redirect_uri: `${window.location.origin}/`,
+  redirect_uri: `${import.meta.env.BASE_URL}/callback`,
+  post_logout_redirect_uri: `${import.meta.env.BASE_URL}/`,
   response_type: 'code',
   scope: 'openid profile email',
   automaticSilentRenew: true,

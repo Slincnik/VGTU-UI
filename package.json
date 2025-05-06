@@ -1,5 +1,6 @@
 {
   "name": "vgtu-frontend",
+  "homepage": "https://github.com/Slincnik/VGTU-UI/",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,7 +12,8 @@
     "type-check": "vue-tsc --build --force",
     "lint": "eslint src --fix",
     "format": "prettier --write src/",
-    "prepare": "husky"
+    "prepare": "husky",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@date-io/date-fns": "^3.0.0",
@@ -24,6 +26,7 @@
     "@vueuse/core": "^12.0.0",
     "axios": "^1.7.2",
     "date-fns": "^3.6.0",
+    "gh-pages": "^6.3.0",
     "jwt-decode": "^4.0.0",
     "oidc-client-ts": "^3.2.1",
     "pinia": "^2.1.7",
