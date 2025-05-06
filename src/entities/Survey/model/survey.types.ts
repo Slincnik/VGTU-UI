@@ -1,4 +1,5 @@
 export type SurveyMetaDTO = {
+  id?: string;
   name: string
   type: SurveyType.Enum | null
   filters: Array<{
