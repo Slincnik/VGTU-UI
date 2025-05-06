@@ -37,7 +37,7 @@ export const useSurveysActions = () => {
     if (item.status === SurveyStatus.Enum.PUBLISHED) return
     await surveyApi.publishSurveyMeta(item.id)
     queryClient.setQueryData(['surveys'], (old: CommonSurveyType[]) =>
-      old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.IN_PROGRESS } : it))
+      old.map(it => (it.id === item.id ? { ...it, status: SurveyStatus.Enum.PUBLISHED } : it))
     )
   }
 
@@ -53,7 +53,6 @@ export const useSurveysActions = () => {
     ...action,
     onClick: async (item: CommonSurveyType) => {
       try {
-        console.log(item, 'CLICKED', action.id)
         switch (action.id) {
           case 'copy':
             await handleCopy(item)
