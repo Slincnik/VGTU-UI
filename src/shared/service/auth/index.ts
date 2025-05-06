@@ -1,11 +1,13 @@
 import { jwtDecode } from 'jwt-decode'
 import { UserManager, type UserManagerSettings, WebStorageStateStore } from 'oidc-client-ts'
 
+console.log(import.meta.env.BASE_URL)
+
 const oidcConfig: UserManagerSettings = {
   authority: `${import.meta.env.VITE_KEYCLOAK_CLIENT_URL}/realms/${import.meta.env.VITE_KEYCLOAK_REALM}`,
   client_id: import.meta.env.VITE_KEYCLOAK_CLIENT_ID,
-  redirect_uri: `${import.meta.env.BASE_URL}/callback`,
-  post_logout_redirect_uri: `${import.meta.env.BASE_URL}/`,
+  redirect_uri: `${window.location.origin}${import.meta.env.BASE_URL}callback`,
+  post_logout_redirect_uri: `${window.location.origin}${import.meta.env.BASE_URL}`,
   response_type: 'code',
   scope: 'openid profile email',
   automaticSilentRenew: true,
